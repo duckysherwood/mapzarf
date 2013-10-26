@@ -1,0 +1,290 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<!-- I don't like the scattered nature of this code.
+It seems there are several related going on:
+1. GUI stuff.  Where are things, what is the mapping
+between variables and UI elements.
+2. Setting up information for each layer
+3. Choosing which layer to show
+4. Setting up listeners
+
+Is there a way I can localize each concern??
+
+!-->
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=ISO-8859-1">
+
+  <!--............. PRESENTATION STUFF ..................... -->
+
+
+  <!-- using the 2011 population for the cartogram -->
+  <title>US Congressional Districts</title>
+
+  <!-- HTML layout ......................................................... -->
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="/thirdparty/leaflet/Leaflet-0.6.4/leaflet.css">
+  <link rel="stylesheet" href="./congress2012.css">
+</head>
+<body>
+   <div id="map"></div>
+   <div id="legend">
+     <img id="legendImage" src="http://maps.webfoot.com/tiles/clearTile.png"
+          alt="Legend">
+   </div>
+   <div id="sidebar">
+     <input type="checkbox" id="showDotsCheckbox" name="showDots" value="showDotsCheckbox" checked>Show dots:<p>
+     <p id="dotsDescription" class="indented"></p>
+     <input type="checkbox" id="bordersCheckbox" name="showBorders" value="countyBordersCheckbox" checked>Show borders:
+       <select id="bordersCombo">
+          <option value="stateBorders">State</option>
+          <option value="countyBorders">County</option>
+       </select><p>
+     <input type="checkbox" id="showCitiesCheckbox" name="showCities" value="citiesCheckbox" checked>Show city names<br>
+  
+     <input type="checkbox" id="isCartogramCheckbox" name="cartogram" value="isCartogramCheckbox">Show as cartogram<p>
+     <input type="checkbox" id="showAttributesCheckbox" name="showAttributes" value="showAttributesCheckbox" checked>Colour areas by:<br>
+       <select id="attributesCombo">
+         <option value="congressionalDistricts">Congressional Districts</option>
+         <option value="demMargin">Congressional 2012 election</option>
+         <option value="prez2012">Presidential 2012 election</option>
+
+         <option value="populationPovertyPct">Percent in poverty (2011)</option>
+       </select><p>
+     <p id="attributeDescription" class="indented"></p>
+  <p>
+  </div>
+
+
+   <div id="errorMessage">
+   </div>
+  <!-- end HTML layout stuff -->
+
+  <!-- script src="http://leaflet.cloudmade.com/dist/leaflet.js"></script -->
+  <script src="/thirdparty/leaflet/Leaflet-0.6.4/leaflet.js" type="text/javascript"></script>
+  <script src="./utilityFunctions.js" type="text/javascript"></script>
+  <script src="./cartogram.js" type="text/javascript"></script>
+  <script src="./standard.js" type="text/javascript"></script>
+  <script src="../../mapeteria2/MapRequest.js" type="text/javascript"></script>
+  <script src="../../mapeteria2/MapRequestFactory.js" type="text/javascript"></script>
+  <script src="../../mapeteria2/LayerFactory.js" type="text/javascript"></script>
+  <script src="../../mapeteria2/CityLabeller.js" type="text/javascript"></script>
+  <script src="../../mapeteria2/cartogramSwitching.js" type="text/javascript"></script>
+  <script type="text/javascript">
+
+    // ........ UI widget to variable mapping ...................
+    var attributesCombo = document.getElementById("attributesCombo");
+    var errorMessageDiv = document.getElementById("errorMessage");
+    var descriptionP = document.getElementById("attributeDescription");
+    var dotsDescriptionP = document.getElementById("dotsDescription");
+    var legendImage = document.getElementById("legendImage");
+    var showDotsCheckbox = document.getElementById("showDotsCheckbox");
+    var showAttributesCheckbox = document.getElementById("showAttributesCheckbox");
+    var bordersCheckbox = document.getElementById("bordersCheckbox");
+    var bordersCombo = document.getElementById("bordersCombo");
+    var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
+    var showCitiesCheckbox = document.getElementById("showCitiesCheckbox");
+    var mapDiv = document.getElementById("map");
+    var sidebarDiv = document.getElementById("sidebar");
+
+    // ............... END INTERACTION PRESENTATION ..................... 
+    // ...... map initialization -->
+    // relative path names -- different because localhost and mwf are diff
+    var map = L.map('map', 
+      {minZoom: 2, maxZoom: 14}).setView([38.8, -100.4], 4);
+    var popup = L.popup();
+    map.on('click', onMapClick);
+
+    var bulletChar = "+";  // has to be global to get into XMLHttpRequest callbak
+    var labeller = new CityLabeller(mapDiv, map);
+    map.on('zoomend', onMapMove);
+    map.on('dragend', onMapMove);
+    var cityMarkers = [];
+    refreshCityLabels();
+
+    var attributeOpacity = 1.0;
+    var dotsOpacity = 1.0;
+
+
+    // general variables, need to declare them somewhere 
+    var marker;
+    var attributeLayer;
+    var dotsLayer;
+
+    // ...........initialize stuff that goes into making a layer ............
+
+    // ............... polygon map requests ..............................
+
+    // ............... attribute Info for cartogram .......
+    var attributeInfo = [];
+    attributeInfo.cartogram = cartogramAttributeInfo;
+    attributeInfo.standard = standardAttributeInfo;   // non-cartographic
+
+    // .................... county layers for the cartogram map .........
+
+    var mapRequests = Object.create(null);
+    mapRequests.cartogram = [];
+    mapRequests.standard = [];
+
+    var mrFactory = Object.create(null);
+    mrFactory.cartogram = new MapRequestFactory(attributeInfo.cartogram, mapRequests.cartogram);
+    mrFactory.standard = new MapRequestFactory(attributeInfo.standard, mapRequests.standard);
+/*
+    mrFactory.cartogram.makeBlueYellowLinearMapRequest("unemployment", "countyPopulationCartogram", 2012);
+
+    mrFactory.cartogram.makePopulationPercentageMapRequest("whitePop", "countyPopulationCartogram", 2012);
+    mapRequests.cartogram.whitePopPercentage.minValue = 0.5;
+    mapRequests.cartogram.whitePopPercentage.maxValue = 1.0;
+
+    mrFactory.cartogram.makeLinearMapRequest("povertyRate", "countyPopulationCartogram", 2012);
+    mrFactory.cartogram.makeLinearMapRequest("medianHouseholdIncome1999", "countyPopulationCartogram", 2012);
+    mrFactory.cartogram.makeLinearMapRequest("medianOwnerOccupiedValue", "countyPopulationCartogram", 2012);
+    mrFactory.cartogram.makeLinearMapRequest("population", "countyPopulationCartogram", 2012);
+    mrFactory.cartogram.makeRandomMapRequest("state", "countyPopulationCartogram", 2012);
+    mrFactory.cartogram.makeLinearMapRequest("gini", "countyPopulationCartogram", 2012);
+    
+    mrFactory.cartogram.makeDividedMapRequest("affordability", "medianOwnerOccupiedValue", "medianHouseholdIncome1999", "countyPopulationCartogram", 2011);
+    mapRequests.cartogram.affordability.minValue=1;
+    mapRequests.cartogram.affordability.maxValue=7;
+*/
+
+
+    // ............. map requests for non-cartographic attribute layers ....
+
+    // need to do an explicit creation to get the "isPct" field right
+    mrFactory.standard.makeBlueYellowLinearMapRequest("unemployment", "county", 2008);
+
+    mrFactory.standard.makePopulationPercentageMapRequest("whitePop", "censusTract", 2000);	
+    mapRequests.standard.whitePopPercentage.minValue = 0.5;
+    mapRequests.standard.whitePopPercentage.maxValue = 1.0;
+
+    mrFactory.standard.makeRandomMapRequest("congressionalDistricts", "congressionalDistrict", 2011);
+    mrFactory.standard.makeLinearMapRequest("congressionalDistrictPopulation", "congressionalDistrict", 2011);
+    mrFactory.standard.makeLinearMapRequest("populationPovertyPct", "congressionalDistrict", 2011);
+
+    mrFactory.standard.makePlusMinusMapRequest("prez2012", "county", 2008);
+    mrFactory.standard.makePlusMinusMapRequest("demMargin", "congressionalDistrict", 2011);
+    mrFactory.standard.makePlusMinusMapRequest("prez2008", "county", 2008);
+
+    // ........................ state borders ................
+
+    mrFactory.cartogram.makeBordersMapRequest("stateBorders", "statePopCartogram", 2011);
+    mrFactory.standard.makeBordersMapRequest("stateBorders", "state", 2006);
+
+    // .......................... county borders ..........
+    mrFactory.cartogram.makeBordersMapRequest("countyBorders", "countyPopulationCartogram", 2011);
+    mrFactory.standard.makeBordersMapRequest("countyBorders", "county", 2008);
+
+
+    // .......................... dot layers ...................
+    var dotMapRequests = [];
+
+    dotMapRequests.cartogram = [];
+    dotMapRequests.standard = [];
+
+    // The dot map request is just a bag of properties,
+    // it is simpler than the choropleth MapRequest
+
+    var cssd = Object.create(null);  // cartogram shutdown signers dots
+    cssd.points = "houseDotAttributes";
+    cssd.name = "shutdownSignersHouseCartogram";
+    cssd.year = "2013";
+    cssd.colour = "000005";
+    cssd.size = 3;
+    cssd.jid = "0";
+    cssd.description = "Republican Congressional Representatives who signed a letter supporting shutting down the US Federal government in an attempt to defund Obamacare."
+    dotMapRequests.cartogram.shutdownSigners = cssd;
+
+    var sssd = cloneBagOfProperties(cssd);
+    sssd.points = "dotAttributes";
+    sssd.name = "shutdownSigners";
+    dotMapRequests.standard.shutdownSigners = sssd;
+
+
+    // ................. create initial layers ............ 
+    var mapType;
+    if(isCartogramCheckbox.checked) {
+      mapType = "cartogram"; 
+    } else {
+      mapType = "standard"; 
+    }
+    var shouldShowCities = showCitiesCheckbox.checked;
+    var mr = mapRequests[mapType];
+console.log(mr);
+    var lf = new LayerFactory();
+
+    attributeLayer = 
+	lf.makeChoroplethTileLayer(mr[attributesCombo.value], false, isCartogramCheckbox.checked);
+    updateDescription(mr[attributesCombo.value]);
+
+    if(bordersCheckbox.value) {
+        borderLayer = lf.makeChoroplethTileLayer(mr[bordersCombo.value], true, isCartogramCheckbox.checked);
+    }
+
+    var dotsFieldName = "shutdownSigners";  
+    dotsLayer = lf.makeDotTileLayer(dotMapRequests[mapType][dotsFieldName]);
+    dotsDescriptionP.innerHTML = dotMapRequests[mapType][dotsFieldName].description;
+
+
+    // ....................... add layers to map ....................
+    if(showAttributesCheckbox.checked) {
+       map.addLayer(attributeLayer, false);
+       updateLegend(mapRequests[getProjectionType()][attributesCombo.value]);
+    }
+    if(bordersCheckbox.checked) {
+      map.addLayer(borderLayer, false);
+    }
+    if(showDotsCheckbox.checked) {
+       map.addLayer(dotsLayer, false);
+    }
+    // map.addLayer(streetLayer, false);
+
+
+    // ................... set up listeners ........................
+
+    showDotsCheckbox.onchange = updateLayers;
+    showAttributesCheckbox.onchange = updateLayers;
+    attributesCombo.onchange = updateLayers;
+    bordersCheckbox.onchange = updateLayers;
+    bordersCombo.onchange = updateLayers;
+    isCartogramCheckbox.onchange = updateLayers;
+    showCitiesCheckbox.onchange = refreshCityLabels;
+
+    // ..................... the update function ...............
+    function updateLayers() {
+
+      map.removeLayer(borderLayer);  // only remove if it is there!
+      map.removeLayer(attributeLayer);
+      map.removeLayer(dotsLayer);
+
+      var pt = getProjectionType();
+      var mr = mapRequests[pt];
+      attributeLayer = lf.makeChoroplethTileLayer(mr[attributesCombo.value], false, isCartogramCheckbox.checked);
+      if(showAttributesCheckbox.checked) {
+        updateLegend(mapRequests[pt][attributesCombo.value]);
+        updateDescription(mr[attributesCombo.value]);
+      } else {
+        descriptionP.innerHTML = "";
+      }
+
+      dotsLayer = lf.makeDotTileLayer(dotMapRequests[pt].shutdownSigners);
+
+      map.addLayer(attributeLayer, false);  
+      setOpacity(showAttributesCheckbox, attributeLayer, dotsOpacity);
+      setOpacity(showDotsCheckbox, dotsLayer, dotsOpacity);
+      if(bordersCheckbox.checked) {
+        borderLayer = lf.makeChoroplethTileLayer(mr[bordersCombo.value], bordersCheckbox.checked, isCartogramCheckbox.checked);
+        map.addLayer(borderLayer, true);
+      }
+      map.addLayer(dotsLayer, false);  
+      refreshCityLabels();
+      onMapMove(null);
+    }
+
+
+  </script>
+</body>
+</html>
+
