@@ -1,4 +1,4 @@
-standardAttributeInfo = {
+cartogramAttributeInfo = {
    "null": {
       "table":"null",
       "fieldName":"null",
@@ -28,7 +28,7 @@ standardAttributeInfo = {
       "maxValue":450,
       "description":"Jurisdiction ID",
       "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "sourceUrl":"ftp://ftp2.census.gov/geo/tiger/TIGER2013/CD/tl_2013_us_cd113.zip"
    },
    "stateInt": {
       "table":"countryLowerChamberAttributes",
