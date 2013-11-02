@@ -1,4 +1,5 @@
 
+// Could go into common
 function setOpacity(aCheckbox, aLayer, anOpacity) {
   console.log("Setting opacity for layer: ")
   console.log(aLayer)
@@ -10,6 +11,7 @@ function setOpacity(aCheckbox, aLayer, anOpacity) {
 }
 
 
+// Could go into common
 // returns a comma-separated list of values selected
 // in the combo box
 function getValueString(comboBox) {
@@ -31,6 +33,7 @@ function updateDescription(aMapRequest) {
 }
 
 
+/* in commonUtilities.js
 function updateLegend(aMapRequest) {
   legendImage.src = 
     "../../mapeteria2/makeLegend.php?lbl=y&o=p" +
@@ -42,8 +45,10 @@ function updateLegend(aMapRequest) {
 	"&pct=" + aMapRequest.isPct;
    console.log(aMapRequest);
 }
+*/
 
 
+/* in commonUtilities.js
 function AttributeInfo(table, fieldName, year, 
       minValue, maxValue, description, source, sourceUrl) {
   this.table = table;
@@ -55,8 +60,10 @@ function AttributeInfo(table, fieldName, year,
   this.source = source;
   this.sourceUrl = sourceUrl;
 }
+*/
 
 
+/* In cartogramSwitching
 // 'projectionType' isn't really the right term, but
 // I can't figure out what is.  TODO
 function getProjectionType() {
@@ -65,13 +72,15 @@ function getProjectionType() {
   } else {
     return "standard";
   }  
-
 }
+*/
 
 function onMapClick(e) {
-  popup
-    .setLatLng(e.latlng)
-    .openOn(map);
+  countyMarker = countyMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
+
+  // popup
+    // .setLatLng(e.latlng)
+    // .openOn(map);
 
   var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
   var fieldName;
@@ -91,17 +100,19 @@ function onMapClick(e) {
   var url = "./districtPopupInformation.php?" +
      "lat="+e.latlng.lat+"&lng="+e.latlng.lng+"&zoom="+map.getZoom()+"&fieldName="+fieldName + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
   // popup.setContent("<a href=\""+url+"\">"+url+"</a>");
-  popup.setContent("Looking up congressional district information, please wait...");
+  countyMarker.setPopupContent("Looking up congressional district information, please wait...");
   requestUrl(url, setPopupInfo);  // request is a verb here
 
 }
 
-
-// on 'dragend' or 'zoomend'
-function onMapMove(e) {
-  refreshCityLabels();
+function setPopupInfo() {
+  if (this.readyState==4 && this.status==200)
+  {
+    countyMarker.setPopupContent(this.responseText);
+  }
 }
 
+/* in CityLabeller
 function refreshCityLabels() {
   var bounds = map.getBounds();
   console.log(bounds.getNorthEast());
@@ -113,16 +124,12 @@ function refreshCityLabels() {
 
   labeller.requestCityInfo(upper, lower, left, right, isCartogram);
 }
+*/
 
 
   
-function setPopupInfo() {
-  if (this.readyState==4 && this.status==200)
-  {
-    popup.setContent(this.responseText);
-  }
-}
 
+/* in commonUtilities
 function requestUrl(url, callback) {
   var xmlhttp;
   if (window.XMLHttpRequest)
@@ -140,35 +147,11 @@ function requestUrl(url, callback) {
   xmlhttp.send();
 
 }
+*/
 
 
-function geocodeAddress(address) {
-  // because of cross-site scripting limitations,
-  // I have to pass it to a script which does a curl call 
-  url = "geocodeProxy.php?"+address;
-  requestUrl(url, showAddress);
-}
 
-function showAddress() {
-  if (this.readyState==4 && this.status==200)
-  {
-    console.log("zoom is " + map.getZoom());
-    dictionary = JSON.parse(this.responseText);
-    for (var key in dictionary) {
-      if (dictionary.hasOwnProperty(key)) {
-        geocodedObject = dictionary[key];
-        lat = geocodedObject['latitude'];
-        lng = geocodedObject['longitude'];
-
-        var latlng = new L.LatLng(lat, lng);
-        map.setView(latlng, 11);
- 	marker = L.marker([lat, lng]).addTo(map);
-      }
-    }
-  
-  }
-}
-
+/* In commonUtilities.js
 // Derived from stackoverflow:
 // http://stackoverflow.com/questions/122102/most-efficient-way-to-clone-an-object
 // Used for e.g. dotMapRequest;
@@ -193,3 +176,4 @@ function cloneObject(obj){
         temp[key] = cloneObject(obj[key]);
     return temp;
 }
+*/
