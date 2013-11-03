@@ -31,7 +31,7 @@ function updateDescription(aMapRequest) {
 }
 
 function onMapClick(e) {
-  countyMarker = countyMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
+  jurisdictionMarker = jurisdictionMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
 
   // popup
     // .setLatLng(e.latlng)
@@ -55,7 +55,7 @@ function onMapClick(e) {
   var url = "./districtPopupInformation.php?" +
      "lat="+e.latlng.lat+"&lng="+e.latlng.lng+"&zoom="+map.getZoom()+"&fieldName="+fieldName + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
   // popup.setContent("<a href=\""+url+"\">"+url+"</a>");
-  countyMarker.setPopupContent("Looking up congressional district information, please wait...");
+  jurisdictionMarker.setPopupContent("Looking up congressional district information, please wait...");
   requestUrl(url, setPopupInfo);  // request is a verb here
 
 }
@@ -63,7 +63,7 @@ function onMapClick(e) {
 function setPopupInfo() {
   if (this.readyState==4 && this.status==200)
   {
-    countyMarker.setPopupContent(this.responseText);
+    jurisdictionMarker.setPopupContent(this.responseText);
   }
 }
 

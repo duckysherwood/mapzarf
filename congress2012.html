@@ -141,11 +141,11 @@ Is there a way I can localize each concern??
     var labeller = new CityLabeller(mapDiv, map);
 
     // initialize non-map page elements
-    var countyMarker = L.marker([init.markerLat, init.markerLng])
+    var jurisdictionMarker = L.marker([init.markerLat, init.markerLng])
                                 .bindPopup("Fetching data, please wait...")
                                 .addTo(map)
                                 .openPopup();
-    countyMarker.on('click', onMapClick);
+    jurisdictionMarker.on('click', onMapClick);
 
     map.setView([init.lat, init.lng], init.zoom);
     attributesCombo.selectedIndex = init.attributeNumber;
@@ -158,7 +158,7 @@ Is there a way I can localize each concern??
 
 
     // general variables, need to declare them somewhere 
-    var countyMarker;
+    var jurisdictionMarker;
     var attributeLayer;
     var dotsLayer;
 
