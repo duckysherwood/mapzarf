@@ -1,36 +1,25 @@
+// These are function used in displaying information in the popup -- either
+// information about the dot clicked on or attribute information for the
+// jurisdiction clicked on.
 
-function onMapClick(e) {
-  jurisdictionMarker = jurisdictionMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
+function jurisdictionPopupUrl() {
+  return "./districtPopupInformation.php";
+}
 
-  // popup
-    // .setLatLng(e.latlng)
-    // .openOn(map);
-
-  var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
-  var fieldName;
-  var cartogramFlag;
+function dotFieldName() {
   if(isCartogramCheckbox.checked) {
-    // fieldName = "city";
-    // year = 2010;
-    fieldName = "shutdownSignersHouseCartogram";
-    year = 2011;
-    cartogramFlag = "t";
+    return "shutdownSignerCart";
   } else {
-    fieldName = "shutdownSigners";
-    cartogramFlag = "f";
-    year = 2008;
+    return "shutdownSigners";
   }
-
-  var url = "./districtPopupInformation.php?" +
-     "lat="+e.latlng.lat+"&lng="+e.latlng.lng+"&zoom="+map.getZoom()+"&fieldName="+fieldName + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
-  // popup.setContent("<a href=\""+url+"\">"+url+"</a>");
-  jurisdictionMarker.setPopupContent("Looking up congressional district information, please wait...");
-  requestUrl(url, setPopupInfo);  // request is a verb here
-
 }
 
-function cityLabelsShouldChange() {
-  updateUrls();
-  labeller.refreshCityLabels();
+function dotAttributeYear() {
+  if(isCartogramCheckbox.checked) {
+    return 2011;
+  } else {
+    return 2008;
+  }
 }
+
 

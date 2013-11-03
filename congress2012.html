@@ -136,7 +136,7 @@ Is there a way I can localize each concern??
     var map = L.map('map', {minZoom: 0, maxZoom: 14});
 
     var popup = L.popup();
-    map.on('click', onMapClick);
+    map.on('click', showDotInfoOnEvent);
     map.on('zoomend', cityLabelsShouldChange);
     map.on('dragend', cityLabelsShouldChange);
 
@@ -153,7 +153,7 @@ Is there a way I can localize each concern??
                                 .bindPopup("Fetching data, please wait...")
                                 .addTo(map)
                                 .openPopup();
-    jurisdictionMarker.on('click', onMapClick);
+    jurisdictionMarker.on('click', showDotInfoOnEvent);
 
     attributesCombo.selectedIndex = init.attributeNumber;
     // Placing the marker will reset the map so that the marker is in 
@@ -330,7 +330,8 @@ console.log(mr);
     attributesCombo.onchange = updateLayers;
     bordersCheckbox.onchange = updateLayers;
     bordersCombo.onchange = updateLayers;
-    isCartogramCheckbox.onchange = updateLayers;
+    isCartogramCheckbox.onchange = switchToCartogram;
+    // isCartogramCheckbox.onchange = updateLayers;
     showCitiesCheckbox.onchange = cityLabelsShouldChange;
 
     map.on('zoomend', cityLabelsShouldChange);
