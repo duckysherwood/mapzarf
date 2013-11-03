@@ -10,7 +10,6 @@ function setOpacity(aCheckbox, aLayer, anOpacity) {
   }
 }
 
-
 // Could go into common
 // returns a comma-separated list of values selected
 // in the combo box
@@ -27,53 +26,9 @@ function getValueString(comboBox) {
   return valueString;
 }
 
-
 function updateDescription(aMapRequest) {
   descriptionP.innerHTML = aMapRequest.description();
 }
-
-
-/* in commonUtilities.js
-function updateLegend(aMapRequest) {
-  legendImage.src = 
-    "../../mapeteria2/makeLegend.php?lbl=y&o=p" +
-	"&minValue=" + aMapRequest.minValue +
-	"&maxValue=" + aMapRequest.maxValue +
-	"&minColour=" + aMapRequest.minColor +
-	"&maxColour=" + aMapRequest.maxColor +
-	"&mapping=" + aMapRequest.mapping +
-	"&pct=" + aMapRequest.isPct;
-   console.log(aMapRequest);
-}
-*/
-
-
-/* in commonUtilities.js
-function AttributeInfo(table, fieldName, year, 
-      minValue, maxValue, description, source, sourceUrl) {
-  this.table = table;
-  this.fieldName = fieldName;
-  this.year = year;
-  this.minValue = minValue;
-  this.maxValue = maxValue;
-  this.description = description;
-  this.source = source;
-  this.sourceUrl = sourceUrl;
-}
-*/
-
-
-/* In cartogramSwitching
-// 'projectionType' isn't really the right term, but
-// I can't figure out what is.  TODO
-function getProjectionType() {
-  if(isCartogramCheckbox.checked) {
-    return "cartogram";
-  } else {
-    return "standard";
-  }  
-}
-*/
 
 function onMapClick(e) {
   countyMarker = countyMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
@@ -112,68 +67,3 @@ function setPopupInfo() {
   }
 }
 
-/* in CityLabeller
-function refreshCityLabels() {
-  var bounds = map.getBounds();
-  console.log(bounds.getNorthEast());
-  var upper = bounds.getNorthEast().lat;
-  var lower = bounds.getSouthWest().lat;
-  var left = bounds.getSouthWest().lng;
-  var right = bounds.getNorthEast().lng;
-  var isCartogram = document.getElementById("isCartogramCheckbox").checked;
-
-  labeller.requestCityInfo(upper, lower, left, right, isCartogram);
-}
-*/
-
-
-  
-
-/* in commonUtilities
-function requestUrl(url, callback) {
-  var xmlhttp;
-  if (window.XMLHttpRequest)
-    {// code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-    }
-  else
-    {// code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-    }
-  
-  xmlhttp.onreadystatechange=callback;
-  xmlhttp.open("GET",url,true);
-
-  xmlhttp.send();
-
-}
-*/
-
-
-
-/* In commonUtilities.js
-// Derived from stackoverflow:
-// http://stackoverflow.com/questions/122102/most-efficient-way-to-clone-an-object
-// Used for e.g. dotMapRequest;
-function cloneBagOfProperties(obj){
-    if(obj == null || typeof(obj) != 'object')
-        return obj;
-
-    var temp = Object.create(null);
-
-    for(var key in obj)
-        temp[key] = obj[key];
-    return temp;
-}
-
-function cloneObject(obj){
-    if(obj == null || typeof(obj) != 'object')
-        return obj;
-
-    var temp = obj.constructor(); // changed
-
-    for(var key in obj)
-        temp[key] = cloneObject(obj[key]);
-    return temp;
-}
-*/
