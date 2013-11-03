@@ -1,35 +1,4 @@
 
-// Could go into common
-function setOpacity(aCheckbox, aLayer, anOpacity) {
-  console.log("Setting opacity for layer: ")
-  console.log(aLayer)
-  if(aCheckbox.checked) {
-    aLayer.setOpacity(anOpacity);
-  } else {
-    aLayer.setOpacity(0.0);
-  }
-}
-
-// Could go into common
-// returns a comma-separated list of values selected
-// in the combo box
-function getValueString(comboBox) {
-  valueString = ""
-  valueCount = 0;
-  for (i=0;i<comboBox.length;i++) {
-    if (comboBox[i].selected)
-    {
-      // console.log("comboBox value is "+comboBox[i].value);
-      valueString = valueString + comboBox[i].value + ",";
-    }
-  }
-  return valueString;
-}
-
-function updateDescription(aMapRequest) {
-  descriptionP.innerHTML = aMapRequest.description();
-}
-
 function onMapClick(e) {
   jurisdictionMarker = jurisdictionMarker.setLatLng([e.latlng.lat, e.latlng.lng]);
 
@@ -60,10 +29,8 @@ function onMapClick(e) {
 
 }
 
-function setPopupInfo() {
-  if (this.readyState==4 && this.status==200)
-  {
-    jurisdictionMarker.setPopupContent(this.responseText);
-  }
+function cityLabelsShouldChange() {
+  updateUrls();
+  labeller.refreshCityLabels();
 }
 
