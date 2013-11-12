@@ -10,7 +10,7 @@ function dotFieldName() {
   if(isCartogramCheckbox.checked) {
     return "shutdownSignerCart";
   } else {
-    return "shutdownSigners";
+    return "shutdownSigner";
   }
 }
 
