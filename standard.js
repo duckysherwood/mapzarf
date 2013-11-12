@@ -20,6 +20,16 @@ standardAttributeInfo = {
       "sourceUrl":"ftp://ftp.bls.gov/pub/time.series/compressed/tape.format/"
    },
 
+   "shutdownSigner": {
+      "table":"countryLowerChamberAttributes",
+      "fieldName":"shutdownSigner",
+      "year":2013,
+      "minValue":0,
+      "maxValue":1,
+      "description":"Representatives supporting the 2013 federal shutdown",
+      "source":"Freedom Works",
+      "sourceUrl":"http://www.freedomworks.org/blog/jwithrow/does-your-senator-stand-with-mike-lee-against-obam"
+   },
    "jurisdictionId": {
       "table":"countryLowerChamberAttributes",
       "fieldName":"jurisdictionId",
@@ -27,8 +37,8 @@ standardAttributeInfo = {
       "minValue":0,
       "maxValue":450,
       "description":"Jurisdiction ID",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"Derived from state FIPS and District number",
+      "sourceUrl":"http://www.bls.gov/lau/lausfips.htm"
    },
    "stateInt": {
       "table":"countryLowerChamberAttributes",
@@ -47,8 +57,8 @@ standardAttributeInfo = {
       "minValue":-0.8,
       "maxValue":0.8,
       "description":"House vote margin",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Federal Election Committee",
+      "sourceUrl":"http://www.fec.gov/pubrec/fe2012/2012congresults.xls"
    },
    "whitePop": {
       "table":"countryLowerChamberAttributes",
@@ -57,8 +67,8 @@ standardAttributeInfo = {
       "minValue":120779,
       "maxValue":891294,
       "description":"White population",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    },
    "population": {
       "table":"countryLowerChamberAttributes",
@@ -67,8 +77,8 @@ standardAttributeInfo = {
       "minValue":524097,
       "maxValue":998199,
       "description":"Total population",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    },
    "noIns": {
       "table":"countryLowerChamberAttributes",
@@ -77,8 +87,8 @@ standardAttributeInfo = {
       "minValue":20455,
       "maxValue":271443,
       "description":"Number of non-institutionalized civilians without health insurance",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    },
    "civilians": {
       "table":"countryLowerChamberAttributes",
@@ -87,8 +97,8 @@ standardAttributeInfo = {
       "minValue":516672,
       "maxValue":983214,
       "description":"Number of non-institutionalized civilians",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    },
    "populationPovertyPct": {
       "table":"countryLowerChamberAttributes",
@@ -97,8 +107,8 @@ standardAttributeInfo = {
       "minValue":4,
       "maxValue":40,
       "description":"Population earning less than the poverty line",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    },
    "stateBorders": {
       "table":"provinceAttributes",
@@ -107,8 +117,8 @@ standardAttributeInfo = {
       "minValue":0,
       "maxValue":70,
       "description":"State borders",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html"
    },
    "prez2012": {
       "table":"countyAttributes",
@@ -116,7 +126,7 @@ standardAttributeInfo = {
       "year":2012,
       "minValue":-0.8,
       "maxValue":0.8,
-      "description":"Margin of victory in 2004 US Presidential Election",
+      "description":"Margin of victory in 2012 US Presidential Election",
       "source":"Various",
       "sourceUrl":"http://www.politico.com/2012-election/results/president/maine/"
    },
@@ -126,7 +136,7 @@ standardAttributeInfo = {
       "year":2008,
       "minValue":-0.8,
       "maxValue":0.8,
-      "description":"Margin of victory in 2004 US Presidential Election",
+      "description":"Margin of victory in 2008 US Presidential Election",
       "source":"Various",
       "sourceUrl":"http://www.politico.com/2012-election/results/president/maine/"
    },
@@ -137,8 +147,8 @@ standardAttributeInfo = {
       "minValue":0,
       "maxValue":66000,
       "description":"Congressional district borders",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www.census.gov/geo/maps-data/data/cbf/cbf_cds.html"
    },
    "countyBorders": {
       "table":"countyAttributes",
@@ -147,7 +157,7 @@ standardAttributeInfo = {
       "minValue":0,
       "maxValue":4000,
       "description":"County borders",
-      "source":"Kaitlin Duck Sherwood",
-      "sourceUrl":""
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html"
    }
 }
