@@ -104,9 +104,69 @@ standardAttributeInfo = {
       "table":"countryLowerChamberAttributes",
       "fieldName":"populationPovertyPct",
       "year":2011,
-      "minValue":4,
+      "minValue":5,
       "maxValue":40,
       "description":"Population earning less than the poverty line",
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
+   },
+   "medianAge": {
+      "table":"countryLowerChamberAttributes",
+      "fieldName":"medianAge",
+      "year":2011,
+      "minValue":35,
+      "maxValue":45,
+      "description":"Median age",
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
+   },
+   "medianGrossRent": {
+      "table":"countryLowerChamberAttributes",
+      "fieldName":"medianGrossRent",
+      "year":2011,
+      "minValue":700,
+      "maxValue":1400,
+      "description":"Median gross rent",
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
+   },
+   "medianFamilyIncome": {
+      "table":"countryLowerChamberAttributes",
+      "fieldName":"medianFamilyIncome",
+      "year":2011,
+      "minValue":50000,
+      "maxValue":100000,
+      "description":"Median family income",
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
+   },
+   "medianOwnerOccupiedValue": {
+      "table":"countryLowerChamberAttributes",
+      "fieldName":"medianOwnerOccupiedValue",
+      "year":2011,
+      "minValue":150000,
+      "maxValue":250000,
+      "description":"Median owner-occupied home value",
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
+   },
+   "under18PovertyPct": {
+      "table":"countryLowerChamberAttributes",
+      "fieldName":"under18PovertyPct",
+      "year":2011,
+      "minValue":5,
+      "maxValue":40,
+      "description":"Children living under the poverty line",
+      "source":"US Census Bureau",
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
+   },
+   "over64PovertyPct": {
+      "table":"countryLowerChamberAttributes",
+      "fieldName":"over64PovertyPct",
+      "year":2011,
+      "minValue":5,
+      "maxValue":40,
+      "description":"Elderly living under the poverty line",
       "source":"US Census Bureau",
       "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    },

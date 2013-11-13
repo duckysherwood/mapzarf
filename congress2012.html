@@ -37,6 +37,8 @@ Is there a way I can localize each concern??
    <div id="sidebar">
      <b>Congressional District Information</b> (<a href="./faq.html">FAQ</a>)<p>
      Cartogram district areas are proportional to the district population.
+     Click on a district to get a summary for that district, click off the US
+     to see a summary for the US.
 
      <a id="sharingUrl" href="">Shareable link to this view</a><p />
      <input type="checkbox" id="showDotsCheckbox" name="showDots" value="showDotsCheckbox" checked>Show dots for representatives who supported the federal shutdown<br />
@@ -44,14 +46,17 @@ Is there a way I can localize each concern??
      <input type="checkbox" id="showAttributesCheckbox" name="showAttributes" value="showAttributesCheckbox" checked>Colour areas by:
        <select id="attributesCombo" class="indented">
          <option value="shutdownSigner">Shutdown supporters</option>
-         <option value="whitePopPercentage">Percent white (2011)</option>
          <option value="demMargin">Congressional 2012 election</option>
-         <option value="prez2012">Presidential 2012 election</option>
-
-         <option value="populationPovertyPct">Percent in poverty (2011)</option>
-         <option value="noInsPct">Percent without health insurance(2011)</option>
-         <option value="jurisdictionId">JurisdictionId</option>
-         <option value="stateInt">State</option>
+         <option value="whitePopPercentage">Percent white</option>
+         <option value="noInsPct">Percent without health insurance</option>
+         <option value="medianFamilyIncome">Median family income</option>
+         <option value="medianGrossRent">Median gross rent</option>
+         <option value="medianOwnerOccupiedValue">Median home price</option>
+         <option value="populationPovertyPct">People in poverty (%)</option>
+         <option value="under18PovertyPct">Children in poverty (%)</option>
+         <option value="over64PovertyPct">Elderly in poverty (%)</option>
+         <option value="medianAge">Median age</option>
+         <option value="prez2012">Obama-Romney election</option>
        </select>
      <br />
      <span id="attributeDescription" class="indented"></span>
@@ -186,10 +191,17 @@ Is there a way I can localize each concern??
     mrFactory.cartogram.makeBlueYellowLinearMapRequest("unemployment", "countyPopulationCartogram", 2008);
 
     mrFactory.cartogram.makeGreyYellowLinearMapRequest("shutdownSigner", "congressionalDistrictPopCart", 2011);
-    mrFactory.cartogram.makeRandomMapRequest("jurisdictionId", "congressionalDistrictPopCart", 2011);
-    mrFactory.cartogram.makeFakeMapRequest("stateInt", "congressionalDistrictPopCart", 2011);
-    mrFactory.cartogram.makeLinearMapRequest("population", "congressionalDistrictPopCart", 2011);
+    // mrFactory.cartogram.makeRandomMapRequest("jurisdictionId", "congressionalDistrictPopCart", 2011);
+    // mrFactory.cartogram.makeFakeMapRequest("stateInt", "congressionalDistrictPopCart", 2011);
+    // mrFactory.cartogram.makeLinearMapRequest("population", "congressionalDistrictPopCart", 2011);
     mrFactory.cartogram.makeLinearMapRequest("populationPovertyPct", "congressionalDistrictPopCart", 2011);
+    mrFactory.cartogram.makeLinearMapRequest("medianAge", "congressionalDistrictPopCart", 2011);
+    mrFactory.cartogram.makeLinearMapRequest("medianOwnerOccupiedValue", "congressionalDistrictPopCart", 2011);
+    mrFactory.cartogram.makeLinearMapRequest("medianGrossRent", "congressionalDistrictPopCart", 2011);
+    mrFactory.cartogram.makeLinearMapRequest("medianFamilyIncome", "congressionalDistrictPopCart", 2011);
+    mrFactory.cartogram.makeLinearMapRequest("under18PovertyPct", "congressionalDistrictPopCart", 2011);
+    mrFactory.cartogram.makeLinearMapRequest("over64PovertyPct", "congressionalDistrictPopCart", 2011);
+
 
     mrFactory.cartogram.makePopulationPercentageMapRequest("whitePop", "congressionalDistrictPopCart", 2011);
     mapRequests.cartogram.whitePopPercentage.minValue = 0.5;
@@ -215,10 +227,16 @@ Is there a way I can localize each concern??
     // need to do an explicit creation to get the "isPct" field right
     mrFactory.standard.makeBlueYellowLinearMapRequest("unemployment", "county", 2008);
 
-    mrFactory.standard.makeRandomMapRequest("jurisdictionId", "congressionalDistrict", 2011);
-    mrFactory.standard.makeFakeMapRequest("stateInt", "congressionalDistrict", 2011);
-    mrFactory.standard.makeLinearMapRequest("population", "congressionalDistrict", 2011);
+    // mrFactory.standard.makeRandomMapRequest("jurisdictionId", "congressionalDistrict", 2011);
+    // mrFactory.standard.makeFakeMapRequest("stateInt", "congressionalDistrict", 2011);
+    // mrFactory.standard.makeLinearMapRequest("population", "congressionalDistrict", 2011);
     mrFactory.standard.makeLinearMapRequest("populationPovertyPct", "congressionalDistrict", 2011);
+    mrFactory.standard.makeLinearMapRequest("medianAge", "congressionalDistrict", 2011);
+    mrFactory.standard.makeLinearMapRequest("medianOwnerOccupiedValue", "congressionalDistrictPopCart", 2011);
+    mrFactory.standard.makeLinearMapRequest("medianGrossRent", "congressionalDistrict", 2011);
+    mrFactory.standard.makeLinearMapRequest("medianFamilyIncome", "congressionalDistrict", 2011);
+    mrFactory.standard.makeLinearMapRequest("under18PovertyPct", "congressionalDistrict", 2011);
+    mrFactory.standard.makeLinearMapRequest("over64PovertyPct", "congressionalDistrict", 2011);
 
     mrFactory.standard.makePopulationPercentageMapRequest("whitePop", "congressionalDistrict", 2011);
     mapRequests.standard.whitePopPercentage.minValue = 0.5;
