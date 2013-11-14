@@ -54,9 +54,9 @@ cartogramAttributeInfo = {
       "table":"countryLowerChamberAttributes",
       "fieldName":"demMargin",
       "year":2012,
-      "minValue":-0.8,
-      "maxValue":0.8,
-      "description":"House vote margin",
+      "minValue":-0.9,
+      "maxValue":0.9,
+      "description":"House of Representatives vote margin",
       "source":"US Federal Election Committee",
       "sourceUrl":"http://www.fec.gov/pubrec/fe2012/2012congresults.xls"
    },
@@ -105,7 +105,7 @@ cartogramAttributeInfo = {
       "fieldName":"medianFamilyIncome",
       "year":2011,
       "minValue":50000,
-      "maxValue":100000,
+      "maxValue":125000,
       "description":"Median family income",
       "source":"US Census Bureau",
       "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
@@ -184,8 +184,8 @@ cartogramAttributeInfo = {
       "table":"countyAttributes",
       "fieldName":"demPresidentialMargin",
       "year":2012,
-      "minValue":-0.8,
-      "maxValue":0.8,
+      "minValue":-0.9,
+      "maxValue":0.9,
       "description":"Margin of victory in 2012 US Presidential Election",
       "source":"Various",
       "sourceUrl":"http://www.politico.com/2012-election/results/president/maine/"
@@ -194,8 +194,8 @@ cartogramAttributeInfo = {
       "table":"countyAttributes",
       "fieldName":"demPresidentialMargin",
       "year":2008,
-      "minValue":-0.8,
-      "maxValue":0.8,
+      "minValue":-0.9,
+      "maxValue":0.9,
       "description":"Margin of victory in 2008 US Presidential Election",
       "source":"Various",
       "sourceUrl":"http://www.politico.com/2012-election/results/president/maine/"
