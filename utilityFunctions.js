@@ -22,4 +22,19 @@ function dotAttributeYear() {
   }
 }
 
+function getAttribution() {
+  return   "Maps &copy; Kaitlin Duck Sherwood using " +
+           " boundary shapes from the Census Bureau " +
+           " with data from US Census Bureau, Freedom Works and US Federal Election Commission";
+}
 
+// optional for copyright notice at the bottom
+function getDotAttribution() {
+  return "";
+}
+
+/*
+function getDotAttribution() {
+  return " shutdown signer information from Freedom Works.";
+}
+*/
