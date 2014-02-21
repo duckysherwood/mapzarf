@@ -9,15 +9,25 @@ standardAttributeInfo = {
       "source":"",
       "sourceUrl":""
    },
-   "unemployment": { 
-      "table":"countyAttributes",
-      "fieldName":"unemploymentRateAdjustedJan",
-      "year":2013,
-      "minValue":0,
-      "maxValue":17,
-      "description":"Jan 2013 Adjusted Unemployment Rate (percent)",
-      "source":"US Bureau of Labor Statistics",
-      "sourceUrl":"ftp://ftp.bls.gov/pub/time.series/compressed/tape.format/"
+   "taxRoiNormalized": { 
+      "table":"provinceAttributes",
+      "fieldName":"taxRoiNormalized",
+      "year":2005,
+      "minValue":-1.0,
+      "maxValue":1.0,
+      "description":"Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes",
+      "source":"Tax Foundation",
+      "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
+   },
+   "taxRoi": { 
+      "table":"provinceAttributes",
+      "fieldName":"taxRoi",
+      "year":2005,
+      "minValue":0.5,
+      "maxValue":2.0,
+      "description":"Federal Spending in Each State Per Dollar of Federal Taxes",
+      "source":"Tax Foundation",
+      "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
    },
 
    "shutdownSigner": {
@@ -30,26 +40,6 @@ standardAttributeInfo = {
       "source":"Freedom Works",
       "sourceUrl":"http://www.freedomworks.org/blog/jwithrow/does-your-senator-stand-with-mike-lee-against-obam"
    },
-   "jurisdictionId": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"jurisdictionId",
-      "year":2011,
-      "minValue":0,
-      "maxValue":450,
-      "description":"Jurisdiction ID",
-      "source":"Derived from state FIPS and District number",
-      "sourceUrl":"http://www.bls.gov/lau/lausfips.htm"
-   },
-   "stateInt": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"stateInt",
-      "year":2011,
-      "minValue":0,
-      "maxValue":65,
-      "description":"State FIPS code",
-      "source":"ANSI",
-      "sourceUrl":"http://www.bls.gov/lau/lausfips.htm"
-   },
    "demMargin": {
       "table":"countryLowerChamberAttributes",
       "fieldName":"demMargin",
@@ -60,16 +50,6 @@ standardAttributeInfo = {
       "source":"US Federal Election Committee",
       "sourceUrl":"http://www.fec.gov/pubrec/fe2012/2012congresults.xls"
    },
-   "whitePop": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"whitePop",
-      "year":2011,
-      "minValue":120779,
-      "maxValue":891294,
-      "description":"White population",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
    "population": {
       "table":"countryLowerChamberAttributes",
       "fieldName":"population",
@@ -77,26 +57,6 @@ standardAttributeInfo = {
       "minValue":524097,
       "maxValue":998199,
       "description":"Total population",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
-   "noIns": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"civiliansNoHealthIns",
-      "year":2011,
-      "minValue":20455,
-      "maxValue":271443,
-      "description":"Number of non-institutionalized civilians without health insurance",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
-   "civilians": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"civilianNonInstitutionalized",
-      "year":2011,
-      "minValue":516672,
-      "maxValue":983214,
-      "description":"Number of non-institutionalized civilians",
       "source":"US Census Bureau",
       "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    },
@@ -110,66 +70,6 @@ standardAttributeInfo = {
       "source":"US Census Bureau",
       "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    },
-   "medianAge": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"medianAge",
-      "year":2011,
-      "minValue":35,
-      "maxValue":45,
-      "description":"Median age",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
-   "medianGrossRent": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"medianGrossRent",
-      "year":2011,
-      "minValue":700,
-      "maxValue":1400,
-      "description":"Median gross rent",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
-   "medianFamilyIncome": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"medianFamilyIncome",
-      "year":2011,
-      "minValue":50000,
-      "maxValue":125000,
-      "description":"Median family income",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
-   "medianOwnerOccupiedValue": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"medianOwnerOccupiedValue",
-      "year":2011,
-      "minValue":150000,
-      "maxValue":250000,
-      "description":"Median owner-occupied home value",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
-   "under18PovertyPct": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"under18PovertyPct",
-      "year":2011,
-      "minValue":5,
-      "maxValue":40,
-      "description":"Children living under the poverty line",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
-   "over64PovertyPct": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"over64PovertyPct",
-      "year":2011,
-      "minValue":5,
-      "maxValue":40,
-      "description":"Elderly living under the poverty line",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-   },
    "stateBorders": {
       "table":"provinceAttributes",
       "fieldName":"jurisdictionId",
@@ -178,37 +78,27 @@ standardAttributeInfo = {
       "maxValue":70,
       "description":"State borders",
       "source":"US Census Bureau",
-      "sourceUrl":"http://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html"
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
+   },
+   "prez2008": {
+      "table":"provinceAttributes",
+      "fieldName":"obamaMargin",
+      "year":2008,
+      "minValue":-0.5,
+      "maxValue":0.5,
+      "description":"Democratic margin of victory in 2008 US Presidential Election",
+      "source":"Data from many counties compiled by USA Today, M. E. J. Newman, Kaitlin Duck Sherwood, and Mark Brickly",
+      "sourceUrl":"http://www.usatoday.com/news/politics/election2008/president.htm"
    },
    "prez2012": {
-      "table":"countyAttributes",
+      "table":"provinceAttributes",
       "fieldName":"demPresidentialMargin",
       "year":2012,
-      "minValue":-0.9,
-      "maxValue":0.9,
+      "minValue":-0.5,
+      "maxValue":0.5,
       "description":"Margin of victory in 2012 US Presidential Election",
       "source":"Various",
       "sourceUrl":"http://www.politico.com/2012-election/results/president/maine/"
-   },
-   "prez2008": {
-      "table":"countyAttributes",
-      "fieldName":"demPresidentialMargin",
-      "year":2008,
-      "minValue":-0.9,
-      "maxValue":0.9,
-      "description":"Margin of victory in 2008 US Presidential Election",
-      "source":"Various",
-      "sourceUrl":"http://www.politico.com/2012-election/results/president/maine/"
-   },
-   "districtBorders": {
-      "table":"countryLowerChamberAttributes",
-      "fieldName":"jurisdictionId",
-      "year":2000,
-      "minValue":0,
-      "maxValue":66000,
-      "description":"Congressional district borders",
-      "source":"US Census Bureau",
-      "sourceUrl":"http://www.census.gov/geo/maps-data/data/cbf/cbf_cds.html"
    },
    "countyBorders": {
       "table":"countyAttributes",
@@ -218,6 +108,6 @@ standardAttributeInfo = {
       "maxValue":4000,
       "description":"County borders",
       "source":"US Census Bureau",
-      "sourceUrl":"http://www.census.gov/geo/maps-data/data/cbf/cbf_counties.html"
+      "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
    }
 }
