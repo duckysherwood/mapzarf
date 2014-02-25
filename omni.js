@@ -36,9 +36,7 @@ mapApplicationInfo = {
   'jurisdictionInfoUrl' : '',  // e.g. ./countyPopupInformation.php
   'startingCenterLat' : 38,
   'startingCenterLng' : -95,
-  'startingCenterZoom' : 0,
-  'startingMarkerLat' : 0,
-  'startingMarkerLng' : 0,
+  'startingCenterZoom' : 4,
   'polygonLayers' :
     {
        'taxRoiNormalized': { 

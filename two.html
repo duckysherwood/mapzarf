@@ -35,16 +35,22 @@
             src="/thirdparty/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="./omni.js"></script>
     <script type="text/javascript" src="./DomCreator.js"></script>
+    <script type="text/javascript" src="./BehaviourCreator.js"></script>
   
     <script type="text/javascript">
 
+      // var initParam = initializePageParametersFromQueryString(mapApplicationInfo)
       $(document).ready(function() {
 
         // L (from Leaflet) is global scope, but we need map in this scope
-        var map = L.map("map", {minZoom: 0, maxZoom: 14})
+        // so we can pass it to behaviour
+        var myMap = L.map("map", {minZoom: 0, maxZoom: 14})
 
         var domCreator = new DomCreator(mapApplicationInfo)
-        domCreator.createAndPopulateElements(map)
+        domCreator.createAndPopulateElements(myMap)
+
+        var behaviourCreator = new BehaviourCreator(myMap, mapApplicationInfo)
+        // behaviourCreator.initializeBehaviours(map, mapApplicationInfo)
       });
     </script>
 

@@ -1,3 +1,9 @@
+// I tried to set the value of a checkbox to null if it was
+// multiple, but the value ended up being "on" (<- literally, "o"+"n").
+// So I'm going to set a sentinel value instead.  It needs to be global
+// so that BehaviourCreator can see it.
+SENTINEL_MULTIPLE = ""
+
 // The DomCreator populates and initalizes the DOM.  It takes
 // a JSON object which describes basically everything about the
 // map.
@@ -12,6 +18,7 @@
 // TODO check for existence of all the named elements
 function DomCreator ( mapApplicationInfo ) {
   this.mai = mapApplicationInfo // shortened for typing
+
 }
 
 
@@ -60,7 +67,7 @@ DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
 
       layerSelectionCheckbox.checked = true
       layerSelectionCheckbox.type = 'checkbox'
-      layerSelectionCheckbox.name = layerTypeName + 'Checkbox'
+      layerSelectionCheckbox.id = layerTypeName + 'Checkbox'
       var layerDescriptionSpan = document.createElement('span');
 
       if( layersCount == 1) {
@@ -72,11 +79,14 @@ DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
 
       } else {
         
-        layerSelectionCheckbox.value = '' // don't-care
+        // When I tried making value=null, value was instead ="on".  ???
+        layerSelectionCheckbox.value = SENTINEL_MULTIPLE
+
         layerDescriptionSpan.innerHTML = 'Show ' + layerTypeName + ': <br />'
         layerSelectionControl.appendChild(layerDescriptionSpan)
         var selectElement = document.createElement('select')
         selectElement.className = 'indented'
+        selectElement.id = layerTypeName + 'Select'
         layerSelectionControl.appendChild(selectElement)
 
         var alreadySelected = false
@@ -146,6 +156,15 @@ DomCreator.prototype.createAndPopulateElements = function (map) {
   map.setView([this.mai.startingCenterLat, this.mai.startingCenterLng],
               this.mai.startingCenterZoom)
 
+  // Set up the marker
+  // TODO @@@ The marker needs to get into higher scope, maybe 
+  // the marker gets set one level up?
+  if (this.mai.hasOwnProperty('startingMarkerLat') &&
+      (this.mai.startingMarkerLat != undefined)) {
+    L.marker([this.mai.startingMarkerLat, this.mai.startingMarkerLng])
+        .bindPopup("Fetching data, please wait...")
+        .addTo(map)
+  }
 
 }
 
