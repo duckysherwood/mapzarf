@@ -35,7 +35,7 @@
             src="/thirdparty/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="./omni.js"></script>
     <script type="text/javascript" src="./DomCreator.js"></script>
-    <script type="text/javascript" src="./BehaviourCreator.js"></script>
+    <script type="text/javascript" src="./MapBehaviorInitializer.js"></script>
   
     <script type="text/javascript">
 
@@ -53,8 +53,9 @@
         var domCreator = new DomCreator(mapApplicationInfo)
         domCreator.createAndPopulateElements(myMap)
 
-        var behaviourCreator = new BehaviourCreator(myMap, mapApplicationInfo)
-        // behaviourCreator.initializeBehaviours(map, mapApplicationInfo)
+        var mbc = new MapBehaviorInitializer(myMap, mapApplicationInfo)
+        mbc.initialize()
+
       });
     </script>
 

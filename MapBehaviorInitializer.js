@@ -5,7 +5,7 @@
 // change city markers
 // BehaviourCreator adds behaviour to everything, including the map
 
-function BehaviourCreator(aMap, mapApplicationInfo) {
+function MapBehaviorInitializer(aMap, mapApplicationInfo) {
   this.map = aMap
   this.map.mai = mapApplicationInfo
   this.dotLayer = null
@@ -169,8 +169,12 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
     }
   }
 
-  this.map.updateLayers()
+  this.initialize = function () {
+    this.map.updateLayers()
+  }
+
 }
+
 
 
 
