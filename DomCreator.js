@@ -109,3 +109,40 @@ DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
   return null
 }
 
+// Creates and initializes all the DOM elements
+DomCreator.prototype.createAndPopulateElements = function (map) {
+  document.title = mapApplicationInfo.pageTitle
+  
+  $( '#explanation').html( "<b>" + this.mai.pageTitle + "</b><p>" 
+                           + this.mai.pageDescription + "<p>")
+
+  
+  // Add the dot layer selector (if needed)
+  var dotSelector = this.createLayerSelectorControl("dotLayers")
+  $( '#dotLayers' ).append(dotSelector)
+
+  // Add the polygon layer selector (if needed)
+  var polygonSelector = this.createLayerSelectorControl('polygonLayers')
+  $( '#polygonLayers' ).append(polygonSelector)
+
+  // Add the polygon layer selector (if needed)
+  var borderSelector = this.createLayerSelectorControl('borderLayers')
+  $( '#borderLayers' ).append(borderSelector)
+
+  // Sharing URL should start out pointing to here
+  $( '#sharingUrl' )[0].href = '#'
+
+  // Allow switching between cartogram and not
+// <input type="checkbox" id="isCartogramCheckbox" checked>Show as cartogram<p>
+
+  if(this.mai has key "cartogramShapeType" 
+     && (this.mai.cartogramShapeType != undefined)) {
+  }
+
+  // Set up the map
+  map.setView([this.mai.startingCenterLat, this.mai.startingCenterLng],
+              this.mai.startingCenterZoom)
+
+
+}
+

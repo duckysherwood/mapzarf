@@ -24,9 +24,13 @@
        <div id="polygonLayers"></div>
        <div id="dotLayers"></div>
        <div id="borderLayers"></div>
+
+       <input type="checkbox" id="showCitiesCheckbox">Show city names<br>
+       <div id="cartogramSelector"></div>
        
      </div>
   
+    <script src="/thirdparty/leaflet/Leaflet-0.6.4/leaflet.js" type="text/javascript"></script>
     <script type="text/javascript" 
             src="/thirdparty/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="./omni.js"></script>
@@ -36,33 +40,11 @@
 
       $(document).ready(function() {
 
+        // L (from Leaflet) is global scope, but we need map in this scope
+        var map = L.map("map", {minZoom: 0, maxZoom: 14})
+
         var domCreator = new DomCreator(mapApplicationInfo)
-
-// this needs to move into DomCreator
-        document.title = mapApplicationInfo.pageTitle
-        
-        $( '#explanation').html( "<b>" 
-                             + mapApplicationInfo.pageTitle + "</b><p>" 
-                             + mapApplicationInfo.pageDescription + "<p>")
-
-        
-        // Add the dot layer selector (if needed)
-        var dotSelector = domCreator.createLayerSelectorControl("dotLayers")
-        $( '#dotLayers' ).append(dotSelector)
-
-        var polygonSelector = domCreator.
-                                  createLayerSelectorControl('polygonLayers')
-        $( '#polygonLayers' ).append(polygonSelector)
-
-        var borderSelector = domCreator.
-                                 createLayerSelectorControl('borderLayers')
-        $( '#borderLayers' ).append(borderSelector)
-
-        // TODO Add the city names checkbox
-
-        // @@@ TODO load this with the actual shareable link
-        // @@@ TODO this needs to go AFTER the shareable link is correct
-        $( '#sharingUrl' )[0].href = 'http://maps.webfoot.com'
+        domCreator.createAndPopulateElements(map)
       });
     </script>
 
