@@ -21,12 +21,14 @@ ListenerInitializer.prototype.addLayerControlSelectListener
 
   // make available to the closure
   var myLayerTypeName = layerTypeName
+  var myMap = this.map
   var mai = this.mai
 
   selectElement.onchange = function () {
     var field = $('option.' + myLayerTypeName + 'Option:selected').val()
     var elementName = '#' + myLayerTypeName + 'Description' 
     $( elementName ).html(descriptionHtml(mai[myLayerTypeName][field]))
+    myMap.updateLayers()
   }
 
 }

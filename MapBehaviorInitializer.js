@@ -1,3 +1,4 @@
+// TODO move to a separate class?
 // Want to add behaviour to the leaflet map, including
 // change to cartogram
 // change dot layer
@@ -65,11 +66,25 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
 
     var url = "../../mapeteria2/choropleth.phpx?x={x}&y={y}&zoom={z}&";
 
-    url += 'polyType=' + this.mai[this.projectionType() + 'ShapeType']
-    url += '&polyYear=' + this.mai[this.projectionType() + 'PolyYear']
+    url += 'polyType=' + layerSpec[this.projectionType() + 'ShapeType']
+    url += '&polyYear=' + layerSpec[this.projectionType() + 'PolyYear']
     url += '&table=' + layerSpec.table
     url += '&field=' + layerSpec.fieldName
     url += '&year=' + layerSpec.year
+
+
+    // @@@ I suppose I could also check for null or undefined...
+    if(layerSpec.hasOwnProperty('normalizerType') &&
+       layerSpec.hasOwnProperty('normalizerField') &&
+       layerSpec.hasOwnProperty('normalizerYear') ) {
+      url += '&normalizer=' + layerSpec.normalizerField
+      url += '&normalizerType=' + layerSpec.normalizerType
+      url += '&normalizerYear=' + layerSpec.normalizerYear
+    } else {
+      url += '&normalizer=null' 
+      url += '&normalizerYear=1'
+      url += '&normalizerType=n'
+    }
 
     // border layers don't have these
     // TODO look for each one before printing it out, which probably means 
@@ -82,25 +97,12 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
     }
     url += '&mapping=' + layerSpec.mapping
 
-    // @@@ I suppose I could also check for null or undefined...
-    if(layerSpec.hasOwnProperty('normalizerType') &&
-       layerSpec.hasOwnProperty('normalizerField') &&
-       layerSpec.hasOwnProperty('normalizerYear') ) {
-      url += '&normalizer=' + layerSpec.normalizerField
-      url += '&normalizerType=' + layerSpec.normalizerType
-      url += '&normalizerYear=' + layerSpec.normalizerYear
-    } else {
-      url += '&normalizer=n' 
-      url += '&normalizerYear=1'
-      url += '&normalizerField=null'
-    }
-
     if(showBorder) {
       var borderWidth = 1
       if(layerSpec.hasOwnProperty('borderWidth')) {
         borderWidth = layerSpec.borderWidth
       }
-      url += "borderColor="+layerSpec.borderColor
+      url += "&borderColor="+layerSpec.borderColor
              + "&border=solid&width="+layerSpec.borderWidth;
     }
        

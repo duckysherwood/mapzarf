@@ -29,10 +29,6 @@
 mapApplicationInfo = {
   'pageTitle' : 'Federal Spending Per Tax Dollar',
   'pageDescription' : 'This shows the change in the tax dollars spent vs. sent by each state.  If there was $1.50 of spending in a state for each $1.00 in taxes raised from that state, it will show as -50%.',
-  'mercatorShapeType' : 'province',  // could be 'state', I suppose?
-  'mercatorPolyYear' : 2008,
-  'cartogramShapeType' : 'statePopCartogram',
-  'cartogramPolyYear' : 2011,
   'jurisdictionInfoUrl' : '',  // e.g. ./countyPopupInformation.php
   'startingCenterLat' : 38,
   'startingCenterLng' : -95,
@@ -43,6 +39,10 @@ mapApplicationInfo = {
           'table':'provinceAttributes',
           'fieldName':'taxRoiNormalized',
           'year':2005,
+          'mercatorShapeType' : 'province',  // could be 'state', I suppose?
+          'mercatorPolyYear' : 2008,
+          'cartogramShapeType' : 'statePopCartogram',
+          'cartogramPolyYear' : 2011,
           'minValue':-1.0,
           'maxValue':1.0,
           'minColor' : '0000ff',
@@ -56,6 +56,10 @@ mapApplicationInfo = {
        'populationPovertyPct': {
           'table':'countryLowerChamberAttributes',
           'fieldName':'populationPovertyPct',
+          'mercatorShapeType' : 'congressionalDistrict',  
+          'mercatorPolyYear' : 2011, 
+          'cartogramShapeType' : 'congressionalDistrictPopCart',
+          'cartogramPolyYear' : 2011,
           'year':2011,
           'minValue':5,
           'maxValue':40,
@@ -71,6 +75,10 @@ mapApplicationInfo = {
           'table':'provinceAttributes',
           'fieldName':'demPresidentialMargin',
           'year':2012,
+          'mercatorShapeType' : 'province',  // could be 'state', I suppose?
+          'mercatorPolyYear' : 2008,
+          'cartogramShapeType' : 'statePopCartogram',
+          'cartogramPolyYear' : 2011,
           'minValue':-0.5,
           'maxValue':0.5,
           'shortDescription' : 'Obama-Romney Election',
@@ -82,6 +90,10 @@ mapApplicationInfo = {
           'table':'provinceAttributes',
           'fieldName':'obamaMargin',
           'year':2008,
+          'mercatorShapeType' : 'province',  // could be 'state', I suppose?
+          'mercatorPolyYear' : 2008,
+          'cartogramShapeType' : 'statePopCartogram',
+          'cartogramPolyYear' : 2011,
           'minValue':-0.5,
           'maxValue':0.5,
           'shortDescription' : 'Obama-McCain Election',
@@ -92,26 +104,15 @@ mapApplicationInfo = {
     },
   'borderLayers' :
     {
-       'county': {
-          'table':'countyAttributes',
-          'mercatorType' : 'state',
-          'cartogramType' : 'statePopCartogram',
-          'fieldName':'jurisdictionId',
-          'year':2000,
-          'borderColor' : '000000',
-          'borderWidth' : '1',
-          'mapping' : 'none',
-          'shortDescription' : 'County',
-          'description' : 'County borders',
-          'source':'US Census Bureau',
-          'sourceUrl':'http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx'
-       },
        'state': {
           'table':'provinceAttributes',
+          'mercatorShapeType' : 'state',
+          'mercatorPolyYear' : 2006,
+          'cartogramShapeType' : 'statePopCartogram',
+          'cartogramPolyYear' : 2011,
           'fieldName':'jurisdictionId',
-          'mercatorType' : 'county',
-          'cartogramType' : 'countyPopulationCartogram',
           'year':2000,
+          'mapping' : 'none',
           'borderColor' : '000000',
           'borderWidth' : '2',
           'shortDescription' : 'State',
@@ -119,6 +120,23 @@ mapApplicationInfo = {
           'source':'US Census Bureau',
           'sourceUrl':'http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx'
        },
+       'county': {
+          'table':'countyAttributes',
+          'mercatorShapeType' : 'county',  
+          'mercatorPolyYear' : 2008,
+          'cartogramShapeType' : 'countyPopulationCartogram',
+          'cartogramPolyYear' : 2011,
+          'fieldName':'jurisdictionId',
+          'year':2009,
+          'mapping' : 'none',
+          'borderColor' : '000000',
+          'borderWidth' : '1',
+          'mapping' : 'none',
+          'shortDescription' : 'County',
+          'description' : 'County borders',
+          'source':'US Census Bureau',
+          'sourceUrl':'http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx'
+       }
     },
   'dotLayers' :
     {
