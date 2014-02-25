@@ -24,7 +24,7 @@ ListenerInitializer.prototype.addLayerControlSelectListener
   var mai = this.mai
 
   selectElement.onchange = function () {
-    var field = $('option.choroplethLayersOption:selected').val()
+    var field = $('option.' + myLayerTypeName + 'Option:selected').val()
     var elementName = '#' + myLayerTypeName + 'Description' 
     $( elementName ).html(mai[myLayerTypeName][field].description)
   }
