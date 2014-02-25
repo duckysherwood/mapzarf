@@ -18,15 +18,16 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
   }
 
   this.map.getChoroplethLayer = function () {
-    return this.getPolygonLayer('choroplethLayers');
+    return this.getPolygonLayer('choroplethLayers', false);
   }
 
+  // TODO allow different border widths for different jurisdiction types
   this.map.getBorderLayer = function () {
-    return this.getPolygonLayer('borderLayers');
+    return this.getPolygonLayer('borderLayers', true);
   }
 
   // Used for both choropleth layer and border layer
-  this.map.getPolygonLayer = function (layerTypeName) {
+  this.map.getPolygonLayer = function (layerTypeName, showBorder) {
     if(!this.layerSpecExists) {
       return null
     }
@@ -41,10 +42,16 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
     url += '&table=' + layerSpec['table']
     url += '&field=' + layerSpec['fieldName']
     url += '&year=' + layerSpec['year']
-    url += '&minValue=' + layerSpec['minValue']
-    url += '&maxValue=' + layerSpec['maxValue']
-    url += '&minColor=' + layerSpec['minColor']
-    url += '&maxColor=' + layerSpec['maxColor']
+
+    // border layers don't have these
+    // TODO look for each one before printing it out, which probably means 
+    // TODO writing a helper method
+    if(layerSpec.hasOwnProperty('minValue')) {
+      url += '&minValue=' + layerSpec['minValue']
+      url += '&maxValue=' + layerSpec['maxValue']
+      url += '&minColor=' + layerSpec['minColor']
+      url += '&maxColor=' + layerSpec['maxColor']
+    }
     url += '&mapping=' + layerSpec['mapping']
 
     // @@@ I suppose I could also check for null or undefined...
@@ -60,8 +67,14 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
       url += '&normalizerField=null'
     }
 
-    // NOTE: maybe should have the option for putting a border onto
-    // the choropleth tiles
+    if(showBorder) {
+      var borderWidth = 1
+      if(layerSpec.hasOwnProperty('borderWidth')) {
+        borderWidth = layerSpec['borderWidth']
+      }
+      url += "borderColor="+layerSpec.borderColor
+             + "&border=solid&width="+layerSpec.borderWidth;
+    }
        
     console.log('Polygon url for ' + layerTypeName + ' is ' + url)
     return L.tileLayer(url, {
@@ -116,6 +129,10 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
 
   this.map.findSelectedKeyForLayerType  = function (layerTypeName) {
     var checkboxId = '#' + layerTypeName + 'Checkbox'
+    if($( checkboxId ) == undefined) {
+      return false
+    }
+
     if($( checkboxId ).is(':checked')) {
       var key = $( checkboxId ).val()
   
