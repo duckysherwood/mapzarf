@@ -1,3 +1,9 @@
+// TODO figure out why the layer controls don't appear on the page
+// TODO the same order as they are added to the DOM
+
+// TODO figure out how to set the first item in a drop-down as the
+// TODO default, instead of the last
+
 // I tried to set the value of a checkbox to null if it was
 // multiple, but the value ended up being "on" (<- literally, "o"+"n").
 // So I'm going to set a sentinel value instead.  It needs to be global
@@ -34,8 +40,8 @@ DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
 
   if(layerTypeName in this.mai) { 
     var layerSpecs = this.mai[layerTypeName]
-    var layerDiv = $( layerSpecs )
-    if( layerDiv == undefined ) {
+    var $layerDiv = $( layerSpecs )
+    if( $layerDiv == undefined ) {
       console.log('Missing div for ' + layerspec + ', failing softly.')
       return null
     }

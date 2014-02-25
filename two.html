@@ -42,6 +42,10 @@
       // var initParam = initializePageParametersFromQueryString(mapApplicationInfo)
       $(document).ready(function() {
 
+        // TODO move this into another file
+        // TODO look again at JS style guide
+        // TODO add JSDoc
+        // TODO put on GitHub
         // L (from Leaflet) is global scope, but we need map in this scope
         // so we can pass it to behaviour
         var myMap = L.map("map", {minZoom: 0, maxZoom: 14})

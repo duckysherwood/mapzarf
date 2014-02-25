@@ -8,10 +8,35 @@
 function BehaviourCreator(aMap, mapApplicationInfo) {
   this.map = aMap
   this.map.mai = mapApplicationInfo
+  this.dotLayer = null
+  this.borderLayer = null
+  this.choroplethLayer = null
 
-  this.map.changeDotLayer = function () {
-    // TODO put in error checks
+  this.map.updateLayers = function () { 
+    
+    // needed because "this" in the $.each is the layer
+    var thisMap = this  
+  
+
+    $.each([this.dotLayer, this.borderLayer, this.choroplethLayer],
+           function (index, layer) {
+             if((layer != null) && (layer != undefined)) {
+               thisMap.removeLayer(layer)
+             }
+           })
+
+    this.dotLayer = this.getDotLayer()
+    this.borderLayer = this.getBorderLayer()
+    this.choroplethLayer = this.getChoroplethLayer()
+
+    $.each([this.choroplethLayer, this.borderLayer, this.dotLayer],
+           function (index, layer) {
+             if((layer != null) && (layer != undefined)) {
+               thisMap.addLayer(layer)
+             }
+           })
   }
+
 
   this.map.projectionType = function () {
     return 'cartogram' // @@@ TODO fix to check the checkbox
@@ -21,14 +46,13 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
     return this.getPolygonLayer('choroplethLayers', false);
   }
 
-  // TODO allow different border widths for different jurisdiction types
   this.map.getBorderLayer = function () {
     return this.getPolygonLayer('borderLayers', true);
   }
 
   // Used for both choropleth layer and border layer
   this.map.getPolygonLayer = function (layerTypeName, showBorder) {
-    if(!this.layerSpecExists) {
+    if(!this.layerSpecExists(layerTypeName)) {
       return null
     }
 
@@ -39,28 +63,28 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
 
     url += 'polyType=' + this.mai[this.projectionType() + 'ShapeType']
     url += '&polyYear=' + this.mai[this.projectionType() + 'PolyYear']
-    url += '&table=' + layerSpec['table']
-    url += '&field=' + layerSpec['fieldName']
-    url += '&year=' + layerSpec['year']
+    url += '&table=' + layerSpec.table
+    url += '&field=' + layerSpec.fieldName
+    url += '&year=' + layerSpec.year
 
     // border layers don't have these
     // TODO look for each one before printing it out, which probably means 
     // TODO writing a helper method
     if(layerSpec.hasOwnProperty('minValue')) {
-      url += '&minValue=' + layerSpec['minValue']
-      url += '&maxValue=' + layerSpec['maxValue']
-      url += '&minColor=' + layerSpec['minColor']
-      url += '&maxColor=' + layerSpec['maxColor']
+      url += '&minValue=' + layerSpec.minValue
+      url += '&maxValue=' + layerSpec.maxValue
+      url += '&minColor=' + layerSpec.minColor
+      url += '&maxColor=' + layerSpec.maxColor
     }
-    url += '&mapping=' + layerSpec['mapping']
+    url += '&mapping=' + layerSpec.mapping
 
     // @@@ I suppose I could also check for null or undefined...
     if(layerSpec.hasOwnProperty('normalizerType') &&
        layerSpec.hasOwnProperty('normalizerField') &&
        layerSpec.hasOwnProperty('normalizerYear') ) {
-      url += '&normalizer=' + layerSpec['normalizerField']
-      url += '&normalizerType=' + layerSpec['normalizerType']
-      url += '&normalizerYear=' + layerSpec['normalizerYear']
+      url += '&normalizer=' + layerSpec.normalizerField
+      url += '&normalizerType=' + layerSpec.normalizerType
+      url += '&normalizerYear=' + layerSpec.normalizerYear
     } else {
       url += '&normalizer=n' 
       url += '&normalizerYear=1'
@@ -70,7 +94,7 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
     if(showBorder) {
       var borderWidth = 1
       if(layerSpec.hasOwnProperty('borderWidth')) {
-        borderWidth = layerSpec['borderWidth']
+        borderWidth = layerSpec.borderWidth
       }
       url += "borderColor="+layerSpec.borderColor
              + "&border=solid&width="+layerSpec.borderWidth;
@@ -86,7 +110,7 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
 
   this.map.getDotLayer = function () {
     var layerTypeName = 'dotLayers'
-    if(!this.layerSpecExists) {
+    if(!this.layerSpecExists('dotLayers')) {
       return null
     }
 
@@ -145,9 +169,7 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
     }
   }
 
-  this.map.addLayer(this.map.getChoroplethLayer())
-  this.map.addLayer(this.map.getBorderLayer())
-  this.map.addLayer(this.map.getDotLayer())
+  this.map.updateLayers()
 }
 
 
