@@ -47,7 +47,7 @@ mapApplicationInfo = {
           'maxValue':1.0,
           'minColor' : '0000ff',
           'maxColor' : 'ff0000',
-          'mapping' : 'plusMinus',
+          'mapping' : 'plusminus',
           'shortDescription' : 'Tax ROI',
           'description':'Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes',
           'source':'Tax Foundation',

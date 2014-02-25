@@ -39,11 +39,13 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
     url += 'polyType=' + this.mai[this.projectionType() + 'ShapeType']
     url += '&polyYear=' + this.mai[this.projectionType() + 'PolyYear']
     url += '&table=' + layerSpec['table']
-    url += '&field=' + layerSpec['field']
+    url += '&field=' + layerSpec['fieldName']
+    url += '&year=' + layerSpec['year']
     url += '&minValue=' + layerSpec['minValue']
     url += '&maxValue=' + layerSpec['maxValue']
     url += '&minColor=' + layerSpec['minColor']
     url += '&maxColor=' + layerSpec['maxColor']
+    url += '&mapping=' + layerSpec['mapping']
 
     // @@@ I suppose I could also check for null or undefined...
     if(layerSpec.hasOwnProperty('normalizerType') &&
@@ -126,10 +128,9 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
     }
   }
 
-  var dotLayer = this.map.getDotLayer()  // @@@ testing only TODO
-  var choroplethLayer = this.map.getChoroplethLayer()  // @@@ testing only TODO
-  var borderLayer = this.map.getBorderLayer()  // @@@ testing only TODO
-
+  this.map.addLayer(this.map.getChoroplethLayer())
+  // this.map.addLayer(this.map.getBorderLayer())
+  // this.map.addLayer(this.map.getDotLayer())
 }
 
 
