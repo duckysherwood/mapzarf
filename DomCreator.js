@@ -94,6 +94,7 @@ DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
         selectElement.className = 'indented'
         selectElement.id = layerTypeName + 'Select'
         layerSelectionControl.appendChild(selectElement)
+        layerSelectionControl.appendChild(document.createElement('br'))
 
         var alreadySelected = false
         for (var key in layerSpecs) {
@@ -110,11 +111,7 @@ DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
                var descriptionElem = document.createElement('span')
                descriptionElem.id = layerTypeName + 'Description'
                var spec = layerSpecs[key]
-               var descriptionText = '<br /><a href="' + spec.sourceUrl + '">'
-                                     + spec.description + '</a> ' 
-                                     + '(' + spec.year + ', '
-                                     + spec.source + ')<p>'
-               descriptionElem.innerHTML = descriptionText
+               descriptionElem.innerHTML = descriptionHtml(spec)
                descriptionElem.className = 'indented'
                layerSelectionControl.appendChild(descriptionElem)
              }

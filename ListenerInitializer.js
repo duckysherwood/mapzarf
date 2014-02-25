@@ -26,7 +26,7 @@ ListenerInitializer.prototype.addLayerControlSelectListener
   selectElement.onchange = function () {
     var field = $('option.' + myLayerTypeName + 'Option:selected').val()
     var elementName = '#' + myLayerTypeName + 'Description' 
-    $( elementName ).html(mai[myLayerTypeName][field].description)
+    $( elementName ).html(descriptionHtml(mai[myLayerTypeName][field]))
   }
 
 }
