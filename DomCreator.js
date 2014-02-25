@@ -12,7 +12,7 @@ SENTINEL_MULTIPLE = ""
 // include elements named
 //   explanation (p)
 //   sharingUrl (a)
-//   polygonLayers (div)
+//   choroplethLayers (div)
 //   dotLayers (div)
 //   borderLayers (div)
 // TODO check for existence of all the named elements
@@ -131,11 +131,11 @@ DomCreator.prototype.createAndPopulateElements = function (map) {
   var dotSelector = this.createLayerSelectorControl("dotLayers")
   $( '#dotLayers' ).append(dotSelector)
 
-  // Add the polygon layer selector (if needed)
-  var polygonSelector = this.createLayerSelectorControl('polygonLayers')
-  $( '#polygonLayers' ).append(polygonSelector)
+  // Add the choropleth layer selector (if needed)
+  var choroplethSelector = this.createLayerSelectorControl('choroplethLayers')
+  $( '#choroplethLayers' ).append(choroplethSelector)
 
-  // Add the polygon layer selector (if needed)
+  // Add the border layer selector (if needed)
   var borderSelector = this.createLayerSelectorControl('borderLayers')
   $( '#borderLayers' ).append(borderSelector)
 

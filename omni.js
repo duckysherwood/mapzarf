@@ -1,12 +1,12 @@
 /* This file gives the information about a mapping web app, including
- *  which polygon layers to show, 
+ *  which choropleth layers to show, 
  *  which dot layers to show, 
  *  whether there is cartogram information, 
  *  what the starting lat/lng should be, 
  *  what the colour mapping should be
  */
 
-/* Polygon layer defaults:
+/* Choropleth layer defaults:
   isPercentage=false, 
   normalizerType='n', 
   normalizerFieldName="dont-care",
@@ -37,7 +37,7 @@ mapApplicationInfo = {
   'startingCenterLat' : 38,
   'startingCenterLng' : -95,
   'startingCenterZoom' : 4,
-  'polygonLayers' :
+  'choroplethLayers' :
     {
        'taxRoiNormalized': { 
           'table':'provinceAttributes',
@@ -134,7 +134,8 @@ mapApplicationInfo = {
           'color': '000005',
           'shortDescription' : "dots for representatives who supported the 2014 US Federal shutdown",
           'description': 'Republican Congressional Representatives who signed a letter supporting shutting down the US Federal government in an attempt to defund Obamacare.',
-          'source' : 'http://www.freedomworks.org/content/have-your-members-congress-signed-defund-obamacare-letter-find-out-here'
+          'sourceUrl' : 'http://www.freedomworks.org/content/have-your-members-congress-signed-defund-obamacare-letter-find-out-here',
+          'source' : 'Freedom Works'
        }
     }
 	
