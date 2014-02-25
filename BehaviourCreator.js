@@ -129,8 +129,8 @@ function BehaviourCreator(aMap, mapApplicationInfo) {
   }
 
   this.map.addLayer(this.map.getChoroplethLayer())
-  // this.map.addLayer(this.map.getBorderLayer())
-  // this.map.addLayer(this.map.getDotLayer())
+  this.map.addLayer(this.map.getBorderLayer())
+  this.map.addLayer(this.map.getDotLayer())
 }
 
 
