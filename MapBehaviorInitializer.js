@@ -56,6 +56,10 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
       return null
     }
 
+    if(!$( '#' + layerTypeName + 'Checkbox').is(':checked')) {
+      return null
+    }
+
     var key = this.findSelectedKeyForLayerType(layerTypeName)
     var layerSpec = this.mai[layerTypeName][key] 
 
@@ -111,6 +115,10 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
   this.map.getDotLayer = function () {
     var layerTypeName = 'dotLayers'
     if(!this.layerSpecExists('dotLayers')) {
+      return null
+    }
+
+    if(!$( '#dotLayersCheckbox').is(':checked')) {
       return null
     }
 

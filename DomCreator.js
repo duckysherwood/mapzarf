@@ -99,6 +99,7 @@ DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
         for (var key in layerSpecs) {
           if (layerSpecs.hasOwnProperty(key)) {
              var optionElement = document.createElement('option')
+             optionElement.className = layerTypeName + 'Option'
              optionElement.text = layerSpecs[key].shortDescription
              optionElement.setAttribute['id'] = key
              optionElement.value = key
@@ -107,6 +108,7 @@ DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
                alreadySelected = true
                optionElement.selected = true
                var descriptionElem = document.createElement('span')
+               descriptionElem.id = layerTypeName + 'Description'
                var spec = layerSpecs[key]
                var descriptionText = '<br /><a href="' + spec.sourceUrl + '">'
                                      + spec.description + '</a> ' 

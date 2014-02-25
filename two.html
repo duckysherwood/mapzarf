@@ -36,6 +36,7 @@
     <script type="text/javascript" src="./omni.js"></script>
     <script type="text/javascript" src="./DomCreator.js"></script>
     <script type="text/javascript" src="./MapBehaviorInitializer.js"></script>
+    <script type="text/javascript" src="./ListenerInitializer.js"></script>
   
     <script type="text/javascript">
 
@@ -55,6 +56,10 @@
 
         var mbc = new MapBehaviorInitializer(myMap, mapApplicationInfo)
         mbc.initialize()
+
+        var listenerInitializer = 
+          new ListenerInitializer(myMap, mapApplicationInfo)
+      
 
       });
     </script>
