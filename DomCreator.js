@@ -133,10 +133,13 @@ DomCreator.prototype.createAndPopulateElements = function (map) {
   $( '#sharingUrl' )[0].href = '#'
 
   // Allow switching between cartogram and not
-// <input type="checkbox" id="isCartogramCheckbox" checked>Show as cartogram<p>
 
-  if(this.mai has key "cartogramShapeType" 
-     && (this.mai.cartogramShapeType != undefined)) {
+  if (this.mai.hasOwnProperty('cartogramShapeType') &&
+      (this.mai.cartogramShapeType != undefined)) {
+     var cartogramCheckbox = 
+           '<input type="checkbox" id="isCartogramCheckbox" checked>'
+     var cartogramText = 'Show as cartogram<p />'
+    $( '#cartogramSelector' ).append(cartogramCheckbox + cartogramText)
   }
 
   // Set up the map
