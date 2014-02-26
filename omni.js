@@ -33,6 +33,7 @@ mapApplicationInfo = {
   'startingCenterLat' : 38,
   'startingCenterLng' : -95,
   'startingCenterZoom' : 4,
+  'hasCartogram' : true,
   'choroplethLayers' :
     {
        'taxRoiNormalized': { 

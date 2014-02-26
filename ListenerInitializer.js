@@ -2,17 +2,15 @@ function ListenerInitializer (map, mapApplicationInfo, labeller) {
   this.map = map
   this.mai = mapApplicationInfo
   this.labeller = labeller
-  // put listeners on the layer checkboxes
-  // put listeners on the layer checkbox
   // put listeners on the cartogram checkbox
-  // put listeners on the city names checkbox
+
   this.addLayerControlSelectListener('choroplethLayers') 
   this.addLayerControlSelectListener('borderLayers') 
   this.addLayerControlCheckboxListener('choroplethLayers')
   this.addLayerControlCheckboxListener('borderLayers')
   this.addLayerControlCheckboxListener('dotLayers')
   this.addCitiesCheckboxListener()
-
+  this.addIsCartogramCheckboxListener()
 }
 
 ListenerInitializer.prototype.addLayerControlSelectListener
@@ -49,6 +47,7 @@ ListenerInitializer.prototype.addLayerControlCheckboxListener
   checkboxElement.onchange = function () {
     myMap.updateLayers()
   }
+}
 
 ListenerInitializer.prototype.addCitiesCheckboxListener
   = function () {
@@ -57,6 +56,22 @@ ListenerInitializer.prototype.addCitiesCheckboxListener
   }
 }
 
+ListenerInitializer.prototype.addIsCartogramCheckboxListener
+  = function () {
+  var checkboxElement = $( '#isCartogramCheckbox' )[0]
+  if((checkboxElement == null) || (checkboxElement == undefined)) {
+    return null
+  }
 
+  var myMap = this.map
+  checkboxElement.onchange = function () {
+    myMap.updateLayers()
+
+    var cityLabeller = new CityLabeller($( '#map' )[0], myMap)
+    cityLabeller.refreshCityLabels()    
+  }
 }
+
+
+
 

@@ -66,8 +66,8 @@
         var listenerInitializer = 
           new ListenerInitializer(myMap, mapApplicationInfo, cityLabeller)
       
-        var markers = new L.FeatureGroup()
-        $.data( $( '#map' )[0], 'markers', markers)
+        var cityMarkers = []
+        $.data( $( '#map' )[0], 'cityMarkers', cityMarkers)
         cityLabeller.refreshCityLabels()
 
       });

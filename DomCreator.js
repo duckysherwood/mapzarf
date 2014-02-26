@@ -24,9 +24,7 @@ SENTINEL_MULTIPLE = ""
 // TODO check for existence of all the named elements
 function DomCreator ( mapApplicationInfo ) {
   this.mai = mapApplicationInfo // shortened for typing
-
 }
-
 
 // Creates a selector object for a layer type (e.g. 
 // dot layers) based on how many layer specs of that type there are.
@@ -149,8 +147,9 @@ DomCreator.prototype.createAndPopulateElements = function (map) {
 
   // Allow switching between cartogram and not
 
-  if (this.mai.hasOwnProperty('cartogramShapeType') &&
-      (this.mai.cartogramShapeType != undefined)) {
+  if (this.mai.hasOwnProperty('hasCartogram') &&
+      (this.mai.hasCartogram != undefined) && 
+      this.mai.hasCartogram) {
      var cartogramCheckbox = 
            '<input type="checkbox" id="isCartogramCheckbox" checked>'
      var cartogramText = 'Show as cartogram<p />'

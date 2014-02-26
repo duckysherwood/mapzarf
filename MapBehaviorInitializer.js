@@ -50,7 +50,11 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
 
 
   this.map.projectionType = function () {
-    return 'cartogram' // @@@ TODO fix to check the checkbox
+    if( $( '#isCartogramCheckbox' ).is(':checked')) {
+      return 'cartogram' 
+    } else {
+      return 'mercator'
+    }
   }
 
   this.map.getChoroplethLayer = function () {
