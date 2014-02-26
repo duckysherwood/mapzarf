@@ -39,8 +39,8 @@ mapApplicationInfo = {
           'table':'provinceAttributes',
           'fieldName':'taxRoiNormalized',
           'year':2005,
-          'mercatorShapeType' : 'province',  // could be 'state', I suppose?
-          'mercatorPolyYear' : 2008,
+          'mercatorShapeType' : 'state', 
+          'mercatorPolyYear' : 2006,
           'cartogramShapeType' : 'statePopCartogram',
           'cartogramPolyYear' : 2011,
           'minValue':-1.0,
