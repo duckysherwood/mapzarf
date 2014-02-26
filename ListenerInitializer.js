@@ -5,16 +5,18 @@ function ListenerInitializer (map, mapApplicationInfo) {
   // put listeners on the layer checkbox
   // put listeners on the cartogram checkbox
   // put listeners on the city names checkbox
-  this.addLayerControlSelectListener('choroplethLayers') // @@@ testing
-  this.addLayerControlSelectListener('borderLayers') // @@@ testing
+  this.addLayerControlSelectListener('choroplethLayers') 
+  this.addLayerControlSelectListener('borderLayers') 
+  this.addLayerControlCheckboxListener('choroplethLayers')
+  this.addLayerControlCheckboxListener('borderLayers')
+  this.addLayerControlCheckboxListener('dotLayers')
 
 }
 
 ListenerInitializer.prototype.addLayerControlSelectListener
   = function (layerTypeName) {
 
-
-  selectElement = $( '#' + layerTypeName + 'Select' )[0]
+  var selectElement = $( '#' + layerTypeName + 'Select' )[0]
   if((selectElement == null) || (selectElement == undefined)) {
     return null
   }
@@ -30,6 +32,23 @@ ListenerInitializer.prototype.addLayerControlSelectListener
     $( elementName ).html(descriptionHtml(mai[myLayerTypeName][field]))
     myMap.updateLayers()
   }
+
+}
+
+ListenerInitializer.prototype.addLayerControlCheckboxListener
+  = function (layerTypeName) {
+
+  var checkboxElement = $( '#' + layerTypeName + 'Checkbox' )[0]
+  if((checkboxElement == null) || (checkboxElement == undefined)) {
+    return null
+  }
+
+  var myMap = this.map
+  checkboxElement.onchange = function () {
+    myMap.updateLayers()
+  }
+
+  
 
 }
 
