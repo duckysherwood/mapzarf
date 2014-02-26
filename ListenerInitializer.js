@@ -1,6 +1,7 @@
-function ListenerInitializer (map, mapApplicationInfo) {
+function ListenerInitializer (map, mapApplicationInfo, labeller) {
   this.map = map
   this.mai = mapApplicationInfo
+  this.labeller = labeller
   // put listeners on the layer checkboxes
   // put listeners on the layer checkbox
   // put listeners on the cartogram checkbox
@@ -10,6 +11,7 @@ function ListenerInitializer (map, mapApplicationInfo) {
   this.addLayerControlCheckboxListener('choroplethLayers')
   this.addLayerControlCheckboxListener('borderLayers')
   this.addLayerControlCheckboxListener('dotLayers')
+  this.addCitiesCheckboxListener()
 
 }
 
@@ -48,6 +50,12 @@ ListenerInitializer.prototype.addLayerControlCheckboxListener
     myMap.updateLayers()
   }
 
+ListenerInitializer.prototype.addCitiesCheckboxListener
+  = function () {
+  $('#showCitiesCheckbox')[0].onchange = function() {
+    $.data($( '#map' )[0], 'cityLabeller').refreshCityLabels()
+  }
+}
   
 
 }

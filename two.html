@@ -25,7 +25,7 @@
        <div id="dotLayers"></div><p />
        <div id="borderLayers"></div><p />
 
-       <input type="checkbox" id="showCitiesCheckbox">Show city names<p />
+       <input type="checkbox" id="showCitiesCheckbox" checked>Show city names<p />
        <div id="cartogramSelector"></div>
        
      </div>
@@ -38,6 +38,7 @@
     <script type="text/javascript" src="./DomCreator.js"></script>
     <script type="text/javascript" src="./MapBehaviorInitializer.js"></script>
     <script type="text/javascript" src="./ListenerInitializer.js"></script>
+    <script type="text/javascript" src="./CityLabeller.js"></script>
   
     <script type="text/javascript">
 
@@ -51,6 +52,7 @@
         // L (from Leaflet) is global scope, but we need map in this scope
         // so we can pass it to behaviour
         var myMap = L.map("map", {minZoom: 0, maxZoom: 14})
+        $.data( $( '#map' )[0], 'mapObject', myMap)
 
         var domCreator = new DomCreator(mapApplicationInfo)
         domCreator.createAndPopulateElements(myMap)
@@ -58,9 +60,15 @@
         var mbc = new MapBehaviorInitializer(myMap, mapApplicationInfo)
         mbc.initialize()
 
+        cityLabeller = new CityLabeller($( '#map' )[0], myMap)
+        $.data( $( '#map' )[0], 'cityLabeller', cityLabeller)
+
         var listenerInitializer = 
-          new ListenerInitializer(myMap, mapApplicationInfo)
+          new ListenerInitializer(myMap, mapApplicationInfo, cityLabeller)
       
+        var markers = new L.FeatureGroup()
+        $.data( $( '#map' )[0], 'markers', markers)
+        cityLabeller.refreshCityLabels()
 
       });
     </script>
