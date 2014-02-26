@@ -24,6 +24,7 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
     closureCityLabeller.refreshCityLabels(closureCityLabeller)
   })
 
+  var closureMap = this.map
   this.map.updateLayers = function () { 
     
     // needed because "this" in the $.each is the layer
@@ -47,8 +48,6 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
                thisMap.addLayer(layer)
              }
            })
-
-    // updateLegend()
 
   }
 
@@ -123,15 +122,15 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
       url += "&borderColor="+layerSpec.borderColor
              + "&border=solid&width="+layerSpec.borderWidth;
     }
+
+    if(layerTypeName == "choroplethLayers") {
+      $( '#legendImage' )[0].update(layerSpec)
+    }
        
     return L.tileLayer(url, {
       maxZoom: 18,
       attribution: layerSpec['source']
     });
-
-    if(layerTypeName == "choropleth") {
-      this.updateLegend(layerSpec)
-    }
 
   }
 
@@ -199,25 +198,6 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
     }
   }
 
-  this.map.updateLegend = function (layerSpec) {
-    url = "../../mapeteria2/makeLegend.php?lbl=y&o=p" +
-         "&minValue=" + layerSpec.minValue +
-         "&maxValue=" + layerSpec.maxValue +
-         "&minColour=" + layerSpec.minColor +
-         "&maxColour=" + layerSpec.maxColor +
-         "&mapping=" + layerSpec.mapping 
-
-    if(layerSpec.hasOwnProperty('isPercentage')) {
-      if(layerSpec.isPercentage) {
-        url += "&pct=t"
-      } else {
-        url += "&pct=f"
-      }
-    }
-
-    legendImage.src = url;
-
-  }
 
 
   this.initialize = function () {

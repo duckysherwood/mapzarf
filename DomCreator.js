@@ -172,3 +172,22 @@ DomCreator.prototype.createAndPopulateElements = function (map) {
 
 }
 
+$( '#legendImage' )[0].update = function (layerSpec) {
+  url = "../../mapeteria2/makeLegend.php?lbl=y&o=p" +
+       "&minValue=" + layerSpec.minValue +
+       "&maxValue=" + layerSpec.maxValue +
+       "&minColour=" + layerSpec.minColor +
+       "&maxColour=" + layerSpec.maxColor +
+       "&mapping=" + layerSpec.mapping 
+
+  if(layerSpec.hasOwnProperty('isPercentage')) {
+    if(layerSpec.isPercentage) {
+      url += "&pct=y"
+    }
+  }
+
+console.log("legend url is" + url)
+  this.src = url;
+
+}
+

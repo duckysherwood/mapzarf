@@ -28,7 +28,7 @@
 /* if missing cartogram table, then don't have a cartogram checkbox */
 mapApplicationInfo = {
   'pageTitle' : 'Federal Spending Per Tax Dollar',
-  'pageDescription' : 'This shows the change in the tax dollars spent vs. sent by each state.  If there was $1.50 of spending in a state for each $1.00 in taxes raised from that state, it will show as -50%.',
+  'pageDescription' : 'The Tax ROI layer shows the change in the tax dollars spent vs. sent by each state.  If there was $1.50 of spending in a state for each $1.00 in taxes raised from that state, it will show as -50%.',
   'jurisdictionInfoUrl' : '',  // e.g. ./countyPopupInformation.php
   'startingCenterLat' : 38,
   'startingCenterLng' : -95,
@@ -46,6 +46,7 @@ mapApplicationInfo = {
           'cartogramPolyYear' : 2011,
           'minValue':-1.0,
           'maxValue':1.0,
+          'isPercentage' : true,
           'minColor' : '0000ff',
           'maxColor' : 'ff0000',
           'mapping' : 'plusminus',
@@ -82,6 +83,7 @@ mapApplicationInfo = {
           'cartogramPolyYear' : 2011,
           'minValue':-0.5,
           'maxValue':0.5,
+          'isPercentage' : true,
           'minColor' : 'ff0000',
           'maxColor' : '0000ff',
           'mapping': 'plusminus',
@@ -100,6 +102,7 @@ mapApplicationInfo = {
           'cartogramPolyYear' : 2011,
           'minValue':-0.5,
           'maxValue':0.5,
+          'isPercentage' : true,
           'minColor' : 'ff0000',
           'maxColor' : '0000ff',
           'mapping': 'plusminus',
