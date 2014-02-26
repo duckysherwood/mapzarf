@@ -56,7 +56,7 @@ ListenerInitializer.prototype.addCitiesCheckboxListener
     $.data($( '#map' )[0], 'cityLabeller').refreshCityLabels()
   }
 }
-  
+
 
 }
 

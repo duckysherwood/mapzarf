@@ -13,6 +13,16 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
   this.borderLayer = null
   this.choroplethLayer = null
 
+  this.map.on("zoomend", function () {
+    var cityLabeller = $.data( $( '#map' )[0], 'cityLabeller')
+    cityLabeller.refreshCityLabels()
+  })
+
+  this.map.on("dragend", function () {
+    var cityLabeller = $.data( $( '#map' )[0], 'cityLabeller')
+    cityLabeller.refreshCityLabels()
+  })
+
   this.map.updateLayers = function () { 
     
     // needed because "this" in the $.each is the layer
