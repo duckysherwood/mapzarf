@@ -75,8 +75,8 @@ mapApplicationInfo = {
           'table':'provinceAttributes',
           'fieldName':'demPresidentialMargin',
           'year':2012,
-          'mercatorShapeType' : 'province',  // could be 'state', I suppose?
-          'mercatorPolyYear' : 2008,
+          'mercatorShapeType' : 'state', 
+          'mercatorPolyYear' : 2006,
           'cartogramShapeType' : 'statePopCartogram',
           'cartogramPolyYear' : 2011,
           'minValue':-0.5,
@@ -93,8 +93,8 @@ mapApplicationInfo = {
           'table':'provinceAttributes',
           'fieldName':'obamaMargin',
           'year':2008,
-          'mercatorShapeType' : 'province',  // could be 'state', I suppose?
-          'mercatorPolyYear' : 2008,
+          'mercatorShapeType' : 'state',
+          'mercatorPolyYear' : 2006,
           'cartogramShapeType' : 'statePopCartogram',
           'cartogramPolyYear' : 2011,
           'minValue':-0.5,
