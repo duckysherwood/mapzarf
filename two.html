@@ -10,7 +10,7 @@
 
      <div id="map"></div>
      <div id="legend">
-       <img id="legendImage" src="http://maps.webfoot.com/tiles/clearTile.png"
+       <img id="legendImage" src="/tiles/clearTile.png"
             alt="Legend">
      </div>
      <div id="sidebar">
@@ -52,23 +52,20 @@
         // L (from Leaflet) is global scope, but we need map in this scope
         // so we can pass it to behaviour
         var myMap = L.map("map", {minZoom: 0, maxZoom: 14})
-        $.data( $( '#map' )[0], 'mapObject', myMap)
 
         var domCreator = new DomCreator(mapApplicationInfo)
         domCreator.createAndPopulateElements(myMap)
 
-        var mbc = new MapBehaviorInitializer(myMap, mapApplicationInfo)
-        mbc.initialize()
+        var cityLabeller = new CityLabeller($( '#map' )[0], myMap)
 
-        cityLabeller = new CityLabeller($( '#map' )[0], myMap)
-        $.data( $( '#map' )[0], 'cityLabeller', cityLabeller)
+        var mbc = new MapBehaviorInitializer(
+                              myMap, mapApplicationInfo, cityLabeller)
+        mbc.initialize()
 
         var listenerInitializer = 
           new ListenerInitializer(myMap, mapApplicationInfo, cityLabeller)
       
-        var cityMarkers = []
-        $.data( $( '#map' )[0], 'cityMarkers', cityMarkers)
-        cityLabeller.refreshCityLabels()
+        cityLabeller.refreshCityLabels(cityLabeller)
 
       });
     </script>

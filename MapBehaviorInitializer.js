@@ -6,21 +6,22 @@
 // change city markers
 // BehaviourCreator adds behaviour to everything, including the map
 
-function MapBehaviorInitializer(aMap, mapApplicationInfo) {
+function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
   this.map = aMap
   this.map.mai = mapApplicationInfo
+  this.cityLabeller = aCityLabeller
+
   this.dotLayer = null
   this.borderLayer = null
   this.choroplethLayer = null
 
+  var closureCityLabeller = aCityLabeller
   this.map.on("zoomend", function () {
-    var cityLabeller = $.data( $( '#map' )[0], 'cityLabeller')
-    cityLabeller.refreshCityLabels()
+    closureCityLabeller.refreshCityLabels(closureCityLabeller)
   })
 
   this.map.on("dragend", function () {
-    var cityLabeller = $.data( $( '#map' )[0], 'cityLabeller')
-    cityLabeller.refreshCityLabels()
+    closureCityLabeller.refreshCityLabels(closureCityLabeller)
   })
 
   this.map.updateLayers = function () { 
@@ -46,6 +47,9 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
                thisMap.addLayer(layer)
              }
            })
+
+    // updateLegend()
+
   }
 
 
@@ -120,11 +124,14 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
              + "&border=solid&width="+layerSpec.borderWidth;
     }
        
-    console.log('Polygon url for ' + layerTypeName + ' is ' + url)
     return L.tileLayer(url, {
       maxZoom: 18,
       attribution: layerSpec['source']
     });
+
+    if(layerTypeName == "choropleth") {
+      this.updateLegend(layerSpec)
+    }
 
   }
 
@@ -148,7 +155,6 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
     url += '&colour=' + layerSpec['color']
     url += '&size=' + layerSpec['size']
     url += '&jId=0'	// I think this is just for symmetry with MapRequest
-    console.log("URL for dot tile layer is " + url)
   
     return L.tileLayer(url, {
       maxZoom: 18,
@@ -192,6 +198,27 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo) {
       return key
     }
   }
+
+  this.map.updateLegend = function (layerSpec) {
+    url = "../../mapeteria2/makeLegend.php?lbl=y&o=p" +
+         "&minValue=" + layerSpec.minValue +
+         "&maxValue=" + layerSpec.maxValue +
+         "&minColour=" + layerSpec.minColor +
+         "&maxColour=" + layerSpec.maxColor +
+         "&mapping=" + layerSpec.mapping 
+
+    if(layerSpec.hasOwnProperty('isPercentage')) {
+      if(layerSpec.isPercentage) {
+        url += "&pct=t"
+      } else {
+        url += "&pct=f"
+      }
+    }
+
+    legendImage.src = url;
+
+  }
+
 
   this.initialize = function () {
     this.map.updateLayers()

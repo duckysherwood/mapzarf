@@ -1,7 +1,7 @@
 function ListenerInitializer (map, mapApplicationInfo, labeller) {
   this.map = map
   this.mai = mapApplicationInfo
-  this.labeller = labeller
+  this.cityLabeller = labeller
   // put listeners on the cartogram checkbox
 
   this.addLayerControlSelectListener('choroplethLayers') 
@@ -51,8 +51,9 @@ ListenerInitializer.prototype.addLayerControlCheckboxListener
 
 ListenerInitializer.prototype.addCitiesCheckboxListener
   = function () {
+  var labeller = this.cityLabeller
   $('#showCitiesCheckbox')[0].onchange = function() {
-    $.data($( '#map' )[0], 'cityLabeller').refreshCityLabels()
+    labeller.refreshCityLabels(labeller)
   }
 }
 
@@ -64,11 +65,10 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener
   }
 
   var myMap = this.map
+  var closureCityLabeller = this.cityLabeller
   checkboxElement.onchange = function () {
     myMap.updateLayers()
-
-    var cityLabeller = new CityLabeller($( '#map' )[0], myMap)
-    cityLabeller.refreshCityLabels()    
+    closureCityLabeller.refreshCityLabels(closureCityLabeller)    
   }
 }
 
