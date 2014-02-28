@@ -16,12 +16,15 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
   this.choroplethLayer = null
 
   var closureCityLabeller = aCityLabeller
+  var closureMap = aMap
   this.map.on("zoomend", function () {
     closureCityLabeller.refreshCityLabels(closureCityLabeller)
+    $( '#sharingUrl' )[0].href = closureMap.getSharingUrl()
   })
 
   this.map.on("dragend", function () {
     closureCityLabeller.refreshCityLabels(closureCityLabeller)
+    $( '#sharingUrl' )[0].href = closureMap.getSharingUrl()
   })
 
   var closureMap = this.map
@@ -191,17 +194,95 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
   
       if(key == SENTINEL_MULTIPLE) {
         // multiple options, select the one which is checked
-        var layerSelectorId = '#' + layerTypeName + 'Select'
+        var layerSelectorId = '#' + layerTypeName + 'Selector'
         key = $( layerSelectorId ).find(':selected').val()
       } 
       return key
     }
   }
 
-
-
   this.initialize = function () {
     this.map.updateLayers()
+  }
+
+  // This URL will re-create the map as it exists at a given point,
+  // so you can more easily call attention to certain features on the map.
+  this.map.getSharingUrl = function() {
+     var url = location.origin + location.pathname;
+     var latlng = closureMap.getCenter();
+  
+     url += "?lat=" + latlng.lat;
+     url += "&lng=" + latlng.lng;
+     url += "&zoom=" + closureMap.getZoom();
+
+     url += "&cartogram=" + getFlagForCheckbox('#isCartogramCheckbox')
+     var citiesFlag =  getFlagForCheckbox('#showCitiesCheckbox')
+     url += "&cities=" + citiesFlag
+  
+     // @@@
+     /*
+     if(typeof jurisdictionMarker !== 'undefined') {
+       url += "&markerLat=" + jurisdictionMarker.getLatLng().lat;
+       url += "&markerLng=" + jurisdictionMarker.getLatLng().lng;
+     }
+     */
+  
+     var $showChoroplethsCheckbox = $( '#choroplethLayersSelector' ).first()[0]
+     if($showChoroplethsCheckbox) {
+       url += "&showChoropleths=" 
+              + getFlagForCheckbox('#choroplethLayersCheckbox');
+     }
+
+     var $choroplethLayersSelector = $( '#choroplethLayersSelector' ).first()[0]
+     if($choroplethLayersSelector) {
+       url += "&choroplethIndex=" 
+              + (parseInt($choroplethLayersSelector.selectedIndex));
+     }
+
+     var showDotsCheckbox = $( '#dotLayersSelector' ).first()[0]
+     if(showDotsCheckbox) {
+       url += "&showDots=" + getFlagForCheckbox('#dotLayersCheckbox');
+     }
+     var $dotsLayersSelector = $( '#dotsLayersSelector' ).first()[0]
+     if($dotsLayersSelector) {
+       url += "&dotIndex=" 
+              + (parseInt($dotsLayersSelector.selectedIndex));
+     }
+  
+     // borders are sometimes selected with a combobox instead of checkboxes
+     // TODO need to figure out how to handle borders
+     var bordersCheckbox = $( '#borderLayersCheckbox' ).first()[0]
+     var bordersCheckbox = $( '#borderLayersSelect' ).first()[0]
+     if(bordersCheckbox) {
+       url += "&borders=" + getFlagForCheckbox('#borderLayersCheckbox');
+     }
+
+     /* 
+     if( typeof countyBordersCheckbox != "undefined" ) {
+       url += "&counties=" + getFlagForCheckbox(countyBordersCheckbox);
+     }
+     */
+  
+     /*
+     // Year and month are not always set
+     if( typeof yearCombo != "undefined" ) {
+       url += "&year=" + yearCombo.value;
+     }
+     if( typeof monthCombo != "undefined" ) {
+       url += "&month=" + (parseInt(monthCombo.selectedIndex)+1);
+     }
+     */
+     
+     return url
+  }
+
+  function getFlagForCheckbox(checkboxElementName) {
+     var element = $( checkboxElementName )
+     if(!element) {
+       return 'f'
+     }
+
+     return isChecked = $( checkboxElementName ).is(':checked') ? 't' : 'f'
   }
 
 }

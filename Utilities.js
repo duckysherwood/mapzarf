@@ -1,3 +1,6 @@
+function toBoolean (aString) {
+    return (aString == "t");
+  }
 
 function descriptionHtml(layerSpec) {
   return '<a href="' + layerSpec.sourceUrl + '">'

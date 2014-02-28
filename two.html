@@ -35,15 +35,29 @@
             src="/thirdparty/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="./omni.js"></script>
     <script type="text/javascript" src="./Utilities.js"></script>
+    <script type="text/javascript" src="./MapDisplayParameters.js"></script>
     <script type="text/javascript" src="./DomCreator.js"></script>
     <script type="text/javascript" src="./MapBehaviorInitializer.js"></script>
     <script type="text/javascript" src="./ListenerInitializer.js"></script>
     <script type="text/javascript" src="./CityLabeller.js"></script>
+    <script type="text/javascript" src="./Tester.js"></script>
   
     <script type="text/javascript">
 
-      // var initParam = initializePageParametersFromQueryString(mapApplicationInfo)
+      var tester = new Tester()
+
       $(document).ready(function() {
+
+        var mapDisplayParameters = new MapDisplayParameters()
+        var ignoreThis = mapDisplayParameters
+              .createDefaultsFromMapApplicationInfo(mapApplicationInfo)
+        var queryString = mapDisplayParameters.getQueryString()
+        ignoreThis = mapDisplayParameters
+              .initializePageParametersFromQueryString(queryString)
+        var pageInitValues = mapDisplayParameters
+              .getValues()
+
+        // tester.pageInitValuesTest()
 
         // TODO move this into another file
         // TODO look again at JS style guide
@@ -53,13 +67,14 @@
         // so we can pass it to behaviour
         var myMap = L.map("map", {minZoom: 0, maxZoom: 14})
 
-        var domCreator = new DomCreator(mapApplicationInfo)
-        domCreator.createAndPopulateElements(myMap)
+        var domCreator 
+            = new DomCreator(myMap, mapApplicationInfo, pageInitValues)
+        domCreator.createAndPopulateElements()
 
         var cityLabeller = new CityLabeller($( '#map' )[0], myMap)
 
-        var mbc = new MapBehaviorInitializer(
-                              myMap, mapApplicationInfo, cityLabeller)
+        var mbc = 
+            new MapBehaviorInitializer(myMap, mapApplicationInfo, cityLabeller)
         mbc.initialize()
 
         var listenerInitializer = 

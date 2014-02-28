@@ -22,172 +22,211 @@ SENTINEL_MULTIPLE = ""
 //   dotLayers (div)
 //   borderLayers (div)
 // TODO check for existence of all the named elements
-function DomCreator ( mapApplicationInfo ) {
+function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
   this.mai = mapApplicationInfo // shortened for typing
-}
-
-// Creates a selector object for a layer type (e.g. 
-// dot layers) based on how many layer specs of that type there are.
-// If there are 0, don't show a control.
-// If there are exactly 1, show a checkbox.
-// If there are >1, show a dropdown (plus a checkbox to turn them all off/on).
-// Returns a div containing a new selector control plus any explanatory text
-// @@@ Would it make more sense to create elements, then just hide
-// @@@ them if they are not used / there is not data for them?
-DomCreator.prototype.createLayerSelectorControl = function ( layerTypeName) {
-
-  if(layerTypeName in this.mai) { 
-    var layerSpecs = this.mai[layerTypeName]
-    var $layerDiv = $( layerSpecs )
-    if( $layerDiv == undefined ) {
-      console.log('Missing div for ' + layerspec + ', failing softly.')
-      return null
-    }
-
-    if (layerSpecs != undefined) {
-      var layerSelectionControl
-
-      // I can't just do a layerSpecs.length to get the number
-      // of layers; I can't just do a layerSpecs[0] to get
-      // the (only) element in case there is only one
-      var layersCount = 0
-      var lastKey
-      for (var key in layerSpecs) {
-        layersCount++
-        lastKey = key
-        if(layersCount > 1) break
-      }
-
-      if(layersCount == 0) {
+  var closurePageInitValues = pageInitValues
+  var closureMap = map
+  
+  // Creates a selector object for a layer type (e.g. 
+  // dot layers) based on how many layer specs of that type there are.
+  // If there are 0, don't show a control.
+  // If there are exactly 1, show a checkbox.
+  // If there are >1, show a dropdown (plus a checkbox to turn them all off/on).
+  // Returns a div containing a new selector control plus any explanatory text
+  // @@@ Would it make more sense to create elements, then just hide
+  // @@@ them if they are not used / there is not data for them?
+  this.createLayerSelectorControl = function( layerTypeName) {
+  
+    if(layerTypeName in this.mai) { 
+      var layerSpecs = this.mai[layerTypeName]
+      var $layerDiv = $( layerSpecs )
+      if( $layerDiv == undefined ) {
+        console.log('Missing div for ' + layerspec + ', failing softly.')
         return null
       }
-
-      layerSelectionControl = document.createElement('div');
-      layerSelectionControl.id = layerTypeName + 'Control'
-
-      // Checkbox to turn all the layers on or off
-      layerSelectionCheckbox = document.createElement('input');
-      layerSelectionControl.appendChild (layerSelectionCheckbox);
-
-      layerSelectionCheckbox.checked = true
-      layerSelectionCheckbox.type = 'checkbox'
-      layerSelectionCheckbox.id = layerTypeName + 'Checkbox'
-      var layerDescriptionSpan = document.createElement('span');
-
-      if( layersCount == 1) {
-        layerSelectionCheckbox.value = lastKey
-        var longerDescription = 'Show '+layerSpecs[key].shortDescription+'<p />'
-        layerDescriptionSpan.innerHTML = longerDescription
-        // @@@ TODO why appended out of order?
-        layerSelectionControl.appendChild(layerDescriptionSpan)
-
-      } else {
-        
-        // When I tried making value=null, value was instead ="on".  ???
-        layerSelectionCheckbox.value = SENTINEL_MULTIPLE
-
-        layerDescriptionSpan.innerHTML = 'Show ' + layerTypeName + ': <br />'
-        layerSelectionControl.appendChild(layerDescriptionSpan)
-        var selectElement = document.createElement('select')
-        selectElement.className = 'indented'
-        selectElement.id = layerTypeName + 'Select'
-        layerSelectionControl.appendChild(selectElement)
-        layerSelectionControl.appendChild(document.createElement('br'))
-
-        var alreadySelected = false
+  
+      if (layerSpecs != undefined) {
+        var layerSelectionControl
+  
+        // I can't just do a layerSpecs.length to get the number
+        // of layers; I can't just do a layerSpecs[0] to get
+        // the (only) element in case there is only one
+        var layersCount = 0
+        var lastKey
         for (var key in layerSpecs) {
-          if (layerSpecs.hasOwnProperty(key)) {
-             var optionElement = document.createElement('option')
-             optionElement.className = layerTypeName + 'Option'
-             optionElement.text = layerSpecs[key].shortDescription
-             optionElement.setAttribute['id'] = key
-             optionElement.value = key
-             selectElement.appendChild(optionElement)
-             if(!alreadySelected) {
-               alreadySelected = true
-               optionElement.selected = true
-               var descriptionElem = document.createElement('span')
-               descriptionElem.id = layerTypeName + 'Description'
-               var spec = layerSpecs[key]
-               descriptionElem.innerHTML = descriptionHtml(spec)
-               descriptionElem.className = 'indented'
-               layerSelectionControl.appendChild(descriptionElem)
-             }
-           }
+          layersCount++
+          lastKey = key
+          if(layersCount > 1) break
         }
+  
+        if(layersCount == 0) {
+          return null
+        }
+  
+        layerSelectionControl = document.createElement('div');
+        layerSelectionControl.id = layerTypeName + 'Control'
+  
+        // Checkbox to turn all the layers on or off
+        layerSelectionCheckbox = document.createElement('input');
+        layerSelectionControl.appendChild (layerSelectionCheckbox);
+        layerSelectionCheckbox.id = layerTypeName + 'Checkbox'
+  
+        layerSelectionCheckbox.type = 'checkbox'
+        layerSelectionCheckbox.checked = true
+console.log("Checkbox " + layerTypeName + ' checked? '
+            + layerSelectionCheckbox.checked)
+
+        var layerDescriptionSpan = document.createElement('span');
+  
+        if( layersCount == 1) {
+          layerSelectionCheckbox.value = lastKey
+          var longerDescription = 'Show '+layerSpecs[key].shortDescription+'<p />'
+          layerDescriptionSpan.innerHTML = longerDescription
+          // @@@ TODO why appended out of order?
+          layerSelectionControl.appendChild(layerDescriptionSpan)
+  
+        } else {
+          
+          // When I tried making value=null, value was instead ="on".  ???
+          layerSelectionCheckbox.value = SENTINEL_MULTIPLE
+  
+          layerDescriptionSpan.innerHTML = 'Show ' + layerTypeName + ': <br />'
+          layerSelectionControl.appendChild(layerDescriptionSpan)
+          var selectElement = document.createElement('select')
+          selectElement.className = 'indented'
+          selectElement.id = layerTypeName + 'Selector'
+          layerSelectionControl.appendChild(selectElement)
+          layerSelectionControl.appendChild(document.createElement('br'))
+  
+          var alreadySelected = false
+          for (var key in layerSpecs) {
+            if (layerSpecs.hasOwnProperty(key)) {
+               var optionElement = document.createElement('option')
+               optionElement.className = layerTypeName + 'Option'
+               optionElement.text = layerSpecs[key].shortDescription
+               optionElement.setAttribute['id'] = key
+               optionElement.value = key
+               selectElement.appendChild(optionElement)
+               if(!alreadySelected) {
+                 alreadySelected = true
+                 optionElement.selected = true
+                 var descriptionElem = document.createElement('span')
+                 descriptionElem.id = layerTypeName + 'Description'
+                 var spec = layerSpecs[key]
+                 descriptionElem.innerHTML = descriptionHtml(spec)
+                 descriptionElem.className = 'indented'
+                 layerSelectionControl.appendChild(descriptionElem)
+               }
+             }
+          }
+        }
+        return layerSelectionControl
       }
-      return layerSelectionControl
     }
+    return null
   }
-  return null
-}
-
-// Creates and initializes all the DOM elements
-DomCreator.prototype.createAndPopulateElements = function (map) {
-  document.title = mapApplicationInfo.pageTitle
   
-  $( '#explanation').html( "<b>" + this.mai.pageTitle + "</b><p>" 
-                           + this.mai.pageDescription + "<p>")
-
+  // Creates and initializes all the DOM elements
+  this.createAndPopulateElements = function () {
+    document.title = mapApplicationInfo.pageTitle
+    
+    $( '#explanation').html( "<b>" + this.mai.pageTitle + "</b><p>" 
+                             + this.mai.pageDescription + "<p>")
   
-  // Add the dot layer selector (if needed)
-  var dotSelector = this.createLayerSelectorControl("dotLayers")
-  $( '#dotLayers' ).append(dotSelector)
-
-  // Add the choropleth layer selector (if needed)
-  var choroplethSelector = this.createLayerSelectorControl('choroplethLayers')
-  $( '#choroplethLayers' ).append(choroplethSelector)
-
-  // Add the border layer selector (if needed)
-  var borderSelector = this.createLayerSelectorControl('borderLayers')
-  $( '#borderLayers' ).append(borderSelector)
-
-  // Sharing URL should start out pointing to here
-  $( '#sharingUrl' )[0].href = '#'
-
-  // Allow switching between cartogram and not
-
-  if (this.mai.hasOwnProperty('hasCartogram') &&
-      (this.mai.hasCartogram != undefined) && 
-      this.mai.hasCartogram) {
-     var cartogramCheckbox = 
-           '<input type="checkbox" id="isCartogramCheckbox" checked>'
-     var cartogramText = 'Show as cartogram<p />'
-    $( '#cartogramSelector' ).append(cartogramCheckbox + cartogramText)
-  }
-
-  // Set up the map
-  map.setView([this.mai.startingCenterLat, this.mai.startingCenterLng],
-              this.mai.startingCenterZoom)
-
-  // Set up the marker
-  // TODO @@@ The marker needs to get into higher scope, maybe 
-  // the marker gets set one level up?
-  if (this.mai.hasOwnProperty('startingMarkerLat') &&
-      (this.mai.startingMarkerLat != undefined)) {
-    L.marker([this.mai.startingMarkerLat, this.mai.startingMarkerLng])
-        .bindPopup("Fetching data, please wait...")
-        .addTo(map)
-  }
-
-}
-
-$( '#legendImage' )[0].update = function (layerSpec) {
-  url = "../../mapeteria2/makeLegend.php?lbl=y&o=p" +
-       "&minValue=" + layerSpec.minValue +
-       "&maxValue=" + layerSpec.maxValue +
-       "&minColour=" + layerSpec.minColor +
-       "&maxColour=" + layerSpec.maxColor +
-       "&mapping=" + layerSpec.mapping 
-
-  if(layerSpec.hasOwnProperty('isPercentage')) {
-    if(layerSpec.isPercentage) {
-      url += "&pct=y"
+    
+    // Add the dot layer selector (if needed)
+    var dotSelector = this.createLayerSelectorControl("dotLayers")
+    if(dotSelector) {
+      $( '#dotLayers' ).append(dotSelector)
     }
+    var $dotLayersCheckbox = $( '#dotLayersCheckbox')
+    if($dotLayersCheckbox) {
+      var checkedBool = closurePageInitValues['showDots']
+      $dotLayersCheckbox.prop('checked', checkedBool)
+
+      if(closurePageInitValues.dotIndex) {
+        $( '#dotLayersSelector' ).
+          prop('selectedIndex', closurePageInitValues.dotIndex)
+      }
+    }
+  
+
+    // Add the choropleth layer selector (if needed)
+    var choroplethSelector = this.createLayerSelectorControl('choroplethLayers')
+    if(choroplethSelector) {
+      $( '#choroplethLayers' ).append(choroplethSelector)
+    }
+
+    // Initialize the selector (if needed)
+    var $choroplethLayersCheckbox = $( '#choroplethLayersCheckbox')
+    if($choroplethLayersCheckbox) {
+      var checkedBool = closurePageInitValues['showChoropleths']
+      $choroplethLayersCheckbox.prop('checked', checkedBool)
+
+      if(closurePageInitValues.choroplethIndex) {
+        $( '#choroplethLayersSelector' ).
+          prop('selectedIndex', closurePageInitValues.choroplethIndex)
+      }
+    }
+
+  
+    // Add the border layer selector (if needed)
+    var borderSelector = this.createLayerSelectorControl('borderLayers')
+    if(borderSelector) {
+      $( '#borderLayers' ).append(borderSelector)
+    }
+
+    var $borderLayersCheckbox = $( '#borderLayersCheckbox' )
+    if($borderLayersCheckbox) {
+      var checkedBool = closurePageInitValues['borderLayers']
+      $borderLayersCheckbox.prop('checked', checkedBool)
+    }
+    // TODO what about border slection box?
+  
+    $( '#sharingUrl' )[0].href = '#'
+  
+    // Allow switching between cartogram and not
+  
+    if (this.mai.hasOwnProperty('hasCartogram') &&
+        (this.mai.hasCartogram != undefined) && 
+        this.mai.hasCartogram) {
+       var cartogramCheckbox = 
+             '<input type="checkbox" id="isCartogramCheckbox" checked>'
+       var cartogramText = 'Show as cartogram<p />'
+      $( '#cartogramSelector' ).append(cartogramCheckbox + cartogramText)
+    }
+  
+    // Set up the map
+    closureMap.setView([closurePageInitValues.lat, closurePageInitValues.lng], 
+                 closurePageInitValues.zoom)
+  
+    // set up the marker
+    if(closurePageInitValues.markerLat) {
+      L.marker([closurePageInitValues.markerLat, 
+                closurePageInitValues.markerLng])
+          .bindPopup("Fetching data, please wait...")
+          .addTo(closureMap)
+    }
+  
+  }
+  
+  // put the legend update on the legend image
+  $( '#legendImage' )[0].update = function (layerSpec) {
+    url = "../../mapeteria2/makeLegend.php?lbl=y&o=p" +
+         "&minValue=" + layerSpec.minValue +
+         "&maxValue=" + layerSpec.maxValue +
+         "&minColour=" + layerSpec.minColor +
+         "&maxColour=" + layerSpec.maxColor +
+         "&mapping=" + layerSpec.mapping 
+  
+    if(layerSpec.hasOwnProperty('isPercentage')) {
+      if(layerSpec.isPercentage) {
+        url += "&pct=y"
+      }
+    }
+  
+    this.src = url;
+  
   }
 
-console.log("legend url is" + url)
-  this.src = url;
-
 }
-
