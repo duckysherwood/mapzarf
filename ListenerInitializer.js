@@ -2,7 +2,6 @@ function ListenerInitializer (map, mapApplicationInfo, labeller) {
   this.map = map
   this.mai = mapApplicationInfo
   this.cityLabeller = labeller
-  // put listeners on the cartogram checkbox
 
   this.addLayerControlSelectListener('choroplethLayers') 
   this.addLayerControlSelectListener('borderLayers') 
