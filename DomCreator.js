@@ -190,11 +190,14 @@ console.log("Checkbox " + layerTypeName + ' checked? '
     if (this.mai.hasOwnProperty('hasCartogram') &&
         (this.mai.hasCartogram != undefined) && 
         this.mai.hasCartogram) {
-       var cartogramCheckbox = 
-             '<input type="checkbox" id="isCartogramCheckbox">'
-       cartogramCheckbox.checked = closurePageInitValues.cartogram
+       var cartogramCheckboxString
+       if(closurePageInitValues.cartogram) {
+         cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" checked>'
+       } else {
+         cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" >' // TODO clean up
+       }
        var cartogramText = 'Show as cartogram<p />'
-      $( '#cartogramSelector' ).append(cartogramCheckbox + cartogramText)
+       $( '#cartogramSelector' ).append(cartogramCheckboxString + cartogramText)
     }
   
     // Set up the map
