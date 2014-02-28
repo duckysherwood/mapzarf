@@ -253,7 +253,7 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
      var bordersCheckbox = $( '#borderLayersCheckbox' ).first()[0]
      var bordersSelector = $( '#borderLayersSelector' ).first()[0]
      if(bordersCheckbox) {
-       url += "&borders=" + getFlagForCheckbox('#borderLayersCheckbox');
+       url += "&showBorders=" + getFlagForCheckbox('#borderLayersCheckbox');
      }
 
      /* 
