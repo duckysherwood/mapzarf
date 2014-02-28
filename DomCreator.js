@@ -191,7 +191,8 @@ console.log("Checkbox " + layerTypeName + ' checked? '
         (this.mai.hasCartogram != undefined) && 
         this.mai.hasCartogram) {
        var cartogramCheckbox = 
-             '<input type="checkbox" id="isCartogramCheckbox" checked>'
+             '<input type="checkbox" id="isCartogramCheckbox">'
+       cartogramCheckbox.checked = closurePageInitValues.cartogram
        var cartogramText = 'Show as cartogram<p />'
       $( '#cartogramSelector' ).append(cartogramCheckbox + cartogramText)
     }
