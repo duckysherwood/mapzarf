@@ -176,7 +176,7 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
 
     var $borderLayersCheckbox = $( '#borderLayersCheckbox' )
     if($borderLayersCheckbox) {
-      var checkedBool = closurePageInitValues['borderLayers']
+      var checkedBool = closurePageInitValues['showBorders']
       $borderLayersCheckbox.prop('checked', checkedBool)
     }
     // TODO what about border slection box?
@@ -211,7 +211,7 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
     }
   
 
-    $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.cities)
+    $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.showCities)
   }
   
   // put the legend update on the legend image

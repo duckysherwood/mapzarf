@@ -36,7 +36,6 @@ function MapDisplayParameters () {
   // borders
   defaults.states = [toBoolean, true, false, true];
   defaults.districts = [toBoolean, false, false, true];
-  defaults.cities = [toBoolean, false, false, true];
 
   
   
@@ -106,6 +105,9 @@ function MapDisplayParameters () {
   // make the URL more human-readable.
   // *** SIDE EFFECT *** Changes =defaults=
   this.createDefaultsFromMapApplicationInfo = function (mai) {
+
+    // Note that the MAI doesn't give direction on how the UI
+    // starts up -- that's the query string's job
     var translator = { 'startingCenterLat' : 'lat',
                        'startingCenterLng' : 'lng',
                        'startingCenterZoom' : 'zoom',

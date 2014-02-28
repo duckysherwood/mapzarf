@@ -217,7 +217,7 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
 
      url += "&cartogram=" + getFlagForCheckbox('#isCartogramCheckbox')
      var citiesFlag =  getFlagForCheckbox('#showCitiesCheckbox')
-     url += "&cities=" + citiesFlag
+     url += "&showCities=" + citiesFlag
   
      // @@@
      /*
@@ -227,7 +227,7 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
      }
      */
   
-     var $showChoroplethsCheckbox = $( '#choroplethLayersSelector' ).first()[0]
+     var $showChoroplethsCheckbox = $( '#choroplethLayersCheckbox' ).first()[0]
      if($showChoroplethsCheckbox) {
        url += "&showChoropleths=" 
               + getFlagForCheckbox('#choroplethLayersCheckbox');
@@ -239,7 +239,7 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
               + (parseInt($choroplethLayersSelector.selectedIndex));
      }
 
-     var showDotsCheckbox = $( '#dotLayersSelector' ).first()[0]
+     var showDotsCheckbox = $( '#dotLayersCheckbox' ).first()[0]
      if(showDotsCheckbox) {
        url += "&showDots=" + getFlagForCheckbox('#dotLayersCheckbox');
      }
@@ -250,9 +250,8 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
      }
   
      // borders are sometimes selected with a combobox instead of checkboxes
-     // TODO need to figure out how to handle borders
      var bordersCheckbox = $( '#borderLayersCheckbox' ).first()[0]
-     var bordersCheckbox = $( '#borderLayersSelect' ).first()[0]
+     var bordersSelector = $( '#borderLayersSelector' ).first()[0]
      if(bordersCheckbox) {
        url += "&borders=" + getFlagForCheckbox('#borderLayersCheckbox');
      }
