@@ -73,14 +73,12 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
   
         layerSelectionCheckbox.type = 'checkbox'
         layerSelectionCheckbox.checked = true
-console.log("Checkbox " + layerTypeName + ' checked? '
-            + layerSelectionCheckbox.checked)
 
         var layerDescriptionSpan = document.createElement('span');
   
         if( layersCount == 1) {
           layerSelectionCheckbox.value = lastKey
-          var longerDescription = 'Show '+layerSpecs[key].shortDescription+'<p />'
+          var longerDescription ='Show '+layerSpecs[key].shortDescription+'<p />'
           layerDescriptionSpan.innerHTML = longerDescription
           // @@@ TODO why appended out of order?
           layerSelectionControl.appendChild(layerDescriptionSpan)
@@ -212,6 +210,8 @@ console.log("Checkbox " + layerTypeName + ' checked? '
           .addTo(closureMap)
     }
   
+
+    $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.cities)
   }
   
   // put the legend update on the legend image
