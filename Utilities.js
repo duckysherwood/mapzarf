@@ -1,14 +1,11 @@
-function toBoolean (aString) {
-    return (aString == "t");
-  }
 
 function descriptionHtml(layerSpec) {
   return '<a href="' + layerSpec.sourceUrl + '">'
          + layerSpec.description + '</a> '
          + '(' + layerSpec.year + ', '
          + layerSpec.source + ')'
-
 }
+
 function requestUrlWithScope(url, callback, scope) {
   var xmlhttp;
   if (window.XMLHttpRequest) {

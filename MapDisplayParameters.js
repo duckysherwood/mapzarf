@@ -23,19 +23,19 @@ function MapDisplayParameters () {
   defaults.markerLat = [parseFloat, MARKER_LAT, -90, 90];
   defaults.markerLng = [parseFloat, MARKER_LNG, -180, 180];
 
-  defaults.showChoropleths = [toBoolean, true, false, true];
-  defaults.showDots = [toBoolean, true, false, true];
-  defaults.showBorders = [toBoolean, true, false, true];
+  defaults.showChoropleths = [this.toBoolean, true, false, true];
+  defaults.showDots = [this.toBoolean, true, false, true];
+  defaults.showBorders = [this.toBoolean, true, false, true];
   defaults.choroplethIndex = [parseInt, 0, 0, MAX_CHOROPLETH_LAYERS];
   defaults.dotIndex = [parseInt, 0, 0, MAX_CHOROPLETH_LAYERS];
   defaults.borderIndex = [parseInt, 0, 0, MAX_CHOROPLETH_LAYERS];
-  defaults.showCities = [toBoolean, true, false, true];
+  defaults.showCities = [this.toBoolean, true, false, true];
 
   // isCartogram?
-  defaults.cartogram = [toBoolean, true, false, true];
+  defaults.cartogram = [this.toBoolean, true, false, true];
   // borders
-  defaults.states = [toBoolean, true, false, true];
-  defaults.districts = [toBoolean, false, false, true];
+  defaults.states = [this.toBoolean, true, false, true];
+  defaults.districts = [this.toBoolean, false, false, true];
 
   
   
@@ -140,6 +140,10 @@ function MapDisplayParameters () {
       init[index] = value[1]
     })
     return init
+  }
+
+  this.toBoolean  = function (aString) {
+    return (aString == "t");
   }
 
 
