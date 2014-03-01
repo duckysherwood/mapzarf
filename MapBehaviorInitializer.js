@@ -6,9 +6,10 @@
 // change city markers
 // BehaviourCreator adds behaviour to everything, including the map
 
-function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
+function MapBehaviorInitializer(aMap, aMapApplicationInfo, 
+                                aCityLabeller, aJurisdictionMarker) {
   this.map = aMap
-  this.map.mai = mapApplicationInfo
+  this.map.mai = aMapApplicationInfo
   this.cityLabeller = aCityLabeller
 
   this.dotLayer = null
@@ -17,6 +18,9 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
 
   var closureCityLabeller = aCityLabeller
   var closureMap = aMap
+  var closureMai = aMapApplicationInfo
+  var closureJurisdictionMarker = aJurisdictionMarker
+
   this.map.on("zoomend", function () {
     closureCityLabeller.refreshCityLabels(closureCityLabeller)
     $( '#sharingUrl' )[0].href = closureMap.getSharingUrl()
@@ -203,6 +207,7 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
 
   this.initialize = function () {
     this.map.updateLayers()
+    this.map.addClickListener()
   }
 
   // This URL will re-create the map as it exists at a given point,
@@ -215,8 +220,9 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
      url += "&lng=" + latlng.lng;
      url += "&zoom=" + closureMap.getZoom();
 
-     url += "&cartogram=" + getFlagForCheckbox('#isCartogramCheckbox')
-     var citiesFlag =  getFlagForCheckbox('#showCitiesCheckbox')
+     url += "&cartogram=" + closureMap.
+                              getFlagForCheckbox('#isCartogramCheckbox')
+     var citiesFlag =  closureMap.getFlagForCheckbox('#showCitiesCheckbox')
      url += "&showCities=" + citiesFlag
   
      // @@@
@@ -230,30 +236,31 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
      var $showChoroplethsCheckbox = $( '#choroplethLayersCheckbox' ).first()[0]
      if($showChoroplethsCheckbox) {
        url += "&showChoropleths=" 
-              + getFlagForCheckbox('#choroplethLayersCheckbox');
+              + closureMap.getFlagForCheckbox('#choroplethLayersCheckbox')
      }
 
      var $choroplethLayersSelector = $( '#choroplethLayersSelector' ).first()[0]
      if($choroplethLayersSelector) {
        url += "&choroplethIndex=" 
-              + (parseInt($choroplethLayersSelector.selectedIndex));
+              + (parseInt($choroplethLayersSelector.selectedIndex))
      }
 
      var showDotsCheckbox = $( '#dotLayersCheckbox' ).first()[0]
      if(showDotsCheckbox) {
-       url += "&showDots=" + getFlagForCheckbox('#dotLayersCheckbox');
+       url += "&showDots=" + closureMap.getFlagForCheckbox('#dotLayersCheckbox')
      }
      var $dotsLayersSelector = $( '#dotsLayersSelector' ).first()[0]
      if($dotsLayersSelector) {
        url += "&dotIndex=" 
-              + (parseInt($dotsLayersSelector.selectedIndex));
+              + (parseInt($dotsLayersSelector.selectedIndex))
      }
   
      // borders are sometimes selected with a combobox instead of checkboxes
      var bordersCheckbox = $( '#borderLayersCheckbox' ).first()[0]
      var bordersSelector = $( '#borderLayersSelector' ).first()[0]
      if(bordersCheckbox) {
-       url += "&showBorders=" + getFlagForCheckbox('#borderLayersCheckbox');
+       url += "&showBorders=" + closureMap.getFlagForCheckbox(
+                                             '#borderLayersCheckbox')
      }
 
      /* 
@@ -275,13 +282,73 @@ function MapBehaviorInitializer(aMap, mapApplicationInfo, aCityLabeller) {
      return url
   }
 
-  function getFlagForCheckbox(checkboxElementName) {
+
+  this.map.addClickListener = function() {
+  
+    closureMap.on("click", function (e) {
+  
+      var latlng = e.latlng
+      var lat = latlng.lat
+      var lng = latlng.lng
+  
+      if(closureJurisdictionMarker) {
+        closureJurisdictionMarker.setLatLng([lat, lng]);
+        // @@@ TODO set flag in omni.js to say iff popup should open always
+        closureJurisdictionMarker.openPopup();
+      }
+    
+      var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
+      var cartogramFlag;
+    
+      
+      var layerName = closureMap.getLayerName('dotLayers')
+      var fieldName, year
+      if(layerName) {
+        fieldName = closureMai['dotLayers'][layerName].fieldName
+        year = closureMai['dotLayers'][layerName].year
+      } else {
+        fieldName = null
+        year =null
+      }
+      var cartogramFlag = closureMap.getFlagForCheckbox('#isCartogramCheckbox')
+    
+      var url = closureMap.pointInfoUrlPrefix + "?" +
+         "lat="+lat+"&lng="+lng+"&zoom="+map.zoom
+         +"&fieldName="+fieldName 
+         + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
+
+      closureJurisdictionMarker.setPopupContent("Looking up congressional district information, please wait...");
+
+      var setPopupInfo = function (responseText) {
+        closureJurisdictionMarker.setPopupContent(responseText);
+      }
+
+      requestUrlWithScope(url, setPopupInfo, this);  // request is a verb here
+    })
+  }
+
+
+  this.map.getFlagForCheckbox = function (checkboxElementName) {
      var element = $( checkboxElementName )
      if(!element) {
        return 'f'
      }
-
      return isChecked = $( checkboxElementName ).is(':checked') ? 't' : 'f'
+  }
+
+  
+  // find out what the field name is for the given layer
+  this.map.getLayerName = function (layerTypeName) {
+    var selector = $( '#' + layerTypeName + 'Option:selected' )
+    if (selector.length > 0) {
+      return selector.val()
+    } else {
+      var checkbox = $( '#' + layerTypeName + 'Checkbox')
+      if (checkbox) {
+        return checkbox.val()
+      }
+    }
+    return null
   }
 
 }

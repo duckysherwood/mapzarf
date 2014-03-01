@@ -202,14 +202,6 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
     closureMap.setView([closurePageInitValues.lat, closurePageInitValues.lng], 
                  closurePageInitValues.zoom)
   
-    // set up the marker
-    if(closurePageInitValues.markerLat) {
-      L.marker([closurePageInitValues.markerLat, 
-                closurePageInitValues.markerLng])
-          .bindPopup("Fetching data, please wait...")
-          .addTo(closureMap)
-    }
-  
 
     $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.showCities)
   }

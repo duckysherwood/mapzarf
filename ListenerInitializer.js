@@ -86,9 +86,11 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener
     closureCityLabeller.refreshCityLabels(closureCityLabeller)    
     scope.updateSharingUrl()
   }
-
-
 }
+
+
+
+
 
 
 
