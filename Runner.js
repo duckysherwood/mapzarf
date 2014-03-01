@@ -42,7 +42,7 @@ Runner.prototype.main = function () {
   mbc.initialize()
 
   var listenerInitializer = 
-    new ListenerInitializer(myMap, this.mai, cityLabeller)
+    new ListenerInitializer(myMap, this.mai, cityLabeller, jurisdictionMarker)
 
   cityLabeller.refreshCityLabels(cityLabeller)
 

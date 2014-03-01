@@ -207,7 +207,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   this.initialize = function () {
     this.map.updateLayers()
-    this.map.addClickListener()
   }
 
   // This URL will re-create the map as it exists at a given point,
@@ -225,13 +224,10 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      var citiesFlag =  closureMap.getFlagForCheckbox('#showCitiesCheckbox')
      url += "&showCities=" + citiesFlag
   
-     // @@@
-     /*
-     if(typeof jurisdictionMarker !== 'undefined') {
-       url += "&markerLat=" + jurisdictionMarker.getLatLng().lat;
-       url += "&markerLng=" + jurisdictionMarker.getLatLng().lng;
+     if(closureJurisdictionMarker) {
+       url += "&markerLat=" + closureJurisdictionMarker.getLatLng().lat;
+       url += "&markerLng=" + closureJurisdictionMarker.getLatLng().lng;
      }
-     */
   
      var $showChoroplethsCheckbox = $( '#choroplethLayersCheckbox' ).first()[0]
      if($showChoroplethsCheckbox) {
@@ -282,52 +278,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      return url
   }
 
-
-  this.map.addClickListener = function() {
-  
-    closureMap.on("click", function (e) {
-  
-      var latlng = e.latlng
-      var lat = latlng.lat
-      var lng = latlng.lng
-  
-      if(closureJurisdictionMarker) {
-        closureJurisdictionMarker.setLatLng([lat, lng]);
-        // @@@ TODO set flag in omni.js to say iff popup should open always
-        closureJurisdictionMarker.openPopup();
-      }
-    
-      var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
-      var cartogramFlag;
-    
-      
-      var layerName = closureMap.getLayerName('dotLayers')
-      var fieldName, year
-      if(layerName) {
-        fieldName = closureMai['dotLayers'][layerName].fieldName
-        year = closureMai['dotLayers'][layerName].year
-      } else {
-        fieldName = null
-        year =null
-      }
-      var cartogramFlag = closureMap.getFlagForCheckbox('#isCartogramCheckbox')
-    
-      var url = closureMap.pointInfoUrlPrefix + "?" +
-         "lat="+lat+"&lng="+lng+"&zoom="+map.zoom
-         +"&fieldName="+fieldName 
-         + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
-
-      closureJurisdictionMarker.setPopupContent("Looking up congressional district information, please wait...");
-
-      var setPopupInfo = function (responseText) {
-        closureJurisdictionMarker.setPopupContent(responseText);
-      }
-
-      requestUrlWithScope(url, setPopupInfo, this);  // request is a verb here
-    })
-  }
-
-
   this.map.getFlagForCheckbox = function (checkboxElementName) {
      var element = $( checkboxElementName )
      if(!element) {
@@ -336,7 +286,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      return isChecked = $( checkboxElementName ).is(':checked') ? 't' : 'f'
   }
 
-  
   // find out what the field name is for the given layer
   this.map.getLayerName = function (layerTypeName) {
     var selector = $( '#' + layerTypeName + 'Option:selected' )
@@ -350,6 +299,8 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     }
     return null
   }
+
+
 
 }
 

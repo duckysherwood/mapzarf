@@ -1,7 +1,9 @@
-function ListenerInitializer (map, mapApplicationInfo, labeller) {
+function ListenerInitializer (map, mapApplicationInfo, 
+                              labeller, jurisdictionMarker) {
   this.map = map
   this.mai = mapApplicationInfo
   this.cityLabeller = labeller
+  this.marker = jurisdictionMarker
 
   this.addLayerControlSelectListener('choroplethLayers') 
   this.addLayerControlSelectListener('borderLayers') 
@@ -10,9 +12,9 @@ function ListenerInitializer (map, mapApplicationInfo, labeller) {
   this.addLayerControlCheckboxListener('dotLayers')
   this.addCitiesCheckboxListener()
   this.addIsCartogramCheckboxListener()
+  this.addClickListener()
 
-  // There isn't an obvious place to put this; it needs
-  // to happen *after* 
+  // There isn't an obvious place to put this
   this.updateSharingUrl()
   
 }
@@ -86,6 +88,57 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener
     closureCityLabeller.refreshCityLabels(closureCityLabeller)    
     scope.updateSharingUrl()
   }
+
+ListenerInitializer.prototype.addClickListener = function() {
+  
+    var closureMap = this.map
+    var closureJurisdictionMarker = this.marker
+
+    var scope = this
+    closureMap.on("click", function (e) {
+  
+      var latlng = e.latlng
+      var lat = latlng.lat
+      var lng = latlng.lng
+  
+      var setPopupInfo = function (responseText) {
+        closureJurisdictionMarker.setPopupContent(responseText);
+        scope.updateSharingUrl()
+      }
+
+      if(closureJurisdictionMarker) {
+        closureJurisdictionMarker.setLatLng([lat, lng]);
+        // @@@ TODO set flag in omni.js to say iff popup should open always
+        closureJurisdictionMarker.openPopup();
+      }
+    
+      var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
+      var cartogramFlag;
+    
+      
+      var layerName = closureMap.getLayerName('dotLayers')
+      var fieldName, year
+      if(layerName) {
+        fieldName = closureMai['dotLayers'][layerName].fieldName
+        year = closureMai['dotLayers'][layerName].year
+      } else {
+        fieldName = null
+        year =null
+      }
+      var cartogramFlag = closureMap.getFlagForCheckbox('#isCartogramCheckbox')
+    
+      var url = closureMap.pointInfoUrlPrefix + "?" +
+         "lat="+lat+"&lng="+lng+"&zoom="+map.zoom
+         +"&fieldName="+fieldName 
+         + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
+
+      closureJurisdictionMarker.setPopupContent("Looking up congressional district information, please wait...");
+
+
+      requestUrlWithScope(url, setPopupInfo, this);  // request is a verb here
+    })
+  }
+  
 }
 
 

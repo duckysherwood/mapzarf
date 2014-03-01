@@ -107,7 +107,7 @@ function MapDisplayParameters () {
   this.createDefaultsFromMapApplicationInfo = function (mai) {
 
     // Note that the MAI doesn't give direction on how the UI
-    // starts up -- that's the query string's job
+    // buttons and dropdowns are set
     var translator = { 'startingCenterLat' : 'lat',
                        'startingCenterLng' : 'lng',
                        'startingCenterZoom' : 'zoom',
