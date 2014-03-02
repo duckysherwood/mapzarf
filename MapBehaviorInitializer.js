@@ -221,8 +221,8 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
      url += "&cartogram=" + closureMap.
                               getFlagForCheckbox('#isCartogramCheckbox')
-     var citiesFlag =  closureMap.getFlagForCheckbox('#showCitiesCheckbox')
-     url += "&showCities=" + citiesFlag
+
+     url += "&showCities=" + closureMap.getFlagForCheckbox('#showCitiesCheckbox')
   
      if(closureJurisdictionMarker) {
        url += "&markerLat=" + closureJurisdictionMarker.getLatLng().lat;
