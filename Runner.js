@@ -31,7 +31,7 @@ Runner.prototype.main = function () {
                                     pageInitValues.markerLng])
                            .bindPopup("Fetching data, please wait...")
                            .addTo(myMap)
-    myMap.pointInfoUrlPrefix = mapApplicationInfo.pointInfoUrl
+    myMap.pointInfoUrlPrefix = mapApplicationInfo.pointInfoUrlPrefix
   }
 
   var domCreator = new DomCreator(myMap, this.mai, pageInitValues)

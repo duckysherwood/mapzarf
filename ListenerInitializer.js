@@ -114,14 +114,14 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
 
     var layerName = this.map.getLayerName('dotLayers')
     var fieldName, year
-    fieldName = layerName ? this.mai['dotLayers'][layerName].fieldName : null
+    fieldName = layerName ? this.mai['dotLayers'][layerName].mercatorFieldName : null
     year = layerName ? this.mai['dotLayers'][layerName].year : null
 
     var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox')
 
     var url = this.map.pointInfoUrlPrefix + "?" 
-       + "lat="+this.map.getCenter().lat+"&lng="+this.map.getCenter().lng
-       +"&zoom="+this.map.zoom
+       + "lat="+lat+"&lng="+lng
+       +"&zoom="+this.map.getZoom()
        +"&fieldName="+fieldName 
        + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
 

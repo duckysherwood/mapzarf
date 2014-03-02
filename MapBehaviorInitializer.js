@@ -288,7 +288,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   // find out what the field name is for the given layer
   this.map.getLayerName = function (layerTypeName) {
-    var selector = $( '#' + layerTypeName + 'Option:selected' )
+    var selector = $( '.' + layerTypeName + 'Option:selected' )
     if (selector.length > 0) {
       return selector.val()
     } else {
