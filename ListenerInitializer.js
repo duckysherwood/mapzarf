@@ -18,7 +18,6 @@ function ListenerInitializer (map, mapApplicationInfo,
 
   // There isn't an obvious place to put this
   this.updateSharingUrl()
-  
 }
 
 
@@ -28,9 +27,11 @@ ListenerInitializer.prototype.updateSharingUrl = function() {
 
 ListenerInitializer.prototype.addMarkerClickListener = function() {
   var scope = this
-  this.jurisdictionMarker.on("click", function (e) {
-    scope.requestPopupInformation(e)
-  })
+  if(this.jurisdictionMarker) {
+    this.jurisdictionMarker.on("click", function (e) {
+      scope.requestPopupInformation(e)
+    })
+  }
 }
 
 ListenerInitializer.prototype.addLayerControlSelectListener
@@ -42,16 +43,15 @@ ListenerInitializer.prototype.addLayerControlSelectListener
   }
 
   // make available to the closure
-  var myLayerTypeName = layerTypeName
-  var myMap = this.map
-  var mai = this.mai
+  var closureLayerTypeName = layerTypeName
   var scope = this
 
   selectElement.onchange = function () {
-    var field = $('option.' + myLayerTypeName + 'Option:selected').val()
-    var elementName = '#' + myLayerTypeName + 'Description' 
-    $( elementName ).html(descriptionHtml(mai[myLayerTypeName][field]))
-    myMap.updateLayers()
+    var field = $('option.' + closureLayerTypeName + 'Option:selected').val()
+    var elementName = '#' + closureLayerTypeName + 'Description' 
+    var description = descriptionHtml(scope.mai[closureLayerTypeName][field])
+    $( elementName ).html(descriptionHtml(description))
+    scope.map.updateLayers()
     scope.updateSharingUrl()
   }
 
@@ -65,20 +65,18 @@ ListenerInitializer.prototype.addLayerControlCheckboxListener
     return null
   }
 
-  var myMap = this.map
   var scope = this
   checkboxElement.onchange = function () {
-    myMap.updateLayers()
+    scope.map.updateLayers()
     scope.updateSharingUrl()
   }
 }
 
 ListenerInitializer.prototype.addCitiesCheckboxListener
   = function () {
-  var labeller = this.cityLabeller
   var scope = this
   $('#showCitiesCheckbox')[0].onchange = function() {
-    labeller.refreshCityLabels(labeller)
+    scope.cityLabeller.refreshCityLabels(scope.cityLabeller)
     scope.updateSharingUrl()
   }
 }
@@ -90,19 +88,17 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener
     return null
   }
 
-  var myMap = this.map
-  var closureCityLabeller = this.cityLabeller
   var scope = this
   checkboxElement.onchange = function () {
-    myMap.updateLayers()
-    closureCityLabeller.refreshCityLabels(closureCityLabeller)    
+    scope.map.updateLayers()
+    scope.cityLabeller.refreshCityLabels(scope.cityLabeller)    
     scope.updateSharingUrl()
   }
 }
 
 ListenerInitializer.prototype.setPopupInfoCallback = function (responseText) {
   this.jurisdictionMarker.setPopupContent(responseText);
-  this.updateSharingUrl()
+  this.updateSharingUrl() 
 }
 
 ListenerInitializer.prototype.requestPopupInformation = function (e) {
@@ -118,15 +114,10 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
 
     var layerName = this.map.getLayerName('dotLayers')
     var fieldName, year
-    if(layerName) {
-      fieldName = this.mai['dotLayers'][layerName].fieldName
-      year = this.mai['dotLayers'][layerName].year
-    } else {
-      fieldName = null
-      year =null
-    }
+    fieldName = layerName ? this.mai['dotLayers'][layerName].fieldName : null
+    year = layerName ? this.mai['dotLayers'][layerName].year : null
+
     var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox')
-  
 
     var url = this.map.pointInfoUrlPrefix + "?" 
        + "lat="+this.map.getCenter().lat+"&lng="+this.map.getCenter().lng
@@ -141,24 +132,22 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
 
 ListenerInitializer.prototype.addMapClickListener = function() {
 
-  var closureMap = this.map
-  var closureJurisdictionMarker = this.jurisdictionMarker
-
   var scope = this
-  closureMap.on("click", function (e) {
+  this.map.on("click", function (e) {
 
     var latlng = e.latlng
     var lat = latlng.lat
     var lng = latlng.lng
 
-
-    if(closureJurisdictionMarker) {
-      closureJurisdictionMarker.setLatLng([lat, lng]);
-      // @@@ TODO set flag in omni.js to say iff popup should open always
-      closureJurisdictionMarker.openPopup();
+console.log("add map click listener!")
+    if(scope.jurisdictionMarker) {
+      scope.jurisdictionMarker.setLatLng([lat, lng]);
+      // @@@ TODO set flag in mapApplicationInfo.js to say whether 
+      // popup should open always
+      scope.jurisdictionMarker.openPopup();
+      scope.requestPopupInformation(e)    
     }
   
-    scope.requestPopupInformation(e)    
 
   })
 

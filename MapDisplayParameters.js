@@ -115,10 +115,10 @@ function MapDisplayParameters () {
                        'startingMarkerLat' : 'markerLat',
                        'startingMarkerLng' : 'markerLng' }
 
-    var closureScope = this
+    var scope = this
     $.each( translator , function ( key, value ) {
-      if(mai.hasOwnProperty(key) && value != undefined && value != null) {
-        closureScope.validateAndUpdate(translator[key], mai[key])
+      if(mai.hasOwnProperty(key) && value) {
+        scope.validateAndUpdate(translator[key], mai[key])
       }
     })
     return defaults // useful for testing
@@ -126,9 +126,9 @@ function MapDisplayParameters () {
 
   // *** SIDE EFFECT *** modifies defaults
   this.initializePageParametersFromQueryString = function (qstring) {
-    var closureScope = this
+    var scope = this
     $.each(defaults, function (key, ignore) {
-      closureScope.validateAndUpdate(key, qstring[key])
+      scope.validateAndUpdate(key, qstring[key])
     })
 
     return defaults
