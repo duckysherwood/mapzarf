@@ -16,6 +16,8 @@ Runner.prototype.main = function () {
   var pageInitValues = mapDisplayParameters.getValues()
 
   // tester.pageInitValuesTest()
+  // tester.testCongressionalDistrictInfoMercator()
+  // tester.testCongressionalDistrictInfoCartogram()
 
   // L (from Leaflet) is global scope, but we need =map= in this scope
   // so we can pass it to behaviour
