@@ -7,6 +7,7 @@ function ListenerInitializer (map, mapApplicationInfo,
 
   this.addLayerControlSelectListener('choroplethLayers') 
   this.addLayerControlSelectListener('borderLayers') 
+  this.addLayerControlSelectListener('dotLayers') 
   this.addLayerControlCheckboxListener('choroplethLayers')
   this.addLayerControlCheckboxListener('borderLayers')
   this.addLayerControlCheckboxListener('dotLayers')
@@ -47,10 +48,10 @@ ListenerInitializer.prototype.addLayerControlSelectListener
   var scope = this
 
   selectElement.onchange = function () {
-    var field = $('option.' + closureLayerTypeName + 'Option:selected').val()
+    var layer = $('option.' + closureLayerTypeName + 'Option:selected').val()
     var elementName = '#' + closureLayerTypeName + 'Description' 
-    var description = descriptionHtml(scope.mai[closureLayerTypeName][field])
-    $( elementName ).html(descriptionHtml(description))
+    var description = descriptionHtml(scope.mai[closureLayerTypeName][layer])
+    $( elementName ).html(description)
     scope.map.updateLayers()
     scope.updateSharingUrl()
   }
@@ -112,10 +113,11 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
     var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
     var cartogramFlag;
 
-    var layerName = this.map.getLayerName('dotLayers')
+    var layerTypeName = this.map.getLayerName('dotLayers')
     var fieldName, year
-    fieldName = layerName ? this.mai['dotLayers'][layerName].mercatorFieldName : null
-    year = layerName ? this.mai['dotLayers'][layerName].year : null
+    fieldName = layerTypeName 
+                 ? this.mai['dotLayers'][layerTypeName].mercatorFieldName : null
+    year = layerTypeName ? this.mai['dotLayers'][layerTypeName].year : null
 
     var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox')
 
