@@ -111,23 +111,25 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
     // I can use it also for clicking on the marker (see addMarkerClickListener,
     // above
     var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
-    var cartogramFlag;
+    var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox')
 
-    var layerTypeName = this.map.getLayerName('dotLayers')
-    var fieldName, year
+    var layerTypeName = this.map.getLayerName('dotLayers');
+    var fieldName, year;
+    var projectionSelector = cartogramFlag == 't'
+      ? 'cartogramFieldName' : 'mercatorFieldName';
     fieldName = layerTypeName 
-                 ? this.mai['dotLayers'][layerTypeName].mercatorFieldName : null
+      ? this.mai['dotLayers'][layerTypeName][projectionSelector] : null
     year = layerTypeName ? this.mai['dotLayers'][layerTypeName].year : null
 
-    var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox')
 
     var url = this.map.pointInfoUrlPrefix + "?" 
        + "lat="+lat+"&lng="+lng
        +"&zoom="+this.map.getZoom()
        +"&fieldName="+fieldName 
        + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
+console.log(url)
 
-    this.jurisdictionMarker.setPopupContent("Looking up congressional district information, please wait...");
+    this.jurisdictionMarker.setPopupContent("Looking up jurisdiction information, please wait...");
 
     requestUrlWithScope(url, this.setPopupInfoCallback, this);  // request is a verb here
     }
