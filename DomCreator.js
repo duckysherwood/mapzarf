@@ -7,9 +7,9 @@
 
 /** @class DomCreator
  *  @classdesc This class sets up the DOM for the map application.
- * The DomCreator depends, by convention, on a number of DOM 
- * elements being created before this point in the view (i.e. the HTML).  
- * These include elements named
+ *  The DomCreator depends, by convention, on a number of DOM 
+ *  elements being created before this point in the view (i.e. the HTML).  
+ *  These include elements named
  *   explanation (p)
  *   sharingUrl (a)
  *   choroplethLayers (div)
@@ -17,9 +17,9 @@
  *   borderLayers (div)
  *   showCitiesCheckbox (input)
  *   cartogramSelector (div)
- * At the moment, this code assumes that there will only be one map
- * element on the page, but it probably wouldn't be *too* difficult 
- * to instanttiate two different maps (with two different sets of controls).
+ *  At the moment, this code assumes that there will only be one map
+ *  element on the page, but it probably wouldn't be *too* difficult 
+ *  to instanttiate two different maps (with two different sets of controls).
  */
 // TODO check for existence of all the named elements
 
@@ -91,10 +91,13 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
   
         if( layersCount == 1) {
           layerSelectionCheckbox.value = lastKey
-          var longerDescription ='Show '+layerSpecs[key].shortDescription+'<p />'
+          var longerDescription ='Show ' 
+               // + layerSpecs[key].shortDescription + '<br />'
           layerDescriptionSpan.innerHTML = longerDescription
           layerSelectionControl.appendChild(layerDescriptionSpan)
-          var descriptionElem.innerHTML = descriptionHtml(spec)
+          var descriptionElem = document.createElement('span')
+          descriptionElem.innerHTML = descriptionHtml(layerSpecs[key])
+          descriptionElem.id = layerTypeName + 'Description'
           descriptionElem.className = 'indented'
           layerSelectionControl.appendChild(descriptionElem)
   
