@@ -6,21 +6,21 @@ html, body, table {
 #sidebar {
     position: absolute;
     font-family:Verdana,Arial,sans-serif;
-    left: 65%;
+    left: 80%;
     height: 100%;
     top: 2%;
-    width: 30%;
+    width: 15%;
     margin: 2%;
 }
 #map {
     left: 0px;
-    width: 65%;
+    width: 80%;
     height: 100%;
     margin: 0;
 }
 #legend {
    position: absolute;
-   left: 57%;
+   left: 72%;
    top: 6%;
    width: 5%;
    margin: 0;
@@ -32,16 +32,9 @@ html, body, table {
    height: 20px;
    bottom: 20px;
    width: 30%;
-   margin: 0px;
+   margin: 0;
 }
-select.indented {
+p.indented {
   position: relative;
-  margin-top: 5pt;
-  margin-bottom: 3pt;
-  left:25px;
-}
-span.indented {
-  position: relative;
-  margin-top: 3pt;
   left:25px;
 }
