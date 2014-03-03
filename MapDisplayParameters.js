@@ -16,6 +16,10 @@ function MapDisplayParameters () {
   /* @const */ var MAX_CHOROPLETH_LAYERS = 30
 
   var defaults = Object.create(null)
+
+  this.toBoolean  = function (aString) {
+    return (aString == "t");
+  } 
   
   defaults.lat = [parseFloat, CENTER_LAT, -90, 90];
   defaults.lng = [parseFloat, CENTER_LNG, -180, 180];
@@ -77,6 +81,7 @@ function MapDisplayParameters () {
     // it needs to be converted into a value
     if(typeof candidateValue == 'string') {
       if(!parseFunction) {
+        console.log("No parse function for validating key "+paramKey)
         return defaults[paramKey]
       }
 
@@ -142,9 +147,7 @@ function MapDisplayParameters () {
     return init
   }
 
-  this.toBoolean  = function (aString) {
-    return (aString == "t");
-  }
+ 
 
 
 }
