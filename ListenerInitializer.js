@@ -1,3 +1,18 @@
+/** @author Kaitlin Duck Sherwood
+ *  @class ListenerInitializer
+ *  @classdesc This class sets up all the listeners for the map.
+ * 
+ *  @constructor
+ *  @this {ListenerInitializer}
+ *  @param map {object} Leaflet map object, e.g. L.map
+ *  @param mapApplicationInfo {object} JSON describing the application,
+ *    especially the layers to go on the map
+ *  @param pageInitValues {object} Information on how to set the UI controls
+ *    on startup
+ *  @param jurisdictionMarker {object} A Leaflet marker
+ */
+// TODO instead of adding all these listeners to the map, make a 
+// TODO Facade element instead
 function ListenerInitializer (map, mapApplicationInfo, 
                               labeller, jurisdictionMarker) {
   this.map = map
