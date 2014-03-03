@@ -1,47 +1,60 @@
-// TODO figure out why the layer controls don't appear on the page
-// TODO the same order as they are added to the DOM
-
-// TODO figure out how to set the first item in a drop-down as the
-// TODO default, instead of the last
-
+// @author Kaitlin Duck Sherwood
 // I tried to set the value of a checkbox to null if it was
-// multiple, but the value ended up being "on" (<- literally, "o"+"n").
+// multiple, but the value ended up being "on" (<- literally, 'o'+'n').
 // So I'm going to set a sentinel value instead.  It needs to be global
 // so that BehaviourCreator can see it.
-SENTINEL_MULTIPLE = ""
+/* @const */ SENTINEL_MULTIPLE = ""
 
-// The DomCreator populates and initalizes the DOM.  It takes
-// a JSON object which describes basically everything about the
-// map.
-// The DomCreator depends, by convention, on a number of DOM 
-// elements being laid out in the view (i.e. the HTML).  These
-// include elements named
-//   explanation (p)
-//   sharingUrl (a)
-//   choroplethLayers (div)
-//   dotLayers (div)
-//   borderLayers (div)
+/** @class DomCreator
+ *  @classdesc This class sets up the DOM for the map application.
+ * The DomCreator depends, by convention, on a number of DOM 
+ * elements being created before this point in the view (i.e. the HTML).  
+ * These include elements named
+ *   explanation (p)
+ *   sharingUrl (a)
+ *   choroplethLayers (div)
+ *   dotLayers (div)
+ *   borderLayers (div)
+ *   showCitiesCheckbox (input)
+ *   cartogramSelector (div)
+ * At the moment, this code assumes that there will only be one map
+ * element on the page, but it probably wouldn't be *too* difficult 
+ * to instanttiate two different maps (with two different sets of controls).
+ */
 // TODO check for existence of all the named elements
+
+/** 
+ *  @constructor
+ *  @this {DomCreator}
+ *  @param map {object} Leaflet map object, e.g. L.map
+ *  @param mapApplicationInfo {object} JSON describing the application,
+ *    especially the layers to go on the map
+ *  @param pageInitValues {object} Information on how to set the UI controls
+ *    on startup
+ */
 function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
-  this.mai = mapApplicationInfo // shortened for typing
-  var closurePageInitValues = pageInitValues
-  var closureMap = map
+  /** @private */ this.mai = mapApplicationInfo // shortened for typing
+  /** @private */ var closurePageInitValues = pageInitValues
+  /** @private */ var closureMap = map
   
-  // Creates a selector object for a layer type (e.g. 
-  // dot layers) based on how many layer specs of that type there are.
-  // If there are 0, don't show a control.
-  // If there are exactly 1, show a checkbox.
-  // If there are >1, show a dropdown (plus a checkbox to turn them all off/on).
-  // Returns a div containing a new selector control plus any explanatory text
   // @@@ Would it make more sense to create elements, then just hide
   // @@@ them if they are not used / there is not data for them?
-  this.createLayerSelectorControl = function( layerTypeName) {
+
+  /** Creates the controls for a particular layer type (e.g. dot layer)
+   *    based on the values in the mapApplicationInfo.  Can contain a 
+   *    checkbox, a checkbox and a selector, or neither.
+   *  @param layerTypeName {string} Name of the type of layer, e.g. 'dotLayers'
+   *  @returns a div with the appropriate controls (as HTML elements)
+   *    or null if there are no layers
+   */
+  // TODO da-yam this is a long method.  Can I split it up?
+  /** @private */ this.createLayerSelectorControl = function( layerTypeName) {
   
     if(layerTypeName in this.mai) { 
       var layerSpecs = this.mai[layerTypeName]
       var $layerDiv = $( layerSpecs )
       if( $layerDiv == undefined ) {
-        console.log('Missing div for ' + layerspec + ', failing softly.')
+        console.log('Missing div for ' + layerTypeName + ', failing softly.')
         return null
       }
   
@@ -49,8 +62,8 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
         var layerSelectionControl
   
         // I can't just do a layerSpecs.length to get the number
-        // of layers; I can't just do a layerSpecs[0] to get
-        // the (only) element in case there is only one
+        // of layers; I need to know if there are 0, exactly 1, or 
+        // more than one layers in this layerSpec.
         var layersCount = 0
         var lastKey
         for (var key in layerSpecs) {
@@ -80,15 +93,18 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
           layerSelectionCheckbox.value = lastKey
           var longerDescription ='Show '+layerSpecs[key].shortDescription+'<p />'
           layerDescriptionSpan.innerHTML = longerDescription
-          // @@@ TODO why appended out of order?
           layerSelectionControl.appendChild(layerDescriptionSpan)
+          var descriptionElem.innerHTML = descriptionHtml(spec)
+          descriptionElem.className = 'indented'
+          layerSelectionControl.appendChild(descriptionElem)
   
         } else {
           
           // When I tried making value=null, value was instead ="on".  ???
           layerSelectionCheckbox.value = SENTINEL_MULTIPLE
   
-          layerDescriptionSpan.innerHTML = 'Show ' + layerTypeName + ': <br />'
+          layerDescriptionSpan.innerHTML = 'Show ' 
+            + layerTypeName.replace('Layer', ' layer') + ': <br />'
           layerSelectionControl.appendChild(layerDescriptionSpan)
           var selectElement = document.createElement('select')
           selectElement.className = 'indented'
@@ -124,8 +140,15 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
     return null
   }
   
-  // Creates and initializes all the DOM elements
+  /** Creates and initializes all the DOM elements relating to the
+   *  map which depend upon the mapApplicationInfo.
+   *
+   *  @public 
+   */
+  // TODO this is honkin' long, maybe break it up into different
+  // pieces?
   this.createAndPopulateElements = function () {
+
     document.title = mapApplicationInfo.pageTitle
     
     $( '#explanation').html( "<b>" + this.mai.pageTitle + "</b><p>" 
