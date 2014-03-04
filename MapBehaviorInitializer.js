@@ -5,13 +5,13 @@
  *  behaviours relating to the map layers.
  * 
  *  @constructor
- *  @this {ListenerInitializer}
- *  @param aMap {object} Leaflet map object, e.g. L.map
- *  @param aMapApplicationInfo {object} JSON describing the application,
+ *  @this {MapBehaviorInitializer}
+ *  @param {Object} aMap Leaflet map object, e.g. L.map
+ *  @param {Object} aMapApplicationInfo JSON describing the application,
  *    especially the layers to go on the map
- *  @param aCityLabeller {object} A class which shows city names
+ *  @param {Object} aCityLabeller A class which shows city names
       on the map at the proper locations
- *  @param aJurisdictionMarker {object} A Leaflet marker
+ *  @param {Object} aJurisdictionMarker A Leaflet marker
  */
 // @@@@ Should I make this MapFacade instead?
 function MapBehaviorInitializer(aMap, aMapApplicationInfo, 
@@ -108,9 +108,9 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   /** Creates a polygon layer -- either choropleth or border --
    *  for the map to use.
-   *  @param layersetName {string] A string describing what type of
+   *  @param {string} layersetName A string describing what type of
    *    layerset it is (valid strings: 'borderLayers' or 'choroplethLayers')
-   *  @param showBorder {boolean} Flag which tells if there should be a border on
+   *  @param {string} showBorder Flag which tells if there should be a border on
    *    the polygons or not.  This is needed because what the user sees as
    *    a border might be implemented either as a separate layer or as
    *    a choropleth layer which happens to have a border.  
