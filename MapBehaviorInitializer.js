@@ -1,6 +1,7 @@
 /** @author Kaitlin Duck Sherwood
  *  @class MapBehaviorInitializer
- *  @classdesc This class is a Facade for the Leaflet map, giving
+ *  @classdesc This class is sort of like a Facade for the map, except
+ *    I put the new behaviours right onto the map.
  *  behaviours relating to the map layers.
  * 
  *  @constructor
@@ -12,6 +13,7 @@
       on the map at the proper locations
  *  @param aJurisdictionMarker {object} A Leaflet marker
  */
+// @@@@ Should I make this MapFacade instead?
 function MapBehaviorInitializer(aMap, aMapApplicationInfo, 
                                 aCityLabeller, aJurisdictionMarker) {
   // @private
