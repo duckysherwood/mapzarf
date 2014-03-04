@@ -5,9 +5,9 @@
 // so that BehaviourCreator can see it.
 /* @const */ SENTINEL_MULTIPLE = ""
 
-/** @class DomCreator
+/** @class DomElementAppender
  *  @classdesc This class sets up the DOM for the map application.
- *  The DomCreator depends, by convention, on a number of DOM 
+ *  The DomElementAppender depends, by convention, on a number of DOM 
  *  elements being created before this point in the view (i.e. the HTML).  
  *  These include elements named
  *   explanation (p)
@@ -25,14 +25,14 @@
 
 /** 
  *  @constructor
- *  @this {DomCreator}
+ *  @this {DomElementAppender}
  *  @param map {object} Leaflet map object, e.g. L.map
  *  @param mapApplicationInfo {object} JSON describing the application,
  *    especially the layers to go on the map
  *  @param pageInitValues {object} Information on how to set the UI controls
  *    on startup
  */
-function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
+function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   /** @private */ this.mai = mapApplicationInfo; // shortened for typing
   /** @private */ var closurePageInitValues = pageInitValues;
   /** @private */ var closureMap = map;
