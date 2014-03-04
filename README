@@ -8,6 +8,20 @@ a marker, change the starting display based on the query string, and so on.
 This framework lets me specify all those things (and a 
 few more) based on one JSON file.
 
+======= Terminology
+
+Choropleth: Maps where jurisdiction polygons are coloured based on an attribute
+of the jurisdiction are called choropleth maps.  The important point is that
+it is polygons, not points.
+
+Layer: Each thing that might be shown or plotted -- like the 
+median income, the location of schools, or the state borders -- is a layer.
+
+Layerset: Each *type* of layer -- choropleth, dot, or border -- is grouped
+together in mapzarf.  That grouping is called a layerset.  
+
+
+
 ======= What is NOT covered by the JSON file?
 
 Three things:
