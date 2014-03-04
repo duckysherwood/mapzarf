@@ -11,154 +11,212 @@
  *    on startup
  *  @param jurisdictionMarker {object} A Leaflet marker
  */
-// TODO instead of adding all these listeners to the map, make a 
+// TODO instead of adding all these listeners directly to the map, make a 
 // TODO Facade element instead
+// TODO someday add links to social media sites like FB, Twitter, etc
 function ListenerInitializer (map, mapApplicationInfo, 
                               labeller, jurisdictionMarker) {
-  this.map = map
-  this.mai = mapApplicationInfo
-  this.cityLabeller = labeller
-  this.jurisdictionMarker = jurisdictionMarker
+  //* @private */ this.map = map;
+  //* @private */ this.mai = mapApplicationInfo;
+  //* @private */ this.cityLabeller = labeller;
+  //* @private */ this.jurisdictionMarker = jurisdictionMarker;
 
-  this.addLayerControlSelectListener('choroplethLayers') 
-  this.addLayerControlSelectListener('borderLayers') 
-  this.addLayerControlSelectListener('dotLayers') 
-  this.addLayerControlCheckboxListener('choroplethLayers')
-  this.addLayerControlCheckboxListener('borderLayers')
-  this.addLayerControlCheckboxListener('dotLayers')
-  this.addCitiesCheckboxListener()
-  this.addIsCartogramCheckboxListener()
-  this.addMapClickListener()
-  this.addMarkerClickListener()
+  // I suppose I could have added an "initialize" method, but
+  // these things only need to happen once per map, so I can't
+  // think of a good reason to not do it here.
+  this.addLayerControlSelectListener('choroplethLayers') ;
+  this.addLayerControlSelectListener('borderLayers') ;
+  this.addLayerControlSelectListener('dotLayers') ;
+  this.addLayerControlCheckboxListener('choroplethLayers');
+  this.addLayerControlCheckboxListener('borderLayers');
+  this.addLayerControlCheckboxListener('dotLayers');
+  this.addCitiesCheckboxListener();
+  this.addIsCartogramCheckboxListener();
+  this.addMapClickListener();
+  this.addMarkerClickListener();
 
 
-  // There isn't an obvious place to put this
-  this.updateSharingUrl()
+  // There isn't an obvious place to put this, alas.
+  this.updateSharingUrl();
 }
 
 
+/** Updates the shareable link
+ *  No arguments, no return.
+ *  SIDE EFFECTS: changes the DOM.
+ *  @private
+ */
 ListenerInitializer.prototype.updateSharingUrl = function() {
-  $( '#sharingUrl' )[0].href = this.map.getSharingUrl()
-}
+  $( '#sharingUrl' )[0].href = this.map.getSharingUrl();
+};
 
+/** Enables clicking on the marker to get info about the dot
+ *  or jurisdiction at that point.  (It gets the information from
+ *  mapApplicationInfo.pointInfoUrlPrefix.)
+ *  No arguments, no return.   Calls the {marker} callback.
+ *  SIDE EFFECTS: changes the DOM.
+ *  @private
+ */
 ListenerInitializer.prototype.addMarkerClickListener = function() {
-  var scope = this
+  var scope = this;
   if(this.jurisdictionMarker) {
     this.jurisdictionMarker.on("click", function (e) {
-      scope.requestPopupInformation(e)
-    })
+      scope.requestPopupInformation(e);
+    });
   }
-}
+};
 
+/** Enables changing a combo box (aka select elements) to select
+ *  which layer is displayed on the map.
+ *  @param layersetName {string} The name of the layerset e.g. 'dotLayers'
+ *  @private
+ */
 ListenerInitializer.prototype.addLayerControlSelectListener
-  = function (layerTypeName) {
+  = function (layersetName) {
 
-  var selectElement = $( '#' + layerTypeName + 'Selector' )[0]
+  var selectElement = $( '#' + layersetName + 'Selector' )[0];
   if((selectElement == null) || (selectElement == undefined)) {
-    return null
+    return null;
   }
 
   // make available to the closure
-  var closureLayerTypeName = layerTypeName
-  var scope = this
+  var closureLayersetName = layersetName;
+  var scope = this;
 
   selectElement.onchange = function () {
-    var layer = $('option.' + closureLayerTypeName + 'Option:selected').val()
-    var elementName = '#' + closureLayerTypeName + 'Description' 
-    var description = descriptionHtml(scope.mai[closureLayerTypeName][layer])
-    $( elementName ).html(description)
-    scope.map.updateLayers()
-    scope.updateSharingUrl()
-  }
+    var layer = $('option.' + closureLayersetName + 'Option:selected').val();
+    var elementName = '#' + closureLayersetName + 'Description' ;
+    var description = descriptionHtml(scope.mai[closureLayersetName][layer]);
+    $( elementName ).html(description);
+    scope.map.updateLayers();
+    scope.updateSharingUrl();
+  };
 
-}
+};
 
+/** Enables changing whether a layer is shown or hidden on the map.
+ *  @param layersetName {string} The name of the layerset e.g. 'dotLayers'
+ *  @private
+ */
 ListenerInitializer.prototype.addLayerControlCheckboxListener
-  = function (layerTypeName) {
+  = function (layersetName) {
 
-  var checkboxElement = $( '#' + layerTypeName + 'Checkbox' )[0]
+  var checkboxElement = $( '#' + layersetName + 'Checkbox' )[0];
   if((checkboxElement == null) || (checkboxElement == undefined)) {
-    return null
+    return null;
   }
 
   var scope = this
   checkboxElement.onchange = function () {
-    scope.map.updateLayers()
-    scope.updateSharingUrl()
-  }
-}
+    scope.map.updateLayers();
+    scope.updateSharingUrl();
+  };
+};
 
+/** Enables changing whether the locations of cities are shown or hidden on 
+ *  the map.
+ *  @private
+ */
 ListenerInitializer.prototype.addCitiesCheckboxListener
   = function () {
-  var scope = this
+  var scope = this;
   $('#showCitiesCheckbox')[0].onchange = function() {
-    scope.cityLabeller.refreshCityLabels(scope.cityLabeller)
-    scope.updateSharingUrl()
-  }
-}
+    scope.cityLabeller.refreshCityLabels(scope.cityLabeller);
+    scope.updateSharingUrl();
+  };
+};
 
+/** Enables changing whether the map shows a mercator projection or
+ *  a cartogram.
+ *  @private
+ */
 ListenerInitializer.prototype.addIsCartogramCheckboxListener
   = function () {
-  var checkboxElement = $( '#isCartogramCheckbox' )[0]
+  var checkboxElement = $( '#isCartogramCheckbox' )[0];
   if((checkboxElement == null) || (checkboxElement == undefined)) {
-    return null
+    return null;
   }
 
-  var scope = this
+  var scope = this;
   checkboxElement.onchange = function () {
-    scope.map.updateLayers()
-    scope.cityLabeller.refreshCityLabels(scope.cityLabeller)    
-    scope.updateSharingUrl()
-  }
-}
+    scope.map.updateLayers();
+    scope.cityLabeller.refreshCityLabels(scope.cityLabeller)    ;
+    scope.updateSharingUrl();
+  };
+};
 
+/** Helper for responding to a click on the map or marker.  Sets the 
+ *  infowindow's content and also updates the sharing URL.  Clicking
+ *  on the marker doesn't change the sharing URL, but it's lightweight
+ *  to update the sharing URL and doesn't hurt anything.  It would be more
+ *  work to inhibit updating the sharing URL if the event came from the marker.
+ *  @callback setPopupInfoCallback
+ *  @param responseText
+ *  @private
+ *  SIDE EFFECTS: changes the DOM's sharing URL and the map's infowindow
+ */
 ListenerInitializer.prototype.setPopupInfoCallback = function (responseText) {
   this.jurisdictionMarker.setPopupContent(responseText);
-  this.updateSharingUrl() 
+  this.updateSharingUrl() ;
 }
 
+/** Event handler for clicking on the map or marker.  Kicks off a request
+ *  to the server for content to fill the infowindow with.  Note that
+ *  the URL for the call to the server is constructed with 
+ *  pointInfoUrlPrefix as specified in the JSON mapApplicationInfo file.
+ *  The server gets information about where the user clicked, but after
+ *  that, it's all the server's job to figure out what to populate the
+ *  infowindow with.
+ *  @param {event}
+ *  @private
+ *  @callback marker
+ */
 ListenerInitializer.prototype.requestPopupInformation = function (e) {
-    var latlng = e.latlng
-    var lat = latlng.lat
-    var lng = latlng.lng
+  var latlng = e.latlng;
+  var lat = latlng.lat;
+  var lng = latlng.lng;
 
-    // TODO this piece needs to be split out separately so that
-    // I can use it also for clicking on the marker (see addMarkerClickListener,
-    // above
-    var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
-    var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox')
+  var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
+  var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox');
 
-    var layerTypeName = this.map.getLayerName('dotLayers');
-    var fieldName, year;
-    var projectionSelector = cartogramFlag == 't'
-      ? 'cartogramFieldName' : 'mercatorFieldName';
-    fieldName = layerTypeName 
-      ? this.mai['dotLayers'][layerTypeName][projectionSelector] : null
-    year = layerTypeName ? this.mai['dotLayers'][layerTypeName].year : null
+  var layersetName = this.map.getLayerName('dotLayers');
+  var fieldName, year;
+  var projectionSelector = cartogramFlag == 't'
+    ? 'cartogramFieldName' : 'mercatorFieldName';
+  fieldName = layersetName 
+    ? this.mai['dotLayers'][layersetName][projectionSelector] : null;
+  year = layersetName ? this.mai['dotLayers'][layersetName].year : null;
 
 
-    var url = this.map.pointInfoUrlPrefix + "?" 
-       + "lat="+lat+"&lng="+lng
-       +"&zoom="+this.map.getZoom()
-       +"&fieldName="+fieldName 
-       + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
-console.log(url)
+  var url = this.map.pointInfoUrlPrefix + "?" 
+     + "lat="+lat+"&lng="+lng
+     +"&zoom="+this.map.getZoom()
+     +"&fieldName="+fieldName 
+     + "&polyYear=2011&year=2011&cartogram="+cartogramFlag;
 
-    this.jurisdictionMarker.setPopupContent("Looking up jurisdiction information, please wait...");
+  // console.log(url);
 
-    requestUrlWithScope(url, this.setPopupInfoCallback, this);  // request is a verb here
-    }
+  this.jurisdictionMarker.
+    setPopupContent("Looking up jurisdiction information, please wait...");
 
+  // request is a verb here
+  requestUrlWithScope(url, this.setPopupInfoCallback, this);  
+};
+
+/**
+ * Calles the {marker} callback
+ * SIDE EFFECTS: directly and indirectly changes the infowindow, indirectly
+ * changes the sharing URL
+ */
 ListenerInitializer.prototype.addMapClickListener = function() {
 
-  var scope = this
+  var scope = this;
   this.map.on("click", function (e) {
 
-    var latlng = e.latlng
-    var lat = latlng.lat
-    var lng = latlng.lng
+    var latlng = e.latlng;
+    var lat = latlng.lat;
+    var lng = latlng.lng;
 
-console.log("add map click listener!")
     if(scope.jurisdictionMarker) {
       scope.jurisdictionMarker.setLatLng([lat, lng]);
       // @@@ TODO set flag in mapApplicationInfo.js to say whether 
@@ -168,9 +226,9 @@ console.log("add map click listener!")
     }
   
 
-  })
+  });
 
-}
+};
   
 
 
