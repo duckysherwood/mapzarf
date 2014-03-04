@@ -1,0 +1,47 @@
+======= What is mapzarf?
+
+Mapzarf is Javascript (with a tiny dollop of HTML) for creating controls
+which I commonly want to have for my maps.  I frequently wanted to switch
+choropleth (polygon) layers, switch dot layers, switch between cartogram
+and mercator, show city names (or not), show borders (or not), show
+a marker, change the starting display based on the query string, and so on.  
+This framework lets me specify all those things (and a 
+few more) based on one JSON file.
+
+======= What is NOT covered by the JSON file?
+
+Two things:
+1. It doesn't make the tiles.  You need to find tiles yourself.  The
+JSON file allows you to specify the fields which *I* need to get *my*
+tiles out of my tile mapping framework.  To get other tiles, you 
+will need to modify at a minimum
+   MapBehavior.getPolygonLayer
+   MapBehavior.getDotLayer
+and will probably need to change what information is specified in the JSON
+file (mapApplicationInfo.js) as well.
+2. They layout and presentation of the page; that's covered by the HTML and CSS.
+You can put the various pieces of the page anywhere you want by changing
+those.
+
+======= Can I put two maps on one page?
+Not yet, but the way the code is structured, it shouldn't be too hard
+to add that someday.  (I haven't figured out how to specify which 
+controls should be shared between the two and which should be separate,
+for one.)
+
+
+======= Why mapzarf?
+
+I decided that if I was going to put this on github, I would need to 
+call it something different than "my generalized map framework".  
+I know that it is easier to find something on the Web if it has a unique
+name, so I started thinking about obscure words which I liked.  I like 
+"zarf", and not just because it is worth hella points in Scrabble.
+
+A zarf is "a cup which holds a glass", and I realized that it was a good
+word for this project: it is the HTML/javascript which holds a map.  
+And combining map+zarf made it unique.
+
+======= Who wrote this?
+Originally by Kaitlin Duck Sherwood, ducky@webfoot.com, for use at
+http://maps.webfoot.com.
