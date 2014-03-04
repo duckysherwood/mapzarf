@@ -33,9 +33,9 @@
  *    on startup
  */
 function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
-  /** @private */ this.mai = mapApplicationInfo // shortened for typing
-  /** @private */ var closurePageInitValues = pageInitValues
-  /** @private */ var closureMap = map
+  /** @private */ this.mai = mapApplicationInfo; // shortened for typing
+  /** @private */ var closurePageInitValues = pageInitValues;
+  /** @private */ var closureMap = map;
   
   // @@@ Would it make more sense to create elements, then just hide
   // @@@ them if they are not used / there is not data for them?
@@ -51,93 +51,93 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
   /** @private */ this.createLayerSelectorControl = function( layerTypeName) {
   
     if(layerTypeName in this.mai) { 
-      var layerSpecs = this.mai[layerTypeName]
-      var $layerDiv = $( layerSpecs )
+      var layerSpecs = this.mai[layerTypeName];
+      var $layerDiv = $( layerSpecs );
       if( $layerDiv == undefined ) {
-        console.log('Missing div for ' + layerTypeName + ', failing softly.')
-        return null
+        console.log('Missing div for ' + layerTypeName + ', failing softly.');
+        return null;
       }
   
       if (layerSpecs != undefined) {
-        var layerSelectionControl
+        var layerSelectionControl;
   
         // I can't just do a layerSpecs.length to get the number
         // of layers; I need to know if there are 0, exactly 1, or 
         // more than one layers in this layerSpec.
-        var layersCount = 0
-        var lastKey
+        var layersCount = 0;
+        var lastKey;
         for (var key in layerSpecs) {
-          layersCount++
-          lastKey = key
-          if(layersCount > 1) break
+          layersCount++;
+          lastKey = key;
+          if(layersCount > 1) break;
         }
   
         if(layersCount == 0) {
-          return null
+          return null;
         }
   
         layerSelectionControl = document.createElement('div');
-        layerSelectionControl.id = layerTypeName + 'Control'
+        layerSelectionControl.id = layerTypeName + 'Control';
   
         // Checkbox to turn all the layers on or off
         layerSelectionCheckbox = document.createElement('input');
         layerSelectionControl.appendChild (layerSelectionCheckbox);
-        layerSelectionCheckbox.id = layerTypeName + 'Checkbox'
+        layerSelectionCheckbox.id = layerTypeName + 'Checkbox';
   
-        layerSelectionCheckbox.type = 'checkbox'
-        layerSelectionCheckbox.checked = true
+        layerSelectionCheckbox.type = 'checkbox';
+        layerSelectionCheckbox.checked = true;
 
         var layerDescriptionSpan = document.createElement('span');
   
         if( layersCount == 1) {
-          layerSelectionCheckbox.value = lastKey
+          layerSelectionCheckbox.value = lastKey;
           var longerDescription ='Show ' 
-               // + layerSpecs[key].shortDescription + '<br />'
-          layerDescriptionSpan.innerHTML = longerDescription
-          layerSelectionControl.appendChild(layerDescriptionSpan)
-          var descriptionElem = document.createElement('span')
-          descriptionElem.innerHTML = descriptionHtml(layerSpecs[key])
-          descriptionElem.id = layerTypeName + 'Description'
-          descriptionElem.className = 'indented'
-          layerSelectionControl.appendChild(descriptionElem)
+               // + layerSpecs[key].shortDescription + '<br />';
+          layerDescriptionSpan.innerHTML = longerDescription;
+          layerSelectionControl.appendChild(layerDescriptionSpan);
+          var descriptionElem = document.createElement('span');
+          descriptionElem.innerHTML = descriptionHtml(layerSpecs[key]);
+          descriptionElem.id = layerTypeName + 'Description';
+          descriptionElem.className = 'indented';
+          layerSelectionControl.appendChild(descriptionElem);
   
         } else {
           
           // When I tried making value=null, value was instead ="on".  ???
-          layerSelectionCheckbox.value = SENTINEL_MULTIPLE
+          layerSelectionCheckbox.value = SENTINEL_MULTIPLE;
   
           layerDescriptionSpan.innerHTML = 'Show ' 
-            + layerTypeName.replace('Layer', ' layer') + ': <br />'
-          layerSelectionControl.appendChild(layerDescriptionSpan)
-          var selectElement = document.createElement('select')
-          selectElement.className = 'indented'
-          selectElement.id = layerTypeName + 'Selector'
-          layerSelectionControl.appendChild(selectElement)
-          layerSelectionControl.appendChild(document.createElement('br'))
+            + layerTypeName.replace('Layer', ' layer') + ': <br />';
+          layerSelectionControl.appendChild(layerDescriptionSpan);
+          var selectElement = document.createElement('select');
+          selectElement.className = 'indented';
+          selectElement.id = layerTypeName + 'Selector';
+          layerSelectionControl.appendChild(selectElement);
+          layerSelectionControl.appendChild(document.createElement('br'));
   
-          var alreadySelected = false
+          var alreadySelected = false;
           for (var key in layerSpecs) {
             if (layerSpecs.hasOwnProperty(key)) {
-               var optionElement = document.createElement('option')
-               optionElement.className = layerTypeName + 'Option'
-               optionElement.text = layerSpecs[key].shortDescription
-               optionElement.setAttribute['id'] = key
-               optionElement.value = key
-               selectElement.appendChild(optionElement)
+               var optionElement = document.createElement('option');
+               optionElement.className = layerTypeName + 'Option';
+               optionElement.text = layerSpecs[key].shortDescription;
+               optionElement.setAttribute['id'] = key;
+               optionElement.value = key;
+               selectElement.appendChild(optionElement);
                if(!alreadySelected) {
-                 alreadySelected = true
-                 optionElement.selected = true
-                 var descriptionElem = document.createElement('span')
-                 descriptionElem.id = layerTypeName + 'Description'
-                 var spec = layerSpecs[key]
-                 descriptionElem.innerHTML = descriptionHtml(spec)
-                 descriptionElem.className = 'indented'
-                 layerSelectionControl.appendChild(descriptionElem)
+                 alreadySelected = true;
+                 optionElement.selected = true;
+                 var descriptionElem = document.createElement('span');
+                 descriptionElem.id = layerTypeName + 'Description';
+                 var spec = layerSpecs[key];
+                 descriptionElem.innerHTML = descriptionHtml(spec);
+                 descriptionElem.className = 'indented';
+                 layerSelectionControl.appendChild(descriptionElem);
                }
              }
           }
         }
-        return layerSelectionControl
+        return layerSelectionControl;
       }
     }
     return null
@@ -155,81 +155,81 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
     document.title = mapApplicationInfo.pageTitle
     
     $( '#explanation').html( "<b>" + this.mai.pageTitle + "</b><p>" 
-                             + this.mai.pageDescription + "<p>")
+                             + this.mai.pageDescription + "<p>");
   
     
     // Add the dot layer selector (if needed)
-    var dotSelector = this.createLayerSelectorControl("dotLayers")
+    var dotSelector = this.createLayerSelectorControl("dotLayers");
     if(dotSelector) {
-      $( '#dotLayers' ).append(dotSelector)
+      $( '#dotLayers' ).append(dotSelector);
     }
-    var $dotLayersCheckbox = $( '#dotLayersCheckbox')
+    var $dotLayersCheckbox = $( '#dotLayersCheckbox');
     if($dotLayersCheckbox) {
-      var checkedBool = closurePageInitValues['showDots']
-      $dotLayersCheckbox.prop('checked', checkedBool)
+      var checkedBool = closurePageInitValues['showDots'];
+      $dotLayersCheckbox.prop('checked', checkedBool);
 
       if(closurePageInitValues.dotIndex) {
         $( '#dotLayersSelector' ).
-          prop('selectedIndex', closurePageInitValues.dotIndex)
+          prop('selectedIndex', closurePageInitValues.dotIndex);
       }
     }
   
 
     // Add the choropleth layer selector (if needed)
-    var choroplethSelector = this.createLayerSelectorControl('choroplethLayers')
+    var choroplethSelector = this.createLayerSelectorControl('choroplethLayers');
     if(choroplethSelector) {
-      $( '#choroplethLayers' ).append(choroplethSelector)
+      $( '#choroplethLayers' ).append(choroplethSelector);
     }
 
     // Initialize the selector (if needed)
-    var $choroplethLayersCheckbox = $( '#choroplethLayersCheckbox')
+    var $choroplethLayersCheckbox = $( '#choroplethLayersCheckbox');
     if($choroplethLayersCheckbox) {
       var checkedBool = closurePageInitValues['showChoropleths']
-      $choroplethLayersCheckbox.prop('checked', checkedBool)
+      $choroplethLayersCheckbox.prop('checked', checkedBool);
 
       if(closurePageInitValues.choroplethIndex) {
         $( '#choroplethLayersSelector' ).
-          prop('selectedIndex', closurePageInitValues.choroplethIndex)
+          prop('selectedIndex', closurePageInitValues.choroplethIndex);
       }
     }
 
   
     // Add the border layer selector (if needed)
-    var borderSelector = this.createLayerSelectorControl('borderLayers')
+    var borderSelector = this.createLayerSelectorControl('borderLayers');
     if(borderSelector) {
-      $( '#borderLayers' ).append(borderSelector)
+      $( '#borderLayers' ).append(borderSelector);
     }
 
-    var $borderLayersCheckbox = $( '#borderLayersCheckbox' )
+    var $borderLayersCheckbox = $( '#borderLayersCheckbox' );
     if($borderLayersCheckbox) {
-      var checkedBool = closurePageInitValues['showBorders']
-      $borderLayersCheckbox.prop('checked', checkedBool)
+      var checkedBool = closurePageInitValues['showBorders'];
+      $borderLayersCheckbox.prop('checked', checkedBool);
     }
     // TODO what about border slection box?
   
-    $( '#sharingUrl' )[0].href = '#'
+    $( '#sharingUrl' )[0].href = '#';
   
     // Allow switching between cartogram and not
   
     if (this.mai.hasOwnProperty('hasCartogram') &&
         (this.mai.hasCartogram != undefined) && 
         this.mai.hasCartogram) {
-       var cartogramCheckboxString
+       var cartogramCheckboxString;
        if(closurePageInitValues.cartogram) {
-         cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" checked>'
+         cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" checked>';
        } else {
-         cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" >' // TODO clean up
+         cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" >'; // TODO clean up
        }
        var cartogramText = 'Show as cartogram<p />'
-       $( '#cartogramSelector' ).append(cartogramCheckboxString + cartogramText)
+       $( '#cartogramSelector' ).append(cartogramCheckboxString + cartogramText);
     }
   
     // Set up the map
     closureMap.setView([closurePageInitValues.lat, closurePageInitValues.lng], 
-                 closurePageInitValues.zoom)
+                 closurePageInitValues.zoom);
   
 
-    $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.showCities)
+    $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.showCities);
   }
   
   // put the legend update on the legend image
@@ -239,16 +239,19 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
          "&maxValue=" + layerSpec.maxValue +
          "&minColour=" + layerSpec.minColor +
          "&maxColour=" + layerSpec.maxColor +
-         "&mapping=" + layerSpec.mapping 
+         "&mapping=" + layerSpec.mapping ;
   
     if(layerSpec.hasOwnProperty('isPercentage')) {
       if(layerSpec.isPercentage) {
-        url += "&pct=y"
+        url += "&pct=y";
       }
     }
   
     this.src = url;
   
   }
+
+  // Put in the attribution
+  $('#attribution').append(', page customized by ' + this.mai.attribution);
 
 }
