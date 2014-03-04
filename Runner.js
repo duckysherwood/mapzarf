@@ -34,8 +34,8 @@ Runner.prototype.main = function () {
     myMap.pointInfoUrlPrefix = mapApplicationInfo.pointInfoUrlPrefix
   }
 
-  var domCreator = new DomCreator(myMap, this.mai, pageInitValues)
-  domCreator.createAndPopulateElements()
+  var domAppender = new DomElementAppender(myMap, this.mai, pageInitValues)
+  domAppender.createAndPopulateElements()
 
   var cityLabeller = new CityLabeller($( '#map' )[0], myMap)
 
