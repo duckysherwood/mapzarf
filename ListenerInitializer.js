@@ -169,7 +169,8 @@ ListenerInitializer.prototype.setPopupInfoCallback = function (responseText) {
  *  The server gets information about where the user clicked, but after
  *  that, it's all the server's job to figure out what to populate the
  *  infowindow with.
- *  @param {event}
+ *  @param e {event} The event triggering the request (a click on the
+      map or marker)
  *  @private
  *  @callback marker
  */

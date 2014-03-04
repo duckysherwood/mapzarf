@@ -108,7 +108,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *  for the map to use.
    *  @param layersetName {string] A string describing what type of
    *    layerset it is (valid strings: 'borderLayers' or 'choroplethLayers')
-   *  @param {boolean} Flag which tells if there should be a border on
+   *  @param showBorder {boolean} Flag which tells if there should be a border on
    *    the polygons or not.  This is needed because what the user sees as
    *    a border might be implemented either as a separate layer or as
    *    a choropleth layer which happens to have a border.  
@@ -214,8 +214,8 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   /** Utility to see if the mapApplicationInfo file specifies any layer
    *  of =layersetName= type.
-   *  @param {string} layersetName The name of the type of the layerset
-   *    in question, e.g. 'dotLayers', 'choroplethLayers', or "borderLayers'
+   *  @param layersetName {string} layersetName The name of the type of the 
+   *   layer in question, e.g. 'dotLayers', 'choroplethLayers', or "borderLayers'
    *  @returns {boolean} Are there any layers of layersetName type>
    *  @private
    */
@@ -240,7 +240,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   /** Utility to figure out which layer in a particular layerset the
    *  user has selectd to be the one displayed.
-   *  @param {string} layersetName The name of the type of the layerset
+   *  @param layersetName {string} The name of the type of the layerset
    *   in question, e.g. 'dotLayers', 'choroplethLayers', or "borderLayers'
    *  @returns {string} The key (name) of the layer, e.g. 
    *   'unemployment' or 'povertyChildren' or 'gunDeaths' or 'stateBorder'
