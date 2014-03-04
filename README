@@ -10,7 +10,7 @@ few more) based on one JSON file.
 
 ======= What is NOT covered by the JSON file?
 
-Two things:
+Three things:
 1. It doesn't make the tiles.  You need to find tiles yourself.  The
 JSON file allows you to specify the fields which *I* need to get *my*
 tiles out of my tile mapping framework.  To get other tiles, you 
@@ -19,9 +19,15 @@ will need to modify at a minimum
    MapBehavior.getDotLayer
 and will probably need to change what information is specified in the JSON
 file (mapApplicationInfo.js) as well.
-2. They layout and presentation of the page; that's covered by the HTML and CSS.
-You can put the various pieces of the page anywhere you want by changing
-those.
+2. It doesn't control layout and presentation of the page; that's covered 
+by the HTML and CSS.  You can put the various pieces of the page anywhere 
+you want by changing the HTML and CSS.
+3. The JSON file doesn't control contents of the marker's infowindow 
+(aka "balloon") per se.  The JSON file does specify an executable
+   mapApplicationInfo.pointInfoUrlPrefix ;
+the executable prefix plus the DOM state get combined in
+  ListenerInitialization.requestPopupInformation()
+
 
 ======= Can I put two maps on one page?
 Not yet, but the way the code is structured, it shouldn't be too hard
