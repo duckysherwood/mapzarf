@@ -43,18 +43,18 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   /** Creates the controls for a particular layer type (e.g. dot layer)
    *    based on the values in the mapApplicationInfo.  Can contain a 
    *    checkbox, a checkbox and a selector, or neither.
-   *  @param layerTypeName {string} Name of the type of layer, e.g. 'dotLayers'
+   *  @param layersetName {string} Name of the type of layer, e.g. 'dotLayers'
    *  @returns a div with the appropriate controls (as HTML elements)
    *    or null if there are no layers
+   *  @private
    */
   // TODO da-yam this is a long method.  Can I split it up?
-  /** @private */ this.createLayerSelectorControl = function( layerTypeName) {
-  
-    if(layerTypeName in this.mai) { 
-      var layerSpecs = this.mai[layerTypeName];
+  this.createLayerSelectorControl = function( layersetName) {
+    if(layersetName in this.mai) { 
+      var layerSpecs = this.mai[layersetName];
       var $layerDiv = $( layerSpecs );
       if( $layerDiv == undefined ) {
-        console.log('Missing div for ' + layerTypeName + ', failing softly.');
+        console.log('Missing div for ' + layersetName + ', failing softly.');
         return null;
       }
   
@@ -77,12 +77,12 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
         }
   
         layerSelectionControl = document.createElement('div');
-        layerSelectionControl.id = layerTypeName + 'Control';
+        layerSelectionControl.id = layersetName + 'Control';
   
         // Checkbox to turn all the layers on or off
         layerSelectionCheckbox = document.createElement('input');
         layerSelectionControl.appendChild (layerSelectionCheckbox);
-        layerSelectionCheckbox.id = layerTypeName + 'Checkbox';
+        layerSelectionCheckbox.id = layersetName + 'Checkbox';
   
         layerSelectionCheckbox.type = 'checkbox';
         layerSelectionCheckbox.checked = true;
@@ -97,7 +97,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
           layerSelectionControl.appendChild(layerDescriptionSpan);
           var descriptionElem = document.createElement('span');
           descriptionElem.innerHTML = descriptionHtml(layerSpecs[key]);
-          descriptionElem.id = layerTypeName + 'Description';
+          descriptionElem.id = layersetName + 'Description';
           descriptionElem.className = 'indented';
           layerSelectionControl.appendChild(descriptionElem);
   
@@ -107,11 +107,11 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
           layerSelectionCheckbox.value = SENTINEL_MULTIPLE;
   
           layerDescriptionSpan.innerHTML = 'Show ' 
-            + layerTypeName.replace('Layer', ' layer') + ': <br />';
+            + layersetName.replace('Layer', ' layer') + ': <br />';
           layerSelectionControl.appendChild(layerDescriptionSpan);
           var selectElement = document.createElement('select');
           selectElement.className = 'indented';
-          selectElement.id = layerTypeName + 'Selector';
+          selectElement.id = layersetName + 'Selector';
           layerSelectionControl.appendChild(selectElement);
           layerSelectionControl.appendChild(document.createElement('br'));
   
@@ -119,7 +119,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
           for (var key in layerSpecs) {
             if (layerSpecs.hasOwnProperty(key)) {
                var optionElement = document.createElement('option');
-               optionElement.className = layerTypeName + 'Option';
+               optionElement.className = layersetName + 'Option';
                optionElement.text = layerSpecs[key].shortDescription;
                optionElement.setAttribute['id'] = key;
                optionElement.value = key;
@@ -128,7 +128,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
                  alreadySelected = true;
                  optionElement.selected = true;
                  var descriptionElem = document.createElement('span');
-                 descriptionElem.id = layerTypeName + 'Description';
+                 descriptionElem.id = layersetName + 'Description';
                  var spec = layerSpecs[key];
                  descriptionElem.innerHTML = descriptionHtml(spec);
                  descriptionElem.className = 'indented';

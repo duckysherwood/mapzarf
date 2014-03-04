@@ -1,137 +1,177 @@
-// TODO move to a separate class?
-// Want to add behaviour to the leaflet map, including
-// change to cartogram
-// change dot layer
-// change choropleth layer
-// change city markers
-// BehaviourCreator adds behaviour to everything, including the map
-
+/** @author Kaitlin Duck Sherwood
+ *  @class MapBehaviorInitializer
+ *  @classdesc This class is a Facade for the Leaflet map, giving
+ *  behaviours relating to the map layers.
+ * 
+ *  @constructor
+ *  @this {ListenerInitializer}
+ *  @param aMap {object} Leaflet map object, e.g. L.map
+ *  @param aMapApplicationInfo {object} JSON describing the application,
+ *    especially the layers to go on the map
+ *  @param aCityLabeller {object} A class which shows city names
+      on the map at the proper locations
+ *  @param aJurisdictionMarker {object} A Leaflet marker
+ */
 function MapBehaviorInitializer(aMap, aMapApplicationInfo, 
                                 aCityLabeller, aJurisdictionMarker) {
-  this.map = aMap
-  this.map.mai = aMapApplicationInfo
-  this.cityLabeller = aCityLabeller
+  // @private
+  this.map = aMap;
+  // @private
+  this.map.mai = aMapApplicationInfo;
+  // @private
+  this.cityLabeller = aCityLabeller;
 
-  this.dotLayer = null
-  this.borderLayer = null
-  this.choroplethLayer = null
+  // @private
+  this.dotLayer = null;
+  // @private
+  this.borderLayer = null;
+  // @private
+  this.choroplethLayer = null;
 
-  var closureCityLabeller = aCityLabeller
-  var closureMap = aMap
-  var closureMai = aMapApplicationInfo
-  var closureJurisdictionMarker = aJurisdictionMarker
+  var closureCityLabeller = aCityLabeller;
+  var closureMap = aMap;
+  var closureMai = aMapApplicationInfo;
+  var closureJurisdictionMarker = aJurisdictionMarker;
 
+  // Refreshes the city labels and sharing URL when the user moves the map.
   this.map.on("zoomend", function () {
-    closureCityLabeller.refreshCityLabels(closureCityLabeller)
-    $( '#sharingUrl' )[0].href = closureMap.getSharingUrl()
-  })
+    closureCityLabeller.refreshCityLabels(closureCityLabeller);
+    $( '#sharingUrl' )[0].href = closureMap.getSharingUrl();
+  });
 
+  // Refreshes the city labels and sharing URL when the user moves the map.
   this.map.on("dragend", function () {
-    closureCityLabeller.refreshCityLabels(closureCityLabeller)
-    $( '#sharingUrl' )[0].href = closureMap.getSharingUrl()
-  })
+    closureCityLabeller.refreshCityLabels(closureCityLabeller);
+    $( '#sharingUrl' )[0].href = closureMap.getSharingUrl();
+  });
 
-  var closureMap = this.map
+  var closureMap = this.map;
+
+  /** Changes which layers are displayed on the map.
+   * @private
+   * SIDE EFFECT: the DOM updates
+   */
   this.map.updateLayers = function () { 
     
     // needed because "this" in the $.each is the layer
-    var thisMap = this  
-  
+    var thisMap = this  ;
 
     $.each([this.dotLayer, this.borderLayer, this.choroplethLayer],
            function (index, layer) {
              if((layer != null) && (layer != undefined)) {
-               thisMap.removeLayer(layer)
+               thisMap.removeLayer(layer);
              }
-           })
+           });
 
-    this.dotLayer = this.getDotLayer()
-    this.borderLayer = this.getBorderLayer()
-    this.choroplethLayer = this.getChoroplethLayer()
+    this.dotLayer = this.getDotLayer();
+    this.borderLayer = this.getBorderLayer();
+    this.choroplethLayer = this.getChoroplethLayer();
 
     $.each([this.choroplethLayer, this.borderLayer, this.dotLayer],
            function (index, layer) {
              if((layer != null) && (layer != undefined)) {
-               thisMap.addLayer(layer)
+               thisMap.addLayer(layer);
              }
-           })
+           });
+  };
 
-  }
 
-
+  /** Figures out what the projection type is.
+   *  @returns {string} String describing the projection type
+   *  @private
+   */
   this.map.projectionType = function () {
     if( $( '#isCartogramCheckbox' ).is(':checked')) {
-      return 'cartogram' 
+      return 'cartogram' ;
     } else {
-      return 'mercator'
+      return 'mercator';
     }
   }
 
+  /** Creates a choropleth layer for the map to use
+   *  @returns {Object} Layer object describing a choropleth layer
+   *  @private
+   */
   this.map.getChoroplethLayer = function () {
     return this.getPolygonLayer('choroplethLayers', false);
   }
 
+  /** Creates a border layer for the map to use
+   * @returns {Object} Layer object describing a border layer
+   * @private
+   */
   this.map.getBorderLayer = function () {
     return this.getPolygonLayer('borderLayers', true);
   }
 
-  // Used for both choropleth layer and border layer
-  this.map.getPolygonLayer = function (layerTypeName, showBorder) {
-    if(!this.layerSpecExists(layerTypeName)) {
-      return null
+  /** Creates a polygon layer -- either choropleth or border --
+   *  for the map to use.
+   *  @param layersetName {string] A string describing what type of
+   *    layerset it is (valid strings: 'borderLayers' or 'choroplethLayers')
+   *  @param {boolean} Flag which tells if there should be a border on
+   *    the polygons or not.  This is needed because what the user sees as
+   *    a border might be implemented either as a separate layer or as
+   *    a choropleth layer which happens to have a border.  
+   *  TODO implement borders as choropleth borders
+   *  @returns {Object} Layer object describing a border or choropleth layer.
+   *  @private
+   */
+  this.map.getPolygonLayer = function (layersetName, showBorder) {
+    if(!this.layerSpecExists(layersetName)) {
+      return null;
     }
 
-    if(!$( '#' + layerTypeName + 'Checkbox').is(':checked')) {
-      return null
+    if(!$( '#' + layersetName + 'Checkbox').is(':checked')) {
+      return null;
     }
 
-    var key = this.findSelectedKeyForLayerType(layerTypeName)
-    var layerSpec = this.mai[layerTypeName][key] 
+    var key = this.findSelectedKeyForLayerType(layersetName);
+    var layerSpec = this.mai[layersetName][key] ;
 
     var url = "../../mapeteria2/choropleth.phpx?x={x}&y={y}&zoom={z}&";
 
-    url += 'polyType=' + layerSpec[this.projectionType() + 'ShapeType']
-    url += '&polyYear=' + layerSpec[this.projectionType() + 'PolyYear']
-    url += '&table=' + layerSpec.table
-    url += '&field=' + layerSpec.fieldName
-    url += '&year=' + layerSpec.year
+    url += 'polyType=' + layerSpec[this.projectionType() + 'ShapeType'];
+    url += '&polyYear=' + layerSpec[this.projectionType() + 'PolyYear'];
+    url += '&table=' + layerSpec.table;
+    url += '&field=' + layerSpec.fieldName;
+    url += '&year=' + layerSpec.year;
 
 
     // @@@ I suppose I could also check for null or undefined...
     if(layerSpec.hasOwnProperty('normalizerType') &&
        layerSpec.hasOwnProperty('normalizerField') &&
        layerSpec.hasOwnProperty('normalizerYear') ) {
-      url += '&normalizer=' + layerSpec.normalizerField
-      url += '&normalizerType=' + layerSpec.normalizerType
-      url += '&normalizerYear=' + layerSpec.normalizerYear
+      url += '&normalizer=' + layerSpec.normalizerField;
+      url += '&normalizerType=' + layerSpec.normalizerType;
+      url += '&normalizerYear=' + layerSpec.normalizerYear;
     } else {
-      url += '&normalizer=null' 
-      url += '&normalizerYear=1'
-      url += '&normalizerType=n'
+      url += '&normalizer=null' ;
+      url += '&normalizerYear=1';
+      url += '&normalizerType=n';
     }
 
     // border layers don't have these
     // TODO look for each one before printing it out, which probably means 
     // TODO writing a helper method
     if(layerSpec.hasOwnProperty('minValue')) {
-      url += '&minValue=' + layerSpec.minValue
-      url += '&maxValue=' + layerSpec.maxValue
-      url += '&minColor=' + layerSpec.minColor
-      url += '&maxColor=' + layerSpec.maxColor
+      url += '&minValue=' + layerSpec.minValue;
+      url += '&maxValue=' + layerSpec.maxValue;
+      url += '&minColor=' + layerSpec.minColor;
+      url += '&maxColor=' + layerSpec.maxColor;
     }
-    url += '&mapping=' + layerSpec.mapping
+    url += '&mapping=' + layerSpec.mapping;
 
     if(showBorder) {
-      var borderWidth = 1
+      var borderWidth = 1;
       if(layerSpec.hasOwnProperty('borderWidth')) {
-        borderWidth = layerSpec.borderWidth
+        borderWidth = layerSpec.borderWidth;
       }
       url += "&borderColor="+layerSpec.borderColor
              + "&border=solid&width="+layerSpec.borderWidth;
     }
 
-    if(layerTypeName == "choroplethLayers") {
-      $( '#legendImage' )[0].update(layerSpec)
+    if(layersetName == "choroplethLayers") {
+      $( '#legendImage' )[0].update(layerSpec);
     }
        
     return L.tileLayer(url, {
@@ -139,78 +179,105 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
       attribution: layerSpec['source']
     });
 
-  }
+  };
 
+  /** Creates a dots layer for the map to use.
+   *  @returns {Object} Layer object describing a dots layer.
+   *  @private
+   */
   this.map.getDotLayer = function () {
-    var layerTypeName = 'dotLayers'
+    var layersetName = 'dotLayers';
     if(!this.layerSpecExists('dotLayers')) {
-      return null
+      return null;
     }
 
     if(!$( '#dotLayersCheckbox').is(':checked')) {
-      return null
+      return null;
     }
 
-    var key = this.findSelectedKeyForLayerType(layerTypeName)
-    var layerSpec = this.mai[layerTypeName][key] 
+    var key = this.findSelectedKeyForLayerType(layersetName);
+    var layerSpec = this.mai[layersetName][key] ;
   
     var url = "../../mapeteria2/dots.php?x={x}&y={y}&zoom={z}&";
-    url += 'points=' + layerSpec[this.projectionType() + 'Table']
-    url += '&name=' + layerSpec[this.projectionType() + 'FieldName'] 
-    url += '&year=' + layerSpec['year']
-    url += '&colour=' + layerSpec['color']
-    url += '&size=' + layerSpec['size']
-    url += '&jId=0'	// I think this is just for symmetry with MapRequest
+    url += 'points=' + layerSpec[this.projectionType() + 'Table'];
+    url += '&name=' + layerSpec[this.projectionType() + 'FieldName'] ;
+    url += '&year=' + layerSpec['year'];
+    url += '&colour=' + layerSpec['color'];
+    url += '&size=' + layerSpec['size'];
+    url += '&jId=0';	// I think this is just for symmetry with MapRequest
   
     return L.tileLayer(url, {
       maxZoom: 18,
       attribution: layerSpec['source']
     });
-  }
+  };
 
-  this.map.layerSpecExists = function (layerTypeName) {
+  /** Utility to see if the mapApplicationInfo file specifies any layer
+   *  of =layersetName= type.
+   *  @param {string} layersetName The name of the type of the layerset
+   *    in question, e.g. 'dotLayers', 'choroplethLayers', or "borderLayers'
+   *  @returns {boolean} Are there any layers of layersetName type>
+   *  @private
+   */
+  this.map.layerSpecExists = function (layersetName) {
 
-    var key = this.findSelectedKeyForLayerType(layerTypeName)
+    var key = this.findSelectedKeyForLayerType(layersetName);
     if(key == undefined) {
-      console.log('No ' + layerTypeName + ' layer selected, ??')
-      return false
+      console.log('Warning: No ' + layersetName + ' layer selected');
+      return false;
     }
   
-    var layerSpec = this.mai[layerTypeName][key] 
+    var layerSpec = this.mai[layersetName][key] ;
     if(layerSpec == undefined) {
-      console.log('No specification for ' + layerTypeName + "'s " + key 
-                  + ' found in the JSON mapApplicationInfo spec')
-      return false
+      console.log('No specification for ' + layersetName + "'s " + key 
+                  + ' found in the JSON mapApplicationInfo spec');
+      return false;
     }
 
-    return true
-  }
+    return true;
+  };
 
 
-  this.map.findSelectedKeyForLayerType  = function (layerTypeName) {
-    var checkboxId = '#' + layerTypeName + 'Checkbox'
+  /** Utility to figure out which layer in a particular layerset the
+   *  user has selectd to be the one displayed.
+   *  @param {string} layersetName The name of the type of the layerset
+   *   in question, e.g. 'dotLayers', 'choroplethLayers', or "borderLayers'
+   *  @returns {string} The key (name) of the layer, e.g. 
+   *   'unemployment' or 'povertyChildren' or 'gunDeaths' or 'stateBorder'
+   *  @private
+   */
+  this.map.findSelectedKeyForLayerType  = function (layersetName) {
+    var checkboxId = '#' + layersetName + 'Checkbox';
     if($( checkboxId ) == undefined) {
-      return false
+      return false;
     }
 
     if($( checkboxId ).is(':checked')) {
-      var key = $( checkboxId ).val()
+      var key = $( checkboxId ).val();
   
       if(key == SENTINEL_MULTIPLE) {
         // multiple options, select the one which is checked
-        var layerSelectorId = '#' + layerTypeName + 'Selector'
-        key = $( layerSelectorId ).find(':selected').val()
+        var layerSelectorId = '#' + layersetName + 'Selector';
+        key = $( layerSelectorId ).find(':selected').val();
       } 
-      return key
+      return key;
     }
-  }
+  };
 
+  /** Initializes the map.
+   *  @public
+   *  SIDE EFFECTS: Initializes everything
+   */
   this.initialize = function () {
-    this.map.updateLayers()
-  }
+    this.map.updateLayers();
+  };
 
-  // This URL will re-create the map as it exists at a given point,
-  // so you can more easily call attention to certain features on the map.
+  /** Gets a URL which can be used to recreate the map as it is shown
+   *  right now.  Looks at the settings of all the controls in the DOM
+   *  and the state of the map.
+   *  @returns {string} A URL suitable for sharing
+   *  @private
+   */
   this.map.getSharingUrl = function() {
      var url = location.origin + location.pathname;
      var latlng = closureMap.getCenter();
@@ -220,51 +287,53 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      url += "&zoom=" + closureMap.getZoom();
 
      url += "&cartogram=" + closureMap.
-                              getFlagForCheckbox('#isCartogramCheckbox')
+                              getFlagForCheckbox('#isCartogramCheckbox');
 
-     url += "&showCities=" + closureMap.getFlagForCheckbox('#showCitiesCheckbox')
+     url += "&showCities=" + closureMap.getFlagForCheckbox('#showCitiesCheckbox');
   
      if(closureJurisdictionMarker) {
        url += "&markerLat=" + closureJurisdictionMarker.getLatLng().lat;
        url += "&markerLng=" + closureJurisdictionMarker.getLatLng().lng;
      }
   
-     var $showChoroplethsCheckbox = $( '#choroplethLayersCheckbox' ).first()[0]
+     var $showChoroplethsCheckbox = $( '#choroplethLayersCheckbox' ).first()[0];
      if($showChoroplethsCheckbox) {
        url += "&showChoropleths=" 
-              + closureMap.getFlagForCheckbox('#choroplethLayersCheckbox')
+              + closureMap.getFlagForCheckbox('#choroplethLayersCheckbox');
      }
 
-     var $choroplethLayersSelector = $( '#choroplethLayersSelector' ).first()[0]
+     var $choroplethLayersSelector = $( '#choroplethLayersSelector' ).first()[0];
      if($choroplethLayersSelector) {
        url += "&choroplethIndex=" 
-              + (parseInt($choroplethLayersSelector.selectedIndex))
+              + (parseInt($choroplethLayersSelector.selectedIndex));
      }
 
-     var showDotsCheckbox = $( '#dotLayersCheckbox' ).first()[0]
+     var showDotsCheckbox = $( '#dotLayersCheckbox' ).first()[0];
      if(showDotsCheckbox) {
-       url += "&showDots=" + closureMap.getFlagForCheckbox('#dotLayersCheckbox')
+       url += "&showDots=" + closureMap.getFlagForCheckbox('#dotLayersCheckbox');
      }
-     var $dotsLayersSelector = $( '#dotsLayersSelector' ).first()[0]
+     var $dotsLayersSelector = $( '#dotsLayersSelector' ).first()[0];
      if($dotsLayersSelector) {
        url += "&dotIndex=" 
-              + (parseInt($dotsLayersSelector.selectedIndex))
+              + (parseInt($dotsLayersSelector.selectedIndex));
      }
   
      // borders are sometimes selected with a combobox instead of checkboxes
-     var bordersCheckbox = $( '#borderLayersCheckbox' ).first()[0]
-     var bordersSelector = $( '#borderLayersSelector' ).first()[0]
+     var bordersCheckbox = $( '#borderLayersCheckbox' ).first()[0];
+     var bordersSelector = $( '#borderLayersSelector' ).first()[0];
      if(bordersCheckbox) {
        url += "&showBorders=" + closureMap.getFlagForCheckbox(
-                                             '#borderLayersCheckbox')
+                                             '#borderLayersCheckbox');
      }
 
+     // TODO someday deal with multiple borders
      /* 
      if( typeof countyBordersCheckbox != "undefined" ) {
        url += "&counties=" + getFlagForCheckbox(countyBordersCheckbox);
      }
      */
   
+     // TODO someday add capability to show time series
      /*
      // Year and month are not always set
      if( typeof yearCombo != "undefined" ) {
@@ -275,31 +344,23 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      }
      */
      
-     return url
-  }
+     return url;
+  };
 
+  /** Figures out if the map should be in cartogram projection or not.
+   *  @returns {string} Returns a single character 't' or 'f' to 
+   *    represent whether the map should show the cartogram projection or not.
+   *    It is a string and not a boolean because it will be used in 
+   *    a URL query string.
+   *  @private
+   */
   this.map.getFlagForCheckbox = function (checkboxElementName) {
-     var element = $( checkboxElementName )
+     var element = $( checkboxElementName );
      if(!element) {
-       return 'f'
+       return 'f';
      }
-     return isChecked = $( checkboxElementName ).is(':checked') ? 't' : 'f'
-  }
-
-  // find out what the field name is for the given layer
-  this.map.getLayerName = function (layerTypeName) {
-    var selector = $( '.' + layerTypeName + 'Option:selected' )
-    if (selector.length > 0) {
-      return selector.val()
-    } else {
-      var checkbox = $( '#' + layerTypeName + 'Checkbox')
-      if (checkbox) {
-        return checkbox.val()
-      }
-    }
-    return null
-  }
-
+     return isChecked = $( checkboxElementName ).is(':checked') ? 't' : 'f';
+  };
 
 
 }

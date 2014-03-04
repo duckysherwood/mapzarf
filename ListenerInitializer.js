@@ -1,6 +1,8 @@
 /** @author Kaitlin Duck Sherwood
  *  @class ListenerInitializer
- *  @classdesc This class sets up all the listeners for the map.
+ *  @classdesc This class sets up the listeners for everything BUT the
+ *  map -- everything in the DOM.  After some internal debate, I put
+ *  the listeners for the marker in here instead of in MapBehavior.
  * 
  *  @constructor
  *  @this {ListenerInitializer}
@@ -16,10 +18,10 @@
 // TODO someday add links to social media sites like FB, Twitter, etc
 function ListenerInitializer (map, mapApplicationInfo, 
                               labeller, jurisdictionMarker) {
-  //* @private */ this.map = map;
-  //* @private */ this.mai = mapApplicationInfo;
-  //* @private */ this.cityLabeller = labeller;
-  //* @private */ this.jurisdictionMarker = jurisdictionMarker;
+  /* @private */ this.map = map;
+  /* @private */ this.mai = mapApplicationInfo;
+  /* @private */ this.cityLabeller = labeller;
+  /* @private */ this.jurisdictionMarker = jurisdictionMarker;
 
   // I suppose I could have added an "initialize" method, but
   // these things only need to happen once per map, so I can't
@@ -179,7 +181,7 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
   var isCartogramCheckbox = document.getElementById("isCartogramCheckbox");
   var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox');
 
-  var layersetName = this.map.getLayerName('dotLayers');
+  var layersetName = this.map.findSelectedKeyForLayerType('dotLayers');
   var fieldName, year;
   var projectionSelector = cartogramFlag == 't'
     ? 'cartogramFieldName' : 'mercatorFieldName';
@@ -207,6 +209,7 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
  * Calles the {marker} callback
  * SIDE EFFECTS: directly and indirectly changes the infowindow, indirectly
  * changes the sharing URL
+ * @private
  */
 ListenerInitializer.prototype.addMapClickListener = function() {
 
