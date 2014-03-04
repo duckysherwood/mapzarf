@@ -16,14 +16,14 @@ function Runner(mapApplicationInfo) {
  *  SIDE EFFECT: removes all the city labels from the map
  */
 Runner.prototype.main = function () {
-  var tester = new Tester();
+  // var tester = new Tester();
+  // tester.pageInitValuesTest()
+  // tester.testCongressionalDistrictInfoMercator()
+  // tester.testCongressionalDistrictInfoCartogram()
 
   var mapDisplayParameters = new MapDisplayParameters(this.mai);
   var pageInitValues = mapDisplayParameters.getPageValueParameters();
 
-  // tester.pageInitValuesTest()
-  // tester.testCongressionalDistrictInfoMercator()
-  // tester.testCongressionalDistrictInfoCartogram()
 
   // L (from Leaflet) is global scope, but we need =map= in this scope
   // so we can pass it to behaviour
