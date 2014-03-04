@@ -54,7 +54,8 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
       var layerSpecs = this.mai[layersetName];
       var $layerDiv = $( layerSpecs );
       if( $layerDiv == undefined ) {
-        console.log('Missing div for ' + layersetName + ', failing softly.');
+        console.log('Warning: Missing div for ' + layersetName 
+                    + ', failing softly.');
         return null;
       }
   
