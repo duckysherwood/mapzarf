@@ -38,6 +38,9 @@ html, body, table {
 #attribution {
    font-family:Verdana,Arial,sans-serif;
    font-size: 11pt;
+   position: absolute;
+   margin: 3pt;
+   left:25px;
 }
 
 p.indented {
