@@ -21,7 +21,7 @@ function MapDisplayParameters (mai) {
 
   this.toBoolean  = function (aString) {
     return (aString == "t");
-  } 
+  };
   
   defaults.lat = [parseFloat, CENTER_LAT, -90, 90];
   defaults.lng = [parseFloat, CENTER_LNG, -180, 180];
@@ -59,7 +59,7 @@ function MapDisplayParameters (mai) {
     var queryString = this.getQueryString();
     this.initializePageParametersFromQueryString(queryString);
     return  this.getValues();
-  }
+  };
 
   
   /** Gets the query string, code adapted from 
@@ -83,7 +83,7 @@ function MapDisplayParameters (mai) {
       }
   
       return result;
-  }
+  };
 
   /** Takes a parameter key and a candidate value.  If the candidate
    *  value is valid and in bounds, stick it into defaults[param].  If 
@@ -133,7 +133,7 @@ function MapDisplayParameters (mai) {
       defaults[paramKey][1] = paramDefault;
     }
   return defaults[paramKey][1]
-  }
+  };
 
   /** Overwrites the hardcoded defaults with values taken from 
    *  mapApplicationInfo (from the JSON file)
@@ -164,7 +164,7 @@ function MapDisplayParameters (mai) {
       }
     })
     return defaults; // useful for testing
-  }
+  };
 
   /** Overwrites the defaults with values taken from from the query string
    *  @param {string } qstring The query string of this page's URL
@@ -176,10 +176,10 @@ function MapDisplayParameters (mai) {
     var scope = this;
     $.each(defaults, function (key, ignore) {
       scope.validateAndUpdate(key, qstring[key]);
-    })
+    });
 
     return defaults
-  }
+  };
 
   /** Translates the initialization values from a defaults object
    *  (which has a whole bunch of other information, including functions
@@ -194,9 +194,7 @@ function MapDisplayParameters (mai) {
       init[index] = value[1]
     })
     return init
-  }
-
- 
+  };
 
 
 }

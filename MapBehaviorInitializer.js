@@ -88,7 +88,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     } else {
       return 'mercator';
     }
-  }
+  };
 
   /** Creates a choropleth layer for the map to use
    *  @returns {Object} Layer object describing a choropleth layer
@@ -96,7 +96,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    */
   this.map.getChoroplethLayer = function () {
     return this.getPolygonLayer('choroplethLayers', false);
-  }
+  };
 
   /** Creates a border layer for the map to use
    * @returns {Object} Layer object describing a border layer
@@ -104,7 +104,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    */
   this.map.getBorderLayer = function () {
     return this.getPolygonLayer('borderLayers', true);
-  }
+  };
 
   /** Creates a polygon layer -- either choropleth or border --
    *  for the map to use.
