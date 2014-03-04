@@ -18,13 +18,8 @@ function Runner(mapApplicationInfo) {
 Runner.prototype.main = function () {
   var tester = new Tester();
 
-  var mapDisplayParameters = new MapDisplayParameters();
-  var ignoreThis = mapDisplayParameters
-        .createDefaultsFromMapApplicationInfo(this.mai);
-  var queryString = mapDisplayParameters.getQueryString();
-  ignoreThis = mapDisplayParameters
-        .initializePageParametersFromQueryString(queryString);
-  var pageInitValues = mapDisplayParameters.getValues();
+  var mapDisplayParameters = new MapDisplayParameters(this.mai);
+  var pageInitValues = mapDisplayParameters.getPageValueParameters();
 
   // tester.pageInitValuesTest()
   // tester.testCongressionalDistrictInfoMercator()
