@@ -252,6 +252,10 @@ function DomCreator ( map, mapApplicationInfo, pageInitValues ) {
   }
 
   // Put in the attribution
-  $('#attribution').append(', page customized by ' + this.mai.attribution);
+  if(this.mai.attribution) {
+    $('#attribution').append(', page customized by ' + this.mai.attribution);
+  } else {
+    $('#attribution').append('.');
+  }
 
 }
