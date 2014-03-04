@@ -3,14 +3,14 @@ function Tester()  {
       'startingCenterLat' : 38.7,
       'startingCenterLng' : -121.7,
       'startingCenterZoom' : 3,
-      'hasCartogram' : true,
+      'hasCartogram' : true
     }
 
     var maiToPageInitTranslator = {
       'startingCenterLat' : 'lat',
       'startingCenterLng' : 'lng',
       'startingCenterZoom' : 'zoom',
-      'hasCartogram' : 'cartogram',
+      'hasCartogram' : 'cartogram'
     }
 
 // This will only work if the query string is null
