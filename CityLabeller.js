@@ -8,7 +8,7 @@
  *    field name; the table/fieldName is specified in the mapApplicationInfo.
  * 
  *  @constructor
- *  @this {ListenerInitializer}
+ *  @this {CityLabeller}
  *  @param aMap {object} A Leaflet map object.
  *  @param aJurisdictionMarker {object} A Leaflet marker
  */
