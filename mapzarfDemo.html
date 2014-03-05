@@ -4,13 +4,19 @@
     <title>Mercator and Cartographic Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- FIXME TODO NOTE Set this to the locations of your Leaflet
+         and mapzarf CSS files!  NOTE TOTO FIXME -->
     <link rel="stylesheet" href="/thirdparty/leaflet/Leaflet-0.6.4/leaflet.css">
-    <link rel="stylesheet" href="../mapzarf/mapzarfDemo.css">
+    <link rel="stylesheet" href="../../mapzarf/mapzarfDemo.css">
   </head>
   <body>
 
      <div id="map"></div>
-     <div><span id="attribution">Mapzarf mapping framework developed by Kaitlin Duck Sherwood</span></div>
+     <div>
+       <span id="attribution">Mapzarf mapping framework developed by 
+         <a href="http://webfoot.com/ducky.home.html">Kaitlin Duck Sherwood</a>
+       </span>
+     </div>
      <div id="legend">
        <img id="legendImage" src="/tiles/clearTile.png"
             alt="Legend">
@@ -32,13 +38,15 @@
        
      </div>
   
+    <!-- FIXME TODO NOTE Set these to the locations of your Leaflet,
+         mapzarf, and jquery scripts!  NOTE TOTO FIXME -->
     <script src="/thirdparty/leaflet/Leaflet-0.6.4/leaflet.js" type="text/javascript"></script>
     <script type="text/javascript" 
             src="/thirdparty/jquery-1.11.0.min.js"></script>
 
     <!-- mapApplicationInfo.js sets the variable =mapApplicationInfo= -->
     <script type="text/javascript" src="./mapApplicationInfo.js"></script>
-    <script type="text/javascript" src="../mapzarf/mapzarfAllCompressed.js"></script>
+    <script type="text/javascript" src="../../mapzarf/mapzarfAllCompressed.js"></script>
 
 <!--
     <script type="text/javascript" src="../mapzarf/Utilities.js"></script>
