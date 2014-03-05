@@ -144,7 +144,7 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener
 
   var scope = this;
   /** @private */
-  cartogramCheckbox.onchange = function () {
+  cartogramCheckboxElement.onchange = function () {
     scope.map.updateLayers();
     scope.cityLabeller.refreshCityLabels(scope.cityLabeller)    ;
     scope.updateSharingUrl();
