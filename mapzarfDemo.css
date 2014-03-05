@@ -6,22 +6,22 @@ html, body, table {
 #sidebar {
     position: absolute;
     font-family:Verdana,Arial,sans-serif;
-    left: 80%;
+    left: 60%;
     height: 100%;
     top: 2%;
-    width: 15%;
+    width: 36%;
     margin: 2%;
 }
 #map {
     left: 0px;
-    width: 80%;
+    width: 60%;
     height: 95%;
     margin: 0;
 }
 #legend {
    position: absolute;
-   left: 72%;
-   top: 6%;
+   left: 55%;
+   top: 2%;
    width: 5%;
    margin: 0;
 }
