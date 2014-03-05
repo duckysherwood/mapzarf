@@ -85,6 +85,7 @@ ListenerInitializer.prototype.addLayerControlSelectListener
   var closureLayersetName = layersetName;
   var scope = this;
 
+  /** @private */
   selectElement.onchange = function () {
     var layer = $('option.' + closureLayersetName + 'Option:selected').val();
     var elementName = '#' + closureLayersetName + 'Description' ;
@@ -103,12 +104,14 @@ ListenerInitializer.prototype.addLayerControlSelectListener
 ListenerInitializer.prototype.addLayerControlCheckboxListener
   = function (layersetName) {
 
+  /** @private */
   var checkboxElement = $( '#' + layersetName + 'Checkbox' )[0];
   if((checkboxElement == null) || (checkboxElement == undefined)) {
     return null;
   }
 
   var scope = this
+  /** @private */
   checkboxElement.onchange = function () {
     scope.map.updateLayers();
     scope.updateSharingUrl();
@@ -134,13 +137,14 @@ ListenerInitializer.prototype.addCitiesCheckboxListener
  */
 ListenerInitializer.prototype.addIsCartogramCheckboxListener
   = function () {
-  var checkboxElement = $( '#isCartogramCheckbox' )[0];
-  if((checkboxElement == null) || (checkboxElement == undefined)) {
+  var cartogramCheckboxElement = $( '#isCartogramCheckbox' )[0];
+  if((cartogramCheckboxElement == null) || (cartogramCheckboxElement == undefined)) {
     return null;
   }
 
   var scope = this;
-  checkboxElement.onchange = function () {
+  /** @private */
+  cartogramCheckbox.onchange = function () {
     scope.map.updateLayers();
     scope.cityLabeller.refreshCityLabels(scope.cityLabeller)    ;
     scope.updateSharingUrl();

@@ -16,18 +16,21 @@
 // @@@@ Should I make this MapFacade instead?
 function MapBehaviorInitializer(aMap, aMapApplicationInfo, 
                                 aCityLabeller, aJurisdictionMarker) {
-  // @private
+  /** @private 
+   *  @member {Object} 
+   */
   this.map = aMap;
-  // @private
+
+  /** @private */
   this.map.mai = aMapApplicationInfo;
-  // @private
+  /** @private */
   this.cityLabeller = aCityLabeller;
 
-  // @private
+  /** @private */
   this.dotLayer = null;
-  // @private
+  /** @private */
   this.borderLayer = null;
-  // @private
+  /** @private */
   this.choroplethLayer = null;
 
   var closureCityLabeller = aCityLabeller;
@@ -50,7 +53,8 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
   var closureMap = this.map;
 
   /** Changes which layers are displayed on the map.
-   * @private
+   * @public
+   * (Used by ListenerInitializer)
    * SIDE EFFECT: the DOM updates
    */
   this.map.updateLayers = function () { 
