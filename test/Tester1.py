@@ -23,7 +23,13 @@ class Tester1(unittest.TestCase):
     return MARKER_TEXT in element.text
 
   def testClickOnZoomedMap(self):
+    # Because the leaflet tiles all have the same class (and no ID),
+    # there isn't a way to distinguish between a zoom 5 tile being ready
+    # and a zoom 4 tile being ready, alas.  That means we have to use
+    # the large and brutal hammer of a hardcoded sleep(1) here.
     self.page.zoomIn()
+    time.sleep(1)  
+
     self.page.clickOnDotTile(7, 11, 5)
     element = self.browser.find_element_by_id('markerText')
     return MARKER_TEXT in element.text

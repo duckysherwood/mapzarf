@@ -109,6 +109,9 @@ class MapApplicationPage:
     self.setAllCheckboxesTo(False)
 
   def clickOnDotTile(self, x, y, z):
+    # This will wait until *some* tile will be clickable, but
+    # note that won't help when zooming because the old tiles
+    # will still be clickable.
     WebDriverWait(self.browser, 2).until(
        EC.element_to_be_clickable((By.CLASS_NAME,'leaflet-tile-loaded')))    
 
