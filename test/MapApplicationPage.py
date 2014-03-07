@@ -13,17 +13,9 @@ CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 # Using the PageObject pattern per 
 #   http://docs.seleniumhq.org/docs/06_test_design_considerations.jsp
 class MapApplicationPage:
-  def __init__(self, browser, urlString, expectedTitle):
+  def __init__(self, browser):
     self.browser = browser
-    assert expectedTitle in self.browser.title
 
-    try:
-      WebDriverWait(self.browser, 2).until(EC.title_contains(expectedTitle))
-    except Exception as e:
-      print "Uh-oh, I didn't see the correct title!" 
-      actualTitle = self.browser.title
-      print "Title was '" + actualTitle + "', expected '" + expectedTitle  + "'"
-      raise
 
   # There are better ways to do this
   def doAndWait(self, func, value):
