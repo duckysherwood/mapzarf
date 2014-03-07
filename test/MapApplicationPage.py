@@ -13,7 +13,7 @@ CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 # Using the PageObject pattern per 
 #   http://docs.seleniumhq.org/docs/06_test_design_considerations.jsp
 class MapApplicationPage:
-  def __init__(self, browser, expectedTitle, pageUrl):
+  def __init__(self, browser, pageUrl, expectedTitle):
     self.browser = browser
     self.browser.get(pageUrl)
     try:
