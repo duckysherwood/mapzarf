@@ -18,14 +18,12 @@ class Tester1(unittest.TestCase):
     self.page = MapApplicationPage(self.browser, TEST_URL, PAGE_TITLE)
 
   def testClickOnMap(self):
-    time.sleep(2) # TODO FIXME
     self.page.clickOnDotTile(4,6,4)
     element = self.browser.find_element_by_id('markerText')
     return MARKER_TEXT in element.text
 
   def testClickOnZoomedMap(self):
     self.page.zoomIn()
-    time.sleep(2) # TODO FIXME
     self.page.clickOnDotTile(7, 11, 5)
     element = self.browser.find_element_by_id('markerText')
     return MARKER_TEXT in element.text

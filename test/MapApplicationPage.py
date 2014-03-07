@@ -109,11 +109,13 @@ class MapApplicationPage:
     self.setAllCheckboxesTo(False)
 
   def clickOnDotTile(self, x, y, z):
+    WebDriverWait(self.browser, 2).until(
+       EC.element_to_be_clickable((By.CLASS_NAME,'leaflet-tile-loaded')))    
+
     tiles = self.browser.find_elements_by_class_name("leaflet-tile-loaded")
 
     # We have to get a tile in the topmost layer, which is usually the 
     # dots layer
-    # What is the pythonic way to do this?
     dotTile = None
     for tile in tiles:
       queryString = 'x=' +  str(x) + '&y=' + str(y) + '&zoom=' + str(z)
@@ -122,7 +124,6 @@ class MapApplicationPage:
       if urlFragment in tile.get_attribute('src'):
         dotTile = tile
         break
-    # WebDriverWait(self.browser, 2).until(EC.element_to_be_clickable(dotTile))
 
     dotTile.click()
     time.sleep(1)
