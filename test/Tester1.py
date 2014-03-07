@@ -1,84 +1,65 @@
+import unittest
 import time
+from MapApplicationPage import MapApplicationPage
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
-from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support.ui import WebDriverWait # available since 2.4.0
 
-class PageBehavior(driver):
-  def __init__:
-    this.driver = driver
-    WebDriverWait(driver, 2).until(EC.title_contains("Test1"))
-    if driver.title != "Test1 pageTitle":
-      print "Uh-oh, it's not the exact right title."
-      print "Found: " + driver.title
+CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
+TEST_URL = 'http://localhost/mapzarf/test/test1.html'
+MARKER_TEXT = "asymmetrical skateboard Bushwick bitters"
+PAGE_TITLE = "Test1 pageTitle"
 
-  def setCheckbox(idString, shouldCheck):
-    element = driver.find_element_by_id(idString)
-    if shouldCheck:
-      check(element)
-    else:
-      uncheck(element)
 
-  def showAsCartogram(bool value):
-    setCheckbox('isCartogramCheckbox', value)
+class Tester1(unittest.TestCase):
 
-  def showDots(bool value):
-    setCheckbox('dotLayersCheckbox', value)
+  # Is there a way to not do this overhead every time?
+  def setUp(self):
+    self.browser = webdriver.Chrome(CHROMEDRIVER_LOCATION)
+    self.browser.get(TEST_URL)
+    self.page = MapApplicationPage(self.browser, TEST_URL, PAGE_TITLE)
 
-  def showChoropleths(bool value):
-    setCheckbox('choroplethLayersCheckbox', value)
+  def testClickOnMap(self):
+    time.sleep(2) # TODO FIXME
+    self.page.clickOnDotTile(4,6,4)
+    element = self.browser.find_element_by_id('markerText')
+    return MARKER_TEXT in element.text
 
-  def showBorders(bool value):
-    setCheckbox('borderLayersCheckbox', value)
+  def testClickOnZoomedMap(self):
+    self.page.zoomIn()
+    time.sleep(2) # TODO FIXME
+    self.page.clickOnDotTile(7, 11, 5)
+    element = self.browser.find_element_by_id('markerText')
+    return MARKER_TEXT in element.text
 
-  def showCities(bool value):
-    setCheckbox('showCities', value)
+  def uncheckAllCheckboxes(self):
+    self.page.uncheckAllCheckboxes()
+
+  def checkAllCheckboxes(self):
+    self.page.checkAllCheckboxes()
+
+  def testUnchecking(self):
+    self.page.checkAllCheckboxes()
+    self.page.uncheckAllCheckboxes()
     
-# end PageBehavior ---------------
+  def testChecking(self):
+    self.page.checkAllCheckboxes()
+
+  def testChangeChoropleth(self):
+    self.page.changeChoroplethLayerToIndex(1)
+    return "poverty" in self.page.getChoroplethDescription()
+
+  def testChangeDots(self):
+    self.page.changeDotLayerToIndex(1)
+    return "Signers2" in self.page.getDotDescription()
+
+  def testChangeBorder(self):
+    self.page.changeBorderLayerToIndex(1)
+    return "county" in self.page.getBorderDescription()
+
+  def tearDown(self):
+    self.page.tearDown()
     
-class Tester:
-  def __init__:
-    this.failures = 0
-    this.driver = webdriver.Chrome('/appdata/bin/chromedriver')  
-
-  def doAndWait(func, value):
-    func(value)
-    time.sleep(1)
-    
-  def sanityTest: 
-
-  def sanityCheckTitle:
-    this.driver.get('http://localhost/mapzarf/test/test1.html');
-    try:
-        WebDriverWait(driver, 2).until(EC.title_contains("Test1"))
-    
-        # You should see "Federal Spending Per Tax Dollar" on the console
-        if driver.title != "Test1 pageTitle":
-          print "Uh-oh, it's not the exact right title."
-          print "Found: " + driver.title
-          failures += 1
-    except:
-        print "Uh-oh, I didn't see the correct title!"
-        failures += 1
-    
-    finally:
-        if failures > 0:
-          print "I saw " + str(failures) + " failures, alas."
-        time.sleep(1) # Let the user actually see something!
-
-
-  def uncheckAll():
-    functions = [this.driver.showCartogram,
-                 this.driver.showDots,
-                 this.driver.showChoropleths,
-                 this.driver.showBorders,
-                 this.driver.showCities,
-                 this.driver.showAsCartogram]
-
-    for func in functions:
-      doAndWait(func, value)
 
 #---- End class Tester
 
+if __name__ == "__main__":
+    unittest.main()

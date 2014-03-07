@@ -2,7 +2,9 @@
 mapApplicationInfo = {
   'pageTitle' : 'Test1 pageTitle',
   'pageDescription' : 'Test1 pageDescription',
-  'pointInfoUrlPrefix' : '',  // e.g. ./countyPopupInformation.php
+  'pointInfoUrlPrefix' : './test1MarkerInfo.html',
+  'startingMarkerLat' : 40,
+  'startingMarkerLng' : -100,
   'startingCenterLat' : 38,
   'startingCenterLng' : -95,
   'startingCenterZoom' : 4,
