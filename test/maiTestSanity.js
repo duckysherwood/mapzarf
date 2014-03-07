@@ -1,8 +1,8 @@
 /* if missing cartogram table, then don't have a cartogram checkbox */
 mapApplicationInfo = {
-  'pageTitle' : 'Test1 pageTitle',
-  'pageDescription' : 'Test1 pageDescription',
-  'pointInfoUrlPrefix' : './test1MarkerInfo.html',
+  'pageTitle' : 'TestSanity pageTitle',
+  'pageDescription' : 'TestSanity pageDescription',
+  'pointInfoUrlPrefix' : './testSanityMarkerInfo.html',
   'startingMarkerLat' : 40,
   'startingMarkerLng' : -100,
   'startingCenterLat' : 38,
