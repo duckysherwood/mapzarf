@@ -3,7 +3,11 @@
 // multiple, but the value ended up being "on" (<- literally, 'o'+'n').
 // So I'm going to set a sentinel value instead.  It needs to be global
 // so that BehaviourCreator can see it.
-/* @const */ SENTINEL_MULTIPLE = ""
+/* @const */ SENTINEL_MULTIPLE = "";
+
+// This is only because Ducky Sherwood's directory structure is
+// different on test and production servers.  Annoying.
+/* @const */ BINDIR = "/maps/mapeteria2";
 
 /** @class DomElementAppender
  *  @classdesc This class sets up the DOM for the map application.
@@ -235,7 +239,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   
   // put the legend update on the legend image
   $( '#legendImage' )[0].update = function (layerSpec) {
-    url = "../../mapeteria2/makeLegend.php?lbl=y&o=p" +
+    url = BINDIR + "/makeLegend.php?lbl=y&o=p" +
          "&minValue=" + layerSpec.minValue +
          "&maxValue=" + layerSpec.maxValue +
          "&minColour=" + layerSpec.minColor +

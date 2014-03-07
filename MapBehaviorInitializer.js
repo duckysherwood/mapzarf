@@ -134,7 +134,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     var key = this.findSelectedKeyForLayerType(layersetName);
     var layerSpec = this.mai[layersetName][key] ;
 
-    var url = "../../mapeteria2/choropleth.phpx?x={x}&y={y}&zoom={z}&";
+    var url = BINDIR + "/choropleth.phpx?x={x}&y={y}&zoom={z}&";
 
     url += 'polyType=' + layerSpec[this.projectionType() + 'ShapeType'];
     url += '&polyYear=' + layerSpec[this.projectionType() + 'PolyYear'];
@@ -204,7 +204,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     var key = this.findSelectedKeyForLayerType(layersetName);
     var layerSpec = this.mai[layersetName][key] ;
   
-    var url = "../../mapeteria2/dots.php?x={x}&y={y}&zoom={z}&";
+    var url = BINDIR + "/dots.php?x={x}&y={y}&zoom={z}&";
     url += 'points=' + layerSpec[this.projectionType() + 'Table'];
     url += '&name=' + layerSpec[this.projectionType() + 'FieldName'] ;
     url += '&year=' + layerSpec['year'];

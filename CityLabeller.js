@@ -92,7 +92,7 @@ function CityLabeller(aMap) {
         latlng = new L.LatLng(lat, lng);
         cityName = cities[i]["description"];
         
-        cityNameIconUrl = '../../mapeteria2/makeCityLabel.php?cityName=' + cityName
+        cityNameIconUrl = BINDIR + '/makeCityLabel.php?cityName=' + cityName
         if (typeof bulletChar != 'undefined') {
           cityNameIconUrl += "&bulletChar="+encodeURIComponent(bulletChar);
         }
