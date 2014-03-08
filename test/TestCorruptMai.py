@@ -7,6 +7,7 @@ import time
 from MapApplicationPage import MapApplicationPage
 from selenium import webdriver
 from selenium.webdriver.common.alert import Alert
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import UnexpectedAlertPresentException
@@ -23,6 +24,9 @@ class TestInsanity(unittest.TestCase):
   def checkAlert(self, urlString):
     try:
       self.page = MapApplicationPage(self.browser, urlString)
+      WebDriverWait(self.browser, 3).until(
+          EC.presence_of_element_located((By.TAG_NAME, 'title')))
+
 
     except UnexpectedAlertPresentException as e:
       alertText = Alert(self.browser).text
