@@ -37,21 +37,29 @@ class TestInsanity(unittest.TestCase):
     return False
 
 
+  # Tests 
   def testGoodJson(self):
     urlString = 'http://localhost/mapzarf/test/testSanity.html'
-    return not self.checkAlert(urlString)
+    self.assertTrue(not self.checkAlert(urlString))
 
   def testPlainString(self):
     urlString = 'http://localhost/mapzarf/test/testCorruptMai1.html'
-    return self.checkAlert(urlString)
+    self.assertTrue(self.checkAlert(urlString))
 
   def testDelimitedString(self):
     urlString = 'http://localhost/mapzarf/test/testCorruptMai2.html'
-    return self.checkAlert(urlString)
+    self.assertTrue(self.checkAlert(urlString))
 
+  # MAI3 is a string inside brackets
   def testInvalidJson(self):
     urlString = 'http://localhost/mapzarf/test/testCorruptMai3.html'
-    return self.checkAlert(urlString)
+    self.assertTrue(self.checkAlert(urlString))
+
+  # MAI4 is just like the good one (in testSanity) but it is
+  # missing a comma
+  def testMissingCommaJSON(self):
+    urlString = 'http://localhost/mapzarf/test/testCorruptMai4.html'
+    self.assertTrue(self.checkAlert(urlString))
 
   def tearDown(self):
     self.page.tearDown()
