@@ -63,16 +63,22 @@
   
     <script type="text/javascript">
 
-      try {
-        this.mai = mapApplicationInfo;
-      }
-      catch(ReferenceError) {
+      function maiAlert() {
         var urlString = $( '#mai')[0].src;
         alert("There was a problem with the JSON file "
               + "used to determine the layout and capabilities of this page. "
               + "Either the file doesn't exist, it can't be read, or it has "
-              + "a syntax error in it.\n"
-              + "<p>The file in question is:" + urlString);
+              + "a syntax error in it.\n")
+      }
+
+      try {
+        this.mai = mapApplicationInfo;
+        if(typeof this.mai != 'object') {
+          maiAlert();
+        }
+      }
+      catch(ReferenceError) {
+        maiAlert();
       }
 
 
