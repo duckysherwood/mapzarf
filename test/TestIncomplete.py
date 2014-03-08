@@ -36,8 +36,9 @@ class TestIncomplete(unittest.TestCase):
     except TimeoutException:
       return False
 
-    # TODO need to troll through the markers to see if any whose src
-    # includes marker-icon.png (i.e. not a city name)
+    # Must troll through the markers to see if any are actual like "teardrop"
+    # markers, not just city names.  The "teardrop" markers have src which
+    # includes marker-icon.png.
     markers = self.browser.find_elements_by_class_name("leaflet-marker-icon")
     # pdb.set_trace()
     srcFragment = "marker-icon.png"
