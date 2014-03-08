@@ -1,4 +1,3 @@
-import pdb
 import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -8,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.common.exceptions import StaleElementReferenceException
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 
@@ -27,10 +27,38 @@ class MapApplicationPage:
       raise
 
 
-  # There are better ways to do this
+  # TODO There are better ways to do this
   def doAndWait(self, func, value):
     func(value)
     time.sleep(1)
+
+  # Note: this is a marker in mapzarf-speak, not a marker in leaflet-speak.
+  # It's an upside-down teardrop-y shaped thing which opens into an infowindow.
+  # The distinction is important because city names are also implemented as
+  # what leaflet calls markers.
+  def markerExists(self):
+    try:
+      WebDriverWait(self.browser, 3).until(
+        EC.presence_of_element_located((By.CLASS_NAME, 'leaflet-marker-icon')))
+    except TimeoutException:
+      return False
+
+    # Must troll through the markers to see if any are actual like "teardrop"
+    # markers, not just city names.  The "teardrop" markers have src which
+    # includes marker-icon.png.
+    markers = self.browser.find_elements_by_class_name("leaflet-marker-icon")
+    srcFragment = "marker-icon.png"
+    for marker in markers:
+      try:
+        if(marker.is_displayed() and srcFragment in marker.get_attribute('src')):
+          return True
+      # Sometimes this can get markers which are no longer attached
+      # to the DOM.  Those don't count either.
+      except StaleElementReferenceException:
+        pass
+
+    return False
+
 
   def getTitle(self):
     return self.browser.title
