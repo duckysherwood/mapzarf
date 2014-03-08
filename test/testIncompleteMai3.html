@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>TestSanity pageTitle</title>
+    <title>Incomplete pageTitle</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- FIXME TODO NOTE Set this to the locations of your Leaflet
@@ -44,22 +44,33 @@
     <script type="text/javascript" 
             src="/thirdparty/jquery-1.11.0.min.js"></script>
 
-    <!-- mapApplicationInfo.js sets the variable =mapApplicationInfo= -->
-    <script type="text/javascript" src="./maiTestSanity.js"></script>
-    <script type="text/javascript" src="/mapzarf/mapzarfAllCompressed.js"></script>
-
+    <!-- this mapApplicationInfo has only one choropleth layer -->
+    <script id="mai" type="text/javascript" src="./incompleteMai3.js"></script>
 <!--
-    <script type="text/javascript" src="../mapzarf/Utilities.js"></script>
-    <script type="text/javascript" src="../mapzarf/MapDisplayParameters.js"></script>
-    <script type="text/javascript" src="../mapzarf/DomElementAppender.js"></script>
-    <script type="text/javascript" src="../mapzarf/MapBehaviorInitializer.js"></script>
-    <script type="text/javascript" src="../mapzarf/ListenerInitializer.js"></script>
-    <script type="text/javascript" src="../mapzarf/CityLabeller.js"></script>
-    <script type="text/javascript" src="../mapzarf/Tester.js"></script>
-    <script type="text/javascript" src="../mapzarf/Runner.js"></script>
+    <script type="text/javascript" src="/mapzarf/mapzarfAllCompressed.js"></script>
 -->
+
+    <script type="text/javascript" src="/mapzarf/Utilities.js"></script>
+    <script type="text/javascript" src="/mapzarf/MapDisplayParameters.js"></script>
+    <script type="text/javascript" src="/mapzarf/DomElementAppender.js"></script>
+    <script type="text/javascript" src="/mapzarf/MapBehaviorInitializer.js"></script>
+    <script type="text/javascript" src="/mapzarf/ListenerInitializer.js"></script>
+    <script type="text/javascript" src="/mapzarf/CityLabeller.js"></script>
+    <script type="text/javascript" src="/mapzarf/Tester.js"></script>
+    <script type="text/javascript" src="/mapzarf/Runner.js"></script>
   
     <script type="text/javascript">
+
+      try {
+        this.mai = mapApplicationInfo;
+      }
+      catch(ReferenceError) {
+        var urlString = $( '#mai')[0].src;
+        alert("There was a problem with the JSON file used to determine " +
+                "the layout and capabilities of this page.  Either the file " +
+                "doesn't exist, it can't be read, or it has a syntax error " +
+                "in it.  \nThe file in question is: " + urlString);
+      }
 
       $(document).ready(function() {
 
