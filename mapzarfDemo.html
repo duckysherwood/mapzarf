@@ -68,10 +68,11 @@
       }
       catch(ReferenceError) {
         var urlString = $( '#mai')[0].src;
-        alert("<p>There was a problem with the JSON file used to determine " +
-                "the layout and capabilities of this page.  Either the file " +
-                "doesn't exist, it can't be read, or it has a syntax error " +
-                "in it.</p>\n\n<p>The file in question is:</p>" + urlString);
+        alert("There was a problem with the JSON file "
+              + "used to determine the layout and capabilities of this page. "
+              + "Either the file doesn't exist, it can't be read, or it has "
+              + "a syntax error in it.\n"
+              + "<p>The file in question is:" + urlString);
       }
 
 
