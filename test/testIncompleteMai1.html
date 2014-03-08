@@ -61,15 +61,22 @@
   
     <script type="text/javascript">
 
+      function maiAlert() {
+        var urlString = $( '#mai')[0].src;
+        alert("There was a problem with the JSON file "
+              + "used to determine the layout and capabilities of this page. "
+              + "Either the file doesn't exist, it can't be read, or it has "
+              + "a syntax error in it.\n")
+      }
+
       try {
         this.mai = mapApplicationInfo;
+        if(typeof this.mai != 'object') {
+          maiAlert();
+        }
       }
       catch(ReferenceError) {
-        var urlString = $( '#mai')[0].src;
-        alert("There was a problem with the JSON file used to determine " +
-                "the layout and capabilities of this page.  Either the file " +
-                "doesn't exist, it can't be read, or it has a syntax error " +
-                "in it.  \nThe file in question is: " + urlString);
+        maiAlert();
       }
 
       $(document).ready(function() {
