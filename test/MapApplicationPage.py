@@ -3,9 +3,9 @@ from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC # available since 2.26.0
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import Select
-from selenium.webdriver.support.ui import WebDriverWait # available since 2.4.0
+from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.action_chains import ActionChains
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
@@ -13,16 +13,16 @@ CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 # Using the PageObject pattern per 
 #   http://docs.seleniumhq.org/docs/06_test_design_considerations.jsp
 class MapApplicationPage:
-  def __init__(self, browser, pageUrl, expectedTitle):
+  def __init__(self, browser, pageUrl):
     self.browser = browser
     self.browser.get(pageUrl)
+
+  def checkTitle(self, expectedTitle):
     try:
       WebDriverWait(self.browser, 3).until(EC.title_contains(expectedTitle))
-    except Exception as e:
-      print e.message + "\n"
-      print "Uh-oh, I didn't see the correct title!" 
+    except TimeoutException as e:
       actualTitle = self.browser.title
-      print "Title was '" + actualTitle + "', expected '" + expectedTitle  + "'"
+      print "Uh-oh: page title was '" + actualTitle + "', but I expected '" + expectedTitle  + "'"
       raise
 
 

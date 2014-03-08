@@ -14,7 +14,8 @@ class TestSanity(unittest.TestCase):
   # Is there a way to not do this overhead every time?
   def setUp(self):
     self.browser = webdriver.Chrome(CHROMEDRIVER_LOCATION)
-    self.page = MapApplicationPage(self.browser, TEST_URL, PAGE_TITLE)
+    self.page = MapApplicationPage(self.browser, TEST_URL)
+    self.page.checkTitle(PAGE_TITLE)
 
 
   def testClickOnMap(self):
