@@ -4,6 +4,7 @@
 
 # TODO check for no controls, no cartogram checkbox, no description
 
+import pdb
 import unittest
 import time
 from MapApplicationPage import MapApplicationPage
@@ -14,6 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 INCOMPLETE_PAGE_TITLE = 'Incomplete pageTitle'
@@ -34,7 +36,21 @@ class TestIncomplete(unittest.TestCase):
     except TimeoutException:
       return False
 
-    return True
+    # TODO need to troll through the markers to see if any whose src
+    # includes marker-icon.png (i.e. not a city name)
+    markers = self.browser.find_elements_by_class_name("leaflet-marker-icon")
+    # pdb.set_trace()
+    srcFragment = "marker-icon.png"
+    for marker in markers:
+      try:
+        if(marker.is_displayed() and srcFragment in marker.get_attribute('src')):
+          return True
+      # Sometimes this can get markers which are no longer attached
+      # to the DOM.  Those don't count either.
+      except StaleElementReferenceException:
+        pass
+    
+    return False
 
   def layerControlExists(self, layerspecName, urlString):
     return self.elementExistsById(layerspecName + "Control", urlString)
@@ -66,18 +82,9 @@ class TestIncomplete(unittest.TestCase):
     exists = self.markerExists()
     page.tearDown()
     self.browser = None 
+
     return exists 
 
-  def testForMarker(self):
-    return not self.doesMarkerExist(GOOD_JSON)
-
-  def testForNoMarker(self):
-    success = True
-    urlStrings = [EMPTY_JSON, MINIMAL_JSON, ONE_LAYER_JSON]
-    for urlString in urlStrings:
-      success &= not self.doesMarkerExist(urlString)
-
-    return success
 
 #  def checkMultipleForExistence(self, urlStrings, layerspecName, 
 #                                elementSuffix, shouldBeThere):
@@ -91,26 +98,33 @@ class TestIncomplete(unittest.TestCase):
 #    return success
 
   # Test for layer controls.  Either all should exist or non should exist
-  def checkForAllLayerElements(self, urlString, layerspecName, shouldExist):
+  def checkForAllLayerElements(self, urlString, layerspecNames, shouldExist):
      success = True
 
      self.browser = webdriver.Chrome(CHROMEDRIVER_LOCATION)
      page = MapApplicationPage(self.browser, urlString)
 
-     elemId = layerspecName + "Control"
-
+     # Check for the cities checkbox; when that shows up, the other
+     # controls should be ready
+     elemId = "showCitiesCheckbox"
      try: 
        WebDriverWait(self.browser, 3).until(
          EC.presence_of_element_located((By.ID, elemId)))
      except TimeoutException:
-       success &= (shouldExist == False)
+       print "The showCitiesCheckbox isn't showing up, something is wrong."
+       exit()
  
-     for widget in ['Checkbox', 'Description']:
-       elemId = layerspecName + widget
-       try: 
-         self.browser.find_element_by_id(elemId)
-       except NoSuchElementException as e:
-         success &= (shouldExist == False)
+     for layerspecName in layerspecNames:
+       for widget in ['Control', 'Checkbox', 'Description']:
+         exists = True
+         elemId = layerspecName + widget
+         try: 
+           self.browser.find_element_by_id(elemId)
+         except NoSuchElementException as e:
+           exists = False
+
+         success &= (shouldExist == exists)
+ 
 
      page.tearDown()
      return success
@@ -119,39 +133,58 @@ class TestIncomplete(unittest.TestCase):
     success = True
     for urlString in urlStrings:
       s = self.checkForAllLayerElements(urlString, layerspecName, shouldExist)
-      success &= (s == shouldExist)
+      success &= s 
 
     return success
 
 
+  # Tests -------
+
+  def testForMarker(self):
+    success = True
+    urlStrings = [GOOD_JSON]
+    for urlString in urlStrings:
+      success &= self.doesMarkerExist(urlString)
+
+    self.assertTrue(success)
+
+  def testForNoMarker(self):
+    success = True
+    urlStrings = [EMPTY_JSON, MINIMAL_JSON, ONE_LAYER_JSON]
+    for urlString in urlStrings:
+      s = self.doesMarkerExist(urlString)
+      success &= not s
+
+    self.assertTrue(success)
+
   def testForNoChoroplethControl(self):
     urlStrings = [EMPTY_JSON, MINIMAL_JSON]
-    return self.checkLayerForMultipleUrls(urlStrings, "choroplethLayers", False)
+    layerspecNames = ["choroplethLayers"]
+    success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, False)
+    self.assertTrue(success)
 
   def testForChoroplethControl(self):
     urlStrings = [GOOD_JSON, ONE_LAYER_JSON]
-    return self.checkLayerForMultipleUrls(urlStrings, "choroplethLayers", True)
+    layerspecNames = ["choroplethLayers"]
+    success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, True)
+    self.assertTrue(success)
 
 
   def testForDotAndBorderExistence(self):
     urlStrings = [GOOD_JSON]
     success = True
-    for layerspecName in ['dotLayers', 'borderLayers']:
-      success &= self.checkLayerForMultipleUrls(urlStrings, layerspecName, True)
+    layerspecNames = ['dotLayers', 'borderLayers']
+    success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, True)
+    self.assertTrue(success)
 
-    return success
 
   def testForNoDotAndBorderExistence(self):
     urlStrings = [EMPTY_JSON, MINIMAL_JSON, ONE_LAYER_JSON]
     success = True
-    for layerspecName in ['dotLayers', 'borderLayers']:
-      success &= not self.checkLayerForMultipleUrls(urlStrings, 
-                                                    layerspecName, False)
-
-    return success
-
+    layerspecNames = ['dotLayers', 'borderLayers']
+    success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, False)
+    self.assertTrue(success)
    
-
 
 if __name__ == "__main__":
     unittest.main()
