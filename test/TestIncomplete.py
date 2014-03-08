@@ -4,7 +4,6 @@
 
 # TODO check for no controls, no cartogram checkbox, no description
 
-import pdb
 import unittest
 import time
 from MapApplicationPage import MapApplicationPage
@@ -40,7 +39,6 @@ class TestIncomplete(unittest.TestCase):
     # markers, not just city names.  The "teardrop" markers have src which
     # includes marker-icon.png.
     markers = self.browser.find_elements_by_class_name("leaflet-marker-icon")
-    # pdb.set_trace()
     srcFragment = "marker-icon.png"
     for marker in markers:
       try:
