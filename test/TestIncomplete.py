@@ -14,7 +14,6 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
-from selenium.common.exceptions import StaleElementReferenceException
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 INCOMPLETE_PAGE_TITLE = 'Incomplete pageTitle'
@@ -27,29 +26,6 @@ class TestIncomplete(unittest.TestCase):
 
   def setUp(self):
     self.browser = None 
-
-  def markerExists(self):
-    try: 
-      WebDriverWait(self.browser, 3).until(
-        EC.presence_of_element_located((By.CLASS_NAME, 'leaflet-marker-icon')))
-    except TimeoutException:
-      return False
-
-    # Must troll through the markers to see if any are actual like "teardrop"
-    # markers, not just city names.  The "teardrop" markers have src which
-    # includes marker-icon.png.
-    markers = self.browser.find_elements_by_class_name("leaflet-marker-icon")
-    srcFragment = "marker-icon.png"
-    for marker in markers:
-      try:
-        if(marker.is_displayed() and srcFragment in marker.get_attribute('src')):
-          return True
-      # Sometimes this can get markers which are no longer attached
-      # to the DOM.  Those don't count either.
-      except StaleElementReferenceException:
-        pass
-    
-    return False
 
   def layerControlExists(self, layerspecName, urlString):
     return self.elementExistsById(layerspecName + "Control", urlString)
@@ -78,23 +54,12 @@ class TestIncomplete(unittest.TestCase):
         EC.presence_of_element_located((By.ID, 'showCitiesCheckbox')))
     page.showCities(False)
 
-    exists = self.markerExists()
+    exists = page.markerExists()
     page.tearDown()
     self.browser = None 
 
     return exists 
 
-
-#  def checkMultipleForExistence(self, urlStrings, layerspecName, 
-#                                elementSuffix, shouldBeThere):
-#    elementId = layerspecName + elementSuffix
-#
-#    success = True
-#    for urlString in urlStrings: 
-#      once = (shouldBeThere == self.elementExistsById(elementId, urlString))
-#      success &= once
-#
-#    return success
 
   # Test for layer controls.  Either all should exist or non should exist
   def checkForAllLayerElements(self, urlString, layerspecNames, shouldExist):
