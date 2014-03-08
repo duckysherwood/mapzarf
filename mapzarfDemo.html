@@ -45,21 +45,35 @@
             src="/thirdparty/jquery-1.11.0.min.js"></script>
 
     <!-- mapApplicationInfo.js sets the variable =mapApplicationInfo= -->
-    <script type="text/javascript" src="./mapApplicationInfo.js"></script>
-    <script type="text/javascript" src="/mapzarf/mapzarfAllCompressed.js"></script>
+    <script id="mai" type="text/javascript" src="./mapApplicationInfo.js">
+    </script>
+    <script type="text/javascript" src="/mapzarf/mapzarfAllCompressed.js">
+    </script>
 
 <!--
-    <script type="text/javascript" src="../mapzarf/Utilities.js"></script>
-    <script type="text/javascript" src="../mapzarf/MapDisplayParameters.js"></script>
-    <script type="text/javascript" src="../mapzarf/DomElementAppender.js"></script>
-    <script type="text/javascript" src="../mapzarf/MapBehaviorInitializer.js"></script>
-    <script type="text/javascript" src="../mapzarf/ListenerInitializer.js"></script>
-    <script type="text/javascript" src="../mapzarf/CityLabeller.js"></script>
-    <script type="text/javascript" src="../mapzarf/Tester.js"></script>
-    <script type="text/javascript" src="../mapzarf/Runner.js"></script>
+    <script type="text/javascript" src="/mapzarf/Utilities.js"></script>
+    <script type="text/javascript" src="/mapzarf/MapDisplayParameters.js"></script>
+    <script type="text/javascript" src="/mapzarf/DomElementAppender.js"></script>
+    <script type="text/javascript" src="/mapzarf/MapBehaviorInitializer.js"></script>
+    <script type="text/javascript" src="/mapzarf/ListenerInitializer.js"></script>
+    <script type="text/javascript" src="/mapzarf/CityLabeller.js"></script>
+    <script type="text/javascript" src="/mapzarf/Tester.js"></script>
+    <script type="text/javascript" src="/mapzarf/Runner.js"></script>
 -->
   
     <script type="text/javascript">
+
+      try {
+        this.mai = mapApplicationInfo;
+      }
+      catch(ReferenceError) {
+        var urlString = $( '#mai')[0].src;
+        alert("<p>There was a problem with the JSON file used to determine " +
+                "the layout and capabilities of this page.  Either the file " +
+                "doesn't exist, it can't be read, or it has a syntax error " +
+                "in it.</p>\n\n<p>The file in question is:</p>" + urlString);
+      }
+
 
       $(document).ready(function() {
 
