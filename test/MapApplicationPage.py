@@ -1,3 +1,4 @@
+import pdb
 import time
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
@@ -113,8 +114,9 @@ class MapApplicationPage:
     # This will wait until *some* tile will be clickable, but
     # note that won't help when zooming because the old tiles
     # will still be clickable.
-    WebDriverWait(self.browser, 2).until(
+    WebDriverWait(self.browser, 3).until(
        EC.element_to_be_clickable((By.CLASS_NAME,'leaflet-tile-loaded')))    
+
 
     tiles = self.browser.find_elements_by_class_name("leaflet-tile-loaded")
 
