@@ -1,3 +1,4 @@
+import pdb
 import unittest
 import time
 from MapApplicationPage import MapApplicationPage
@@ -17,11 +18,15 @@ class TestSanity(unittest.TestCase):
     self.page = MapApplicationPage(self.browser, TEST_URL)
     self.page.checkTitle(PAGE_TITLE)
 
+  def tearDown(self):
+    self.page.tearDown()
+    
 
+  # Tests ----------------
   def testClickOnMap(self):
     self.page.clickOnDotTile(4,6,4)
     element = self.browser.find_element_by_id('markerText')
-    return MARKER_TEXT in element.text
+    self.assertTrue(MARKER_TEXT in element.text)
 
   def testClickOnZoomedMap(self):
     # Because the leaflet tiles all have the same class (and no ID),
@@ -33,38 +38,39 @@ class TestSanity(unittest.TestCase):
 
     self.page.clickOnDotTile(7, 11, 5)
     element = self.browser.find_element_by_id('markerText')
-    return MARKER_TEXT in element.text
-
+    self.assertTrue( MARKER_TEXT in element.text)
+ 
+  # Throws exception on failure
   def uncheckAllCheckboxes(self):
     self.page.uncheckAllCheckboxes()
 
+  # Throws exception on failure
   def checkAllCheckboxes(self):
     self.page.checkAllCheckboxes()
 
+  # Throws exception on failure
   def testUnchecking(self):
     self.page.checkAllCheckboxes()
     self.page.uncheckAllCheckboxes()
     
+  # Throws exception on failure
   def testChecking(self):
     self.page.checkAllCheckboxes()
 
+  # Throws exception on failure
   def testChangeChoropleth(self):
     self.page.changeChoroplethLayerToIndex(1)
-    return "poverty" in self.page.getChoroplethDescription()
+    self.assertTrue("poverty" in self.page.getChoroplethDescription())
 
   def testChangeDots(self):
     self.page.changeDotLayerToIndex(1)
-    return "Signers2" in self.page.getDotDescription()
+    self.assertTrue("Signers2" in self.page.getDotDescription())
 
   def testChangeBorder(self):
     self.page.changeBorderLayerToIndex(1)
-    return "county" in self.page.getBorderDescription()
+    self.assertTrue("County" in self.page.getBorderDescription())
 
-  def tearDown(self):
-    self.page.tearDown()
-    
 
-#---- End class Tester
 
 if __name__ == "__main__":
     unittest.main()
