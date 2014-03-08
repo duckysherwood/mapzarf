@@ -8,7 +8,7 @@
  *    about how to set up the map.
  */
 function Runner(mapApplicationInfo) {
-  this.mai = mapApplicationInfo;
+  this.mai = mapApplicationInfo;  
 }
 
 /** This is the start of execution, much like =main()= in C programs.
@@ -17,9 +17,9 @@ function Runner(mapApplicationInfo) {
  */
 Runner.prototype.main = function () {
   // var tester = new Tester();
-  // tester.pageInitValuesTest()
-  // tester.testCongressionalDistrictInfoMercator()
-  // tester.testCongressionalDistrictInfoCartogram()
+  // tester.pageInitValuesTest();
+  // tester.testCongressionalDistrictInfoMercator();
+  // tester.testCongressionalDistrictInfoCartogram();
 
   var mapDisplayParameters = new MapDisplayParameters(this.mai);
   var pageInitValues = mapDisplayParameters.getPageValueParameters();
