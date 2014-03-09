@@ -1,5 +1,6 @@
-import pdb
 import unittest
+import urllib
+import urlparse
 import time
 from MapApplicationPage import MapApplicationPage
 from selenium import webdriver
@@ -187,6 +188,74 @@ class TestQueryString(unittest.TestCase):
                          "choroplethLayers", "polyType=statePopCartogram"))
 
     page.tearDown()
+
+  # Note: this is not highly portable.  Some fields won't be 
+  # given in some cases.  For example, if the MAI doesn't specify
+  # any choropleth layers, there won't be a choropleth checkbox,
+  # so there won't be any 'showChoropleths' field.
+  def queryStringCreationHelper(self, page, field, expectedValue):
+    sharingUrl = page.getSharingUrl()
+    qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
+    self.assertEqual(qs[field][0], expectedValue)
+   
+
+  def testQueryStringCreation(self):
+    url = TEST_URL 
+    page = MapApplicationPage(self.browser, url)
+    page.checkTitle(PAGE_TITLE)
+
+    # http://localhost/mapzarf/test/testSanity.html?lat=38&lng=-95&zoom=4&cartogram=t&showCities=t&markerLat=40&markerLng=-100&showChoropleths=t&choroplethIndex=0&showDots=t&dotIndex=0&showBorders=t
+    sharingUrl = page.getSharingUrl()
+    print sharingUrl
+    qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
+    for field in ['showChoropleths', 'showDots', 'showBorders',
+                  'cartogram', 'showCities']:
+      if field in qs:
+        self.assertTrue(qs[field][0] == 't')
+
+    for field in ['choroplethIndex', 'dotIndex', 'borderIndex']:
+      if field in qs:
+        self.assertTrue(qs[field][0] == '0')
+
+    self.assertTrue(qs['markerLng'][0] == '-100')
+    self.assertTrue(qs['markerLat'][0] == '40')
+    self.assertTrue(qs['lat'][0] == '38')
+    self.assertTrue(qs['lng'][0] == '-95')
+    self.assertTrue(qs['zoom'][0] == '4')
+
+    page.showAsCartogram(False)
+    self.queryStringCreationHelper(page, 'cartogram', 'f')
+
+    page.showChoropleths(False)
+    self.queryStringCreationHelper(page, 'showChoropleths', 'f')
+
+
+    page.showDots(False)
+    sharingUrl = page.getSharingUrl()
+    qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
+    self.assertTrue(qs['showDots'][0] == 'f')
+
+    page.showCities(False)
+    self.queryStringCreationHelper(page, 'showCities', 'f')
+
+    page.changeDotLayerToIndex(1)
+    self.queryStringCreationHelper(page, 'dotIndex', '1')
+
+    page.changeBorderLayerToIndex(1)
+    self.queryStringCreationHelper(page, 'borderIndex', '1')
+
+    page.changeChoroplethLayerToIndex(1)
+    self.queryStringCreationHelper(page, 'choroplethIndex', '1')
+
+    page.zoomIn()
+    time.sleep(1)  # zoom takes a minute to settle
+    self.queryStringCreationHelper(page, 'zoom', '5')
+
+    # TODO not quite sure how to change center or marker location
+
+    page.tearDown()
+
+# TODO put in a qstring with evil illegal values
 
 
 if __name__ == '__main__':
