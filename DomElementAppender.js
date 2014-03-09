@@ -147,6 +147,43 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
     }
     return null
   }
+
+ 
+  /** Helper: for a given layer type (like 'dot' or 'choropleth')
+   *  update the controls based on the values in the query string.
+   *  The query string can direct the checkbox to be checked or not,
+   *  and which layer should be shown (if there are multiples).
+   *
+   *  @private 
+   */
+  // NOTE: This depends a huge amount on the specific ids given
+  // to the DOM objects.  Yeah, I could put in another layer of
+  // indirection, but that would make it even more of a chore to
+  // get at/address/find the elements I want.
+  this.adjustLayerControl = function (layersetType) {
+    var layersetName = layersetType + "Layers";
+    var checkboxName = '#' + layersetName + 'Checkbox';
+    var $checkbox = $( checkboxName );
+
+    if($checkbox) {
+      var qstringShowFieldName = 'show' 
+                                 + capitalizeFirstLetter(layersetType)
+                                 + 's';
+      var checkedBool = closurePageInitValues[qstringShowFieldName];
+      $checkbox.prop('checked', checkedBool);
+
+      var indexName = layersetType + 'Index';
+      if(closurePageInitValues[indexName]) {
+        var $selector = $( '#' + layersetName + 'Selector');
+        // TODO cope with illegal values
+        $selector.prop('selectedIndex', closurePageInitValues[indexName]);
+        var fieldName = $selector[0].value
+        var spec = this.mai[layersetName][fieldName];
+        var $descriptor = $( '#' + layersetName + 'Description')
+        $descriptor[0].innerHTML = descriptionHtml(spec);
+      }
+    }
+  }
   
   /** Creates and initializes all the DOM elements relating to the
    *  map which depend upon the mapApplicationInfo.
@@ -168,23 +205,9 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
     if(dotSelector) {
       $( '#dotLayers' ).append(dotSelector);
     }
-    var $dotLayersCheckbox = $( '#dotLayersCheckbox');
-    if($dotLayersCheckbox) {
-      var checkedBool = closurePageInitValues['showDots'];
-      $dotLayersCheckbox.prop('checked', checkedBool);
 
-      if(closurePageInitValues.dotIndex) {
-        var layersetType = 'dot';
-        var layersetName = layersetType + 'Layers';
-        var indexName = layersetType + 'Index';
-        var $selector = $( '#' + layersetName + 'Selector');
-        $selector.prop('selectedIndex', closurePageInitValues[indexName]);
-        var fieldName = $selector[0].value
-        var spec = this.mai[layersetName][fieldName];
-        var $descriptor = $( '#' + layersetName + 'Description')
-        $descriptor[0].innerHTML = descriptionHtml(spec);
-      }
-    }
+    this.adjustLayerControl('dot');
+
   
 
     // Add the choropleth layer selector (if needed)
@@ -193,25 +216,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
       $( '#choroplethLayers' ).append(choroplethSelector);
     }
 
-    // Initialize the selector (if needed)
-    var $choroplethLayersCheckbox = $( '#choroplethLayersCheckbox');
-    if($choroplethLayersCheckbox) {
-      var checkedBool = closurePageInitValues['showChoropleths']
-      $choroplethLayersCheckbox.prop('checked', checkedBool);
-
-      if(closurePageInitValues.choroplethIndex) {
-        var layersetType = 'choropleth';
-        var layersetName = layersetType + 'Layers';
-        var indexName = layersetType + 'Index';
-        var $selector = $( '#' + layersetName + 'Selector');
-        $selector.prop('selectedIndex', closurePageInitValues[indexName]);
-        var fieldName = $selector[0].value
-        var spec = this.mai[layersetName][fieldName];
-        var $descriptor = $( '#' + layersetName + 'Description')
-        $descriptor[0].innerHTML = descriptionHtml(spec);
-
-      }
-    }
+    this.adjustLayerControl('choropleth');
 
   
     // Add the border layer selector (if needed)
@@ -220,12 +225,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
       $( '#borderLayers' ).append(borderSelector);
     }
 
-    var $borderLayersCheckbox = $( '#borderLayersCheckbox' );
-    if($borderLayersCheckbox) {
-      var checkedBool = closurePageInitValues['showBorders'];
-      $borderLayersCheckbox.prop('checked', checkedBool);
-    }
-    // TODO what about border slection box?
+    this.adjustLayerControl('border');
   
     $( '#sharingUrl' )[0].href = '#';
   
@@ -250,6 +250,11 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   
 
     $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.showCities);
+
+    // The sharingUrl needs to be updated; that will happen in 
+    // the constructor of ListenerInitializer, which happens after
+    // the DomElementAppender is done.  It's not a great place for it,
+    // but it has to go somewhere.
   }
   
   // put the legend update on the legend image
