@@ -177,7 +177,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
         var layersetType = 'dot';
         var layersetName = layersetType + 'Layers';
         var indexName = layersetType + 'Index';
-        var $selector = $( '#' + layerspecName + 'Selector');
+        var $selector = $( '#' + layersetName + 'Selector');
         $selector.prop('selectedIndex', closurePageInitValues[indexName]);
         var fieldName = $selector[0].value
         var spec = this.mai[layersetName][fieldName];
