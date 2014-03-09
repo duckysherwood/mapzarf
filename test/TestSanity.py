@@ -39,7 +39,7 @@ class TestSanity(unittest.TestCase):
     # Note that the choropleth and the dots and the borders and the
     # cities all have to load, THEN the marker gets put down (which 
     # moves the map).
-    time.sleep(5)  # even at sleep(3), sometimes the tiles were still stale.
+    time.sleep(8)  # even at sleep(5), sometimes the tiles were still stale.
 
     self.page.clickOnDotTile(7, 11, 5)
     element = self.browser.find_element_by_id('markerText')
