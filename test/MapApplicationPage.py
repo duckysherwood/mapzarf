@@ -1,3 +1,4 @@
+import pdb
 import time
 import urllib
 from selenium import webdriver
@@ -95,6 +96,11 @@ class MapApplicationPage:
 
     return False
 
+  def choroplethTileAtCoordinatesExists(self, x, y, z):
+    coordinateString = "x=" + str(x) + "&y=" + str(y) + "zoom=" + str(z)
+    return self.tileLayerOfTypeAndAttributeExists('choroplethLayers', 
+                                                  coordinateString)
+
   def choroplethTileForAttributeExists(self, attributeName): 
     urlFragment = 'field=' + attributeName + "&"
     return self.tileLayerOfTypeAndAttributeExists('choroplethLayers', 
@@ -153,6 +159,9 @@ class MapApplicationPage:
 
   def getBorderDescription(self):
     return self.browser.find_element_by_id("borderLayers").text
+
+  def getSharingUrl(self):
+    return self.browser.find_element_by_id('sharingUrl').get_attribute('href')
 
   def changeLayerToIndex(self, layersetName, index):
     selector = Select(self.browser.find_element_by_id(layersetName + "Selector"))
