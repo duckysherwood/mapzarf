@@ -33,7 +33,7 @@ class TestSanity(unittest.TestCase):
     # and a zoom 4 tile being ready, alas.  That means we have to use
     # the large and brutal hammer of a hardcoded sleep(1) here.
     self.page.zoomIn()
-    time.sleep(2)  # at sleep(1), sometimes the tiles were still stale.
+    time.sleep(3)  # at sleep(2), sometimes the tiles were still stale.
 
     self.page.clickOnDotTile(7, 11, 5)
     element = self.browser.find_element_by_id('markerText')
@@ -103,7 +103,7 @@ class TestSanity(unittest.TestCase):
   def testMercatorBorder(self):
     self.page.showAsCartogram(False)
     self.assertTrue(self.page.borderTileForTypeExists('state'))
-    self.assertTrue("County borders" in self.page.getBorderDescription())
+    self.assertTrue("State borders" in self.page.getBorderDescription())
 
   def testCityLabelExists(self):
     self.assertTrue(self.page.doesLabelExistForCityNamed('Indianapolis'))
