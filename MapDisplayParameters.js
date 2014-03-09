@@ -130,7 +130,7 @@ function MapDisplayParameters (mai) {
        (candidateValue <= paramMax)) {
       defaults[paramKey][1] = candidateValue;
     } else {
-      defaults[paramKey][1] = paramDefault;
+      defaults[paramKey][1] = paramDefault;  // i.e. unchanged
     }
   return defaults[paramKey][1]
   };
@@ -158,11 +158,26 @@ function MapDisplayParameters (mai) {
                        'startingMarkerLng' : 'markerLng' };
 
     var scope = this;
+    // Now that we have the MAI, we can set more intelligent max
+    // allowed indices for the layer dropdown selectors.
+    var layerTypes = ['choropleth', 'dot', 'border'];
+    for (var i=0; i<3; i++) {
+      var layerType = layerTypes[i];
+      var indexName = layerType + 'Index';
+      var layersetName = layerType + 'Layers';
+      if(defaults[indexName] &&
+         scope.mai.hasOwnProperty(layersetName)) {
+        defaults[indexName][3] = Object.keys(
+                                       scope.mai[layersetName]).length - 1; 
+      }
+    }
+
     $.each( translator , function ( key, value ) {
       if(scope.mai.hasOwnProperty(key) && value) {
         scope.validateAndUpdate(translator[key], mai[key]);
       }
     })
+
     return defaults; // useful for testing
   };
 
