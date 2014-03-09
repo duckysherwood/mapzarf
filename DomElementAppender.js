@@ -174,8 +174,15 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
       $dotLayersCheckbox.prop('checked', checkedBool);
 
       if(closurePageInitValues.dotIndex) {
-        $( '#dotLayersSelector' ).
-          prop('selectedIndex', closurePageInitValues.dotIndex);
+        var layersetType = 'dot';
+        var layersetName = layersetType + 'Layers';
+        var indexName = layersetType + 'Index';
+        var $selector = $( '#' + layerspecName + 'Selector');
+        $selector.prop('selectedIndex', closurePageInitValues[indexName]);
+        var fieldName = $selector[0].value
+        var spec = this.mai[layersetName][fieldName];
+        var $descriptor = $( '#' + layersetName + 'Description')
+        $descriptor[0].innerHTML = descriptionHtml(spec);
       }
     }
   
@@ -193,8 +200,16 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
       $choroplethLayersCheckbox.prop('checked', checkedBool);
 
       if(closurePageInitValues.choroplethIndex) {
-        $( '#choroplethLayersSelector' ).
-          prop('selectedIndex', closurePageInitValues.choroplethIndex);
+        var layersetType = 'choropleth';
+        var layersetName = layersetType + 'Layers';
+        var indexName = layersetType + 'Index';
+        var $selector = $( '#' + layersetName + 'Selector');
+        $selector.prop('selectedIndex', closurePageInitValues[indexName]);
+        var fieldName = $selector[0].value
+        var spec = this.mai[layersetName][fieldName];
+        var $descriptor = $( '#' + layersetName + 'Description')
+        $descriptor[0].innerHTML = descriptionHtml(spec);
+
       }
     }
 
