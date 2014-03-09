@@ -84,7 +84,8 @@ class TestSanity(unittest.TestCase):
 
   def testChangeBorder(self):
     self.page.changeBorderLayerToIndex(1)
-    self.assertTrue(self.page.borderTileForTypeExists('countyPopulationCartogram'))
+    self.assertTrue(self.page.borderTileForTypeExists(
+                              'countyPopulationCartogram'))
     self.assertTrue("County" in self.page.getBorderDescription())
 
   # check after changing to mercator
