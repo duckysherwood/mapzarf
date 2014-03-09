@@ -64,7 +64,7 @@ class TestSanity(unittest.TestCase):
 
   def testStartingBorder(self): 
     self.assertTrue(self.page.borderTileForTypeExists('statePopCartogram'))
-    self.assertTrue("County" in self.page.getBorderDescription())
+    self.assertTrue("State borders" in self.page.getBorderDescription())
 
   def testStartingDots(self):
     self.assertTrue(self.page.dotTileForAttributeExists('gunDeathCountPopCart'))
