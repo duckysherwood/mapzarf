@@ -67,9 +67,9 @@ class MapApplicationPage:
   def doesTeardropMarkerExist(self):
     return self.doesMarkerExistForUrlFragment('marker-icon.png')
 
-# http://localhost/maps/mapeteria2/makeCityLabel.php?cityName=New%20York
+  # http://localhost/maps/mapeteria2/makeCityLabel.php?cityName=New%20York
   def doesLabelExistForCityNamed(self, cityName):
-    urlFragment = 'makeCityLabel.php?cityName='+urllib.urlencode(cityName)
+    urlFragment = 'makeCityLabel.php?cityName='+urllib.quote(cityName)
     return self.doesMarkerExistForUrlFragment(urlFragment)
 
   # To look for particular layer types, look for 

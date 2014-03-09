@@ -104,6 +104,12 @@ class TestSanity(unittest.TestCase):
     self.assertTrue(self.page.borderTileForTypeExists('state'))
     self.assertTrue("County" in self.page.getBorderDescription())
 
+  def testCityLabelExists(self):
+    self.assertTrue(self.page.doesLabelExistForCityNamed('Indianapolis'))
+
+  def testBogusCityLabel(self):
+    self.assertFalse(self.page.doesLabelExistForCityNamed('lasjfasf'))
+
 
 if __name__ == "__main__":
     unittest.main()
