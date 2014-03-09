@@ -302,42 +302,25 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
        url += "&markerLng=" + closureJurisdictionMarker.getLatLng().lng;
      }
   
-     var $showChoroplethsCheckbox = $( '#choroplethLayersCheckbox').first()[0];
-     if($showChoroplethsCheckbox) {
-       url += "&showChoropleths=" 
-              + closureMap.getFlagForCheckbox('#choroplethLayersCheckbox');
-     }
-
-     var $choroplethLayersSelector = $( '#choroplethLayersSelector').first()[0];
-     if($choroplethLayersSelector) {
-       url += "&choroplethIndex=" 
-              + (parseInt($choroplethLayersSelector.selectedIndex));
-     }
-
-     var showDotsCheckbox = $( '#dotLayersCheckbox' ).first()[0];
-     if(showDotsCheckbox) {
-       url += "&showDots=" +closureMap.getFlagForCheckbox('#dotLayersCheckbox');
-     }
-     var $dotLayersSelector = $( '#dotLayersSelector' ).first()[0];
-     if($dotLayersSelector) {
-       url += "&dotIndex=" 
-              + (parseInt($dotLayersSelector.selectedIndex));
-     }
+     var layerTypes = ['choropleth', 'dot', 'border'];
+     for (var i=0; i<3; i++) {
+       var layerType = layerTypes[i];
+       var layer = layerType + 'Layers';
+       var checkboxId =  '#' + layer + 'Checkbox';
+       var checkbox = $( checkboxId ).first()[0];
+       if(checkbox) {
+         var fieldName = 'show' + capitalizeFirstLetter(layerType) + 's';
+         url += '&' + fieldName + '=' 
+                + closureMap.getFlagForCheckbox(checkboxId);
+       }
   
-     // borders are sometimes selected with a combobox instead of checkboxes
-     var bordersCheckbox = $( '#borderLayersCheckbox' ).first()[0];
-     var bordersSelector = $( '#borderLayersSelector' ).first()[0];
-     if(bordersCheckbox) {
-       url += "&showBorders=" + closureMap.getFlagForCheckbox(
-                                             '#borderLayersCheckbox');
-     }
-
-     // TODO someday deal with multiple borders
-     /* 
-     if( typeof countyBordersCheckbox != "undefined" ) {
-       url += "&counties=" + getFlagForCheckbox(countyBordersCheckbox);
-     }
-     */
+       var selectorId = '#' + layer + 'Selector';
+       var selector = $( selectorId).first()[0];
+       if(selector) {
+         url += '&' + layerType + 'Index=' 
+                + (parseInt(selector.selectedIndex));
+       }
+    }
   
      // TODO someday add capability to show time series
      /*
