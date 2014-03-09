@@ -25,7 +25,6 @@ class TestQueryString(unittest.TestCase):
   def testSelectingChoroplethLayer(self):
     queryString = "choroplethIndex=1"
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     self.assertTrue("less than the poverty" in page.getChoroplethDescription())
@@ -35,7 +34,6 @@ class TestQueryString(unittest.TestCase):
   def testSelectingChoroplethLayerWithLayerOff(self):
     queryString = "choroplethIndex=1&showChoropleths=f"
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     self.assertTrue("less than the poverty" in page.getChoroplethDescription())
@@ -45,7 +43,6 @@ class TestQueryString(unittest.TestCase):
   def testSelectingDotLayer(self):
     queryString = "dotIndex=1"
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     self.assertTrue("Congressional Representatives" in page.getDotDescription())
@@ -55,7 +52,6 @@ class TestQueryString(unittest.TestCase):
   def testSelectingDotLayerWithLayerOff(self):
     queryString = "dotIndex=1&showDots=f"
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     self.assertTrue("Congressional Representatives" in page.getDotDescription())
@@ -65,7 +61,6 @@ class TestQueryString(unittest.TestCase):
   def testSelectingBorderLayer(self):
     queryString = "borderIndex=1"
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     self.assertTrue("County borders" in page.getBorderDescription())
@@ -75,7 +70,6 @@ class TestQueryString(unittest.TestCase):
   def testSelectingBorderLayerWithLayerOff(self):
     queryString = "borderIndex=1&showBorders=f"
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     self.assertTrue("County borders" in page.getBorderDescription())
@@ -87,7 +81,6 @@ class TestQueryString(unittest.TestCase):
     queryString = "lat=38.5&lng=-122&zoom=8&markerLat=37.5&markerLng=-121.5&cartogram=f&showDots=f&showChoropleths=f&showBorders=f&dotIndex=1&borderIndex=1&choroplethIndex=1&showCities=f"
 
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     
@@ -123,7 +116,6 @@ class TestQueryString(unittest.TestCase):
     queryString = "lat=38.5&lng=-122&zoom=8&cartogram=f"
 
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     page.showCities(False)
@@ -155,7 +147,6 @@ class TestQueryString(unittest.TestCase):
     queryString = "markerLat=-38.5&markerLng=25"
 
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     page.showCities(False)
@@ -174,7 +165,6 @@ class TestQueryString(unittest.TestCase):
     tileClassName = 'leaflet-tile'
 
     url = TEST_URL + '?' + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     page.showCities(False)
@@ -205,7 +195,6 @@ class TestQueryString(unittest.TestCase):
     page.checkTitle(PAGE_TITLE)
 
     sharingUrl = page.getSharingUrl()
-    print sharingUrl
     qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
     for field in ['showChoropleths', 'showDots', 'showBorders',
                   'cartogram', 'showCities']:
@@ -259,7 +248,6 @@ class TestQueryString(unittest.TestCase):
     queryString = "lat=380&lng=-950&zoom=-3&cartogram=7&showCities=2&markerLat=100&markerLng=squirrelshowChoropleths=maybe&choroplethIndex=-2&showDots=t&dotIndex=17&showBorders=t&borderIndex=32"
 
     url = TEST_URL + "?" + queryString
-    print url
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
 
