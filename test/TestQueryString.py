@@ -7,8 +7,8 @@ from selenium.common.exceptions import TimeoutException
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 TEST_URL = 'http://localhost/mapzarf/test/testSanity.html'
-MARKER_TEXT = "asymmetrical skateboard Bushwick bitters"
-PAGE_TITLE = "TestSanity pageTitle"
+MARKER_TEXT = 'asymmetrical skateboard Bushwick bitters'
+PAGE_TITLE = 'TestSanity pageTitle'
 
 # TODO test proper creation of the query string
 
@@ -149,10 +149,45 @@ class TestQueryString(unittest.TestCase):
 
     page.tearDown()
 
-# Check a qstring which specifies the marker movement
+  # Check a qstring which specifies the marker movement
+  def testMoveMap(self):
+    queryString = "markerLat=-38.5&markerLng=25"
 
-# TBD: check a qstring which has all the same values as the defaults?
+    url = TEST_URL + "?" + queryString
+    print url
+    page = MapApplicationPage(self.browser, url)
+    page.checkTitle(PAGE_TITLE)
+    page.showCities(False)
+
+    # the marker should not be visible at first
+    self.assertFalse(page.doesTeardropMarkerExist())
+
+    # clicking on the map should make the marker show up
+    page.clickOnDotTile(4, 6, 4)
+    self.assertTrue(page.doesTeardropMarkerExist())
+
+    page.tearDown()
+
+  def testCartogramFlag(self):
+    queryString = 'cartogram=f'
+    tileClassName = 'leaflet-tile'
+
+    url = TEST_URL + '?' + queryString
+    print url
+    page = MapApplicationPage(self.browser, url)
+    page.checkTitle(PAGE_TITLE)
+    page.showCities(False)
+
+    self.assertTrue(page.tileLayerOfTypeAndAttributeExists(
+                         "choroplethLayers", "polyType=state"))
+ 
+    # Now switch to cartogram, and tile 3,7,4 should be found
+    page.showAsCartogram(True)
+    self.assertTrue(page.tileLayerOfTypeAndAttributeExists(
+                         "choroplethLayers", "polyType=statePopCartogram"))
+
+    page.tearDown()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     unittest.main()
