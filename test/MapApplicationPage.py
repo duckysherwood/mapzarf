@@ -26,7 +26,10 @@ class MapApplicationPage:
       print "Uh-oh: page title was '" + actualTitle + "', but I expected '" + expectedTitle  + "'"
       raise
 
+  def tearDown(self):
+    self.browser.quit()
 
+  
   # TODO There are better ways to do this
   def doAndWait(self, func, value):
     func(value)
@@ -59,7 +62,47 @@ class MapApplicationPage:
 
     return False
 
+  # To look for particular layer types, look for 
+  def tileLayerOfTypeAndAttributeExists(self, layerspecName, attributeName):
+    translation = { 'choroplethLayers' : 'choropleth.phpx',
+                    'dotLayers' : 'dots.php',
+                    'borderLayers' : 'choropleth.phpx' }
+    tileClassName = 'leaflet-tile'
+    executableName = translation[layerspecName]
 
+    # Let the tiles load
+    try:
+      WebDriverWait(self.browser, 3).until(
+        EC.presence_of_element_located((By.CLASS_NAME, tileClassName)))
+    except TimeoutException:
+      return False
+
+    tiles = self.browser.find_elements_by_class_name(tileClassName)
+    for tile in tiles:
+      src = tile.get_attribute('src')
+      if (executableName in src) and (attributeName in src):
+        return True
+
+    return False
+
+  def choroplethTileForAttributeExists(self, attributeName): 
+    urlFragment = 'field=' + attributeName + "&"
+    return self.tileLayerOfTypeAndAttributeExists('choroplethLayers', 
+                                                  urlFragment)
+ 
+  def borderTileForTypeExists(self, borderLayerType): 
+    urlFragment = 'polyType=' + borderLayerType + "&"
+    hasBorderType = self.tileLayerOfTypeAndAttributeExists('choroplethLayers', 
+                                                  urlFragment)
+    isBorder = self.tileLayerOfTypeAndAttributeExists('borderLayers', 
+                                                  'border=solid')
+    return isBorder & hasBorderType
+   
+  def dotTileForAttributeExists(self, dotAttributeName):
+    urlFragment = 'name=' + dotAttributeName + "&"
+    return self.tileLayerOfTypeAndAttributeExists('dotLayers', urlFragment)
+ 
+ 
   def getTitle(self):
     return self.browser.title
 
@@ -142,7 +185,7 @@ class MapApplicationPage:
     # This will wait until *some* tile will be clickable, but
     # note that won't help when zooming because the old tiles
     # will still be clickable.
-    WebDriverWait(self.browser, 3).until(
+    WebDriverWait(self.browser, 4).until(
        EC.element_to_be_clickable((By.CLASS_NAME,'leaflet-tile-loaded')))    
 
 
@@ -170,6 +213,4 @@ class MapApplicationPage:
     self.browser.find_element_by_class_name("leaflet-control-zoom-out").click()
 
 
-  def tearDown(self):
-    self.browser.quit()
 
