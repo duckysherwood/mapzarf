@@ -64,7 +64,7 @@ class MapApplicationPage:
   # It's an upside-down teardrop-y shaped thing which opens into an infowindow.
   # The distinction is important because city names are also implemented as
   # what leaflet calls markers.
-  def markerExists(self):
+  def doesTeardropMarkerExist(self):
     return self.doesMarkerExistForUrlFragment('marker-icon.png')
 
 # http://localhost/maps/mapeteria2/makeCityLabel.php?cityName=New%20York

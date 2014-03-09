@@ -54,7 +54,7 @@ class TestIncomplete(unittest.TestCase):
         EC.presence_of_element_located((By.ID, 'showCitiesCheckbox')))
     page.showCities(False)
 
-    exists = page.markerExists()
+    exists = page.doesTeardropMarkerExist()
     page.tearDown()
     self.browser = None 
 
