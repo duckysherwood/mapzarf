@@ -3,6 +3,7 @@ import unittest
 import time
 from MapApplicationPage import MapApplicationPage
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 TEST_URL = 'http://localhost/mapzarf/test/testSanity.html'
@@ -115,17 +116,42 @@ class TestQueryString(unittest.TestCase):
     self.assertTrue("less than the poverty" in page.getChoroplethDescription())
     self.assertTrue("County borders" in page.getBorderDescription())
 
-    # TODO check map center, zoom
-    # can't do that particularly easily, but *can* look for a tile
-    # which wouldn't be onscreen in the default case
+    page.tearDown()
 
-    # TODO check marker lat, lng
-    # can't do this except by looking for the marker being on screen
-    # when it would be offscreen in default
+  def testMoveMap(self):
+    queryString = "lat=38.5&lng=-122&zoom=8&cartogram=f"
+
+    url = TEST_URL + "?" + queryString
+    print url
+    page = MapApplicationPage(self.browser, url)
+    page.checkTitle(PAGE_TITLE)
+    page.showCities(False)
+
+    # The marker was not moved, so it should still be at defaults
+    # (i.e. off screen).
+    self.assertFalse(page.doesTeardropMarkerExist())
+    
+    # I can't check to see what the lat/lng of the center is,
+    # but I can look for a tile which would not be visible in the
+    # default coordinates.  This will raise an exception if the tile
+    # is not visible.
+    page.clickOnDotTile(41, 99, 8)
+
+    # Clicking on the tile should make the marker visible.
+    self.assertTrue(page.doesTeardropMarkerExist())
+
+    success = False
+    try:
+      page.clickOnDotTile(4, 6, 4)  # not on the map view
+    except TimeoutException:
+      success = True
+    self.assertTrue(success)  
 
     page.tearDown()
 
-# TBD: check a qstring which has all the same values as the defaults
+# Check a qstring which specifies the marker movement
+
+# TBD: check a qstring which has all the same values as the defaults?
 
 
 if __name__ == "__main__":
