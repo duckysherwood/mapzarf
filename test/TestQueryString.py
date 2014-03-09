@@ -204,7 +204,6 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
 
-    # http://localhost/mapzarf/test/testSanity.html?lat=38&lng=-95&zoom=4&cartogram=t&showCities=t&markerLat=40&markerLng=-100&showChoropleths=t&choroplethIndex=0&showDots=t&dotIndex=0&showBorders=t
     sharingUrl = page.getSharingUrl()
     print sharingUrl
     qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
@@ -255,7 +254,18 @@ class TestQueryString(unittest.TestCase):
 
     page.tearDown()
 
-# TODO put in a qstring with evil illegal values
+  # Does it crash or fail gracefully?
+  def testEvilQueryString(self):
+    queryString = "lat=380&lng=-950&zoom=-3&cartogram=7&showCities=2&markerLat=100&markerLng=squirrelshowChoropleths=maybe&choroplethIndex=-2&showDots=t&dotIndex=17&showBorders=t&borderIndex=32"
+
+    url = TEST_URL + "?" + queryString
+    print url
+    page = MapApplicationPage(self.browser, url)
+    page.checkTitle(PAGE_TITLE)
+
+    time.sleep(2)
+
+    page.tearDown()
 
 
 if __name__ == '__main__':
