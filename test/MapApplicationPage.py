@@ -1,4 +1,5 @@
 import time
+import urllib
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import TimeoutException
@@ -35,11 +36,8 @@ class MapApplicationPage:
     func(value)
     time.sleep(1)
 
-  # Note: this is a marker in mapzarf-speak, not a marker in leaflet-speak.
-  # It's an upside-down teardrop-y shaped thing which opens into an infowindow.
-  # The distinction is important because city names are also implemented as
-  # what leaflet calls markers.
-  def markerExists(self):
+
+  def doesMarkerExistForUrlFragment(self, urlFragment):
     try:
       WebDriverWait(self.browser, 3).until(
         EC.presence_of_element_located((By.CLASS_NAME, 'leaflet-marker-icon')))
@@ -50,10 +48,9 @@ class MapApplicationPage:
     # markers, not just city names.  The "teardrop" markers have src which
     # includes marker-icon.png.
     markers = self.browser.find_elements_by_class_name("leaflet-marker-icon")
-    srcFragment = "marker-icon.png"
     for marker in markers:
       try:
-        if(marker.is_displayed() and srcFragment in marker.get_attribute('src')):
+        if(marker.is_displayed() and urlFragment in marker.get_attribute('src')):
           return True
       # Sometimes this can get markers which are no longer attached
       # to the DOM.  Those don't count either.
@@ -61,6 +58,19 @@ class MapApplicationPage:
         pass
 
     return False
+
+
+  # Note: this is a marker in mapzarf-speak, not a marker in leaflet-speak.
+  # It's an upside-down teardrop-y shaped thing which opens into an infowindow.
+  # The distinction is important because city names are also implemented as
+  # what leaflet calls markers.
+  def markerExists(self):
+    return self.doesMarkerExistForUrlFragment('marker-icon.png')
+
+# http://localhost/maps/mapeteria2/makeCityLabel.php?cityName=New%20York
+  def doesLabelExistForCityNamed(self, cityName):
+    urlFragment = 'makeCityLabel.php?cityName='+urllib.urlencode(cityName)
+    return self.doesMarkerExistForUrlFragment(urlFragment)
 
   # To look for particular layer types, look for 
   def tileLayerOfTypeAndAttributeExists(self, layerspecName, attributeName):
