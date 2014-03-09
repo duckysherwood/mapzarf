@@ -302,13 +302,13 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
        url += "&markerLng=" + closureJurisdictionMarker.getLatLng().lng;
      }
   
-     var $showChoroplethsCheckbox = $( '#choroplethLayersCheckbox' ).first()[0];
+     var $showChoroplethsCheckbox = $( '#choroplethLayersCheckbox').first()[0];
      if($showChoroplethsCheckbox) {
        url += "&showChoropleths=" 
               + closureMap.getFlagForCheckbox('#choroplethLayersCheckbox');
      }
 
-     var $choroplethLayersSelector = $( '#choroplethLayersSelector' ).first()[0];
+     var $choroplethLayersSelector = $( '#choroplethLayersSelector').first()[0];
      if($choroplethLayersSelector) {
        url += "&choroplethIndex=" 
               + (parseInt($choroplethLayersSelector.selectedIndex));
@@ -316,12 +316,12 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
      var showDotsCheckbox = $( '#dotLayersCheckbox' ).first()[0];
      if(showDotsCheckbox) {
-       url += "&showDots=" + closureMap.getFlagForCheckbox('#dotLayersCheckbox');
+       url += "&showDots=" +closureMap.getFlagForCheckbox('#dotLayersCheckbox');
      }
-     var $dotsLayersSelector = $( '#dotsLayersSelector' ).first()[0];
-     if($dotsLayersSelector) {
+     var $dotLayersSelector = $( '#dotLayersSelector' ).first()[0];
+     if($dotLayersSelector) {
        url += "&dotIndex=" 
-              + (parseInt($dotsLayersSelector.selectedIndex));
+              + (parseInt($dotLayersSelector.selectedIndex));
      }
   
      // borders are sometimes selected with a combobox instead of checkboxes
