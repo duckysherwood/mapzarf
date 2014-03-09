@@ -75,7 +75,7 @@ class TestSanity(unittest.TestCase):
     self.page.changeChoroplethLayerToIndex(1)
     self.assertTrue(self.page.choroplethTileForAttributeExists(
                                                  'populationPovertyPct'))
-    self.assertTrue("poverty" in self.page.getChoroplethDescription())
+    self.assertTrue("less than the poverty" in self.page.getChoroplethDescription())
 
   def testChangeDots(self):
     self.page.changeDotLayerToIndex(1)
@@ -86,7 +86,7 @@ class TestSanity(unittest.TestCase):
     self.page.changeBorderLayerToIndex(1)
     self.assertTrue(self.page.borderTileForTypeExists(
                               'countyPopulationCartogram'))
-    self.assertTrue("County" in self.page.getBorderDescription())
+    self.assertTrue("County borders" in self.page.getBorderDescription())
 
   # check after changing to mercator
   def testMercatorChoropleth(self):
@@ -103,7 +103,7 @@ class TestSanity(unittest.TestCase):
   def testMercatorBorder(self):
     self.page.showAsCartogram(False)
     self.assertTrue(self.page.borderTileForTypeExists('state'))
-    self.assertTrue("County" in self.page.getBorderDescription())
+    self.assertTrue("County borders" in self.page.getBorderDescription())
 
   def testCityLabelExists(self):
     self.assertTrue(self.page.doesLabelExistForCityNamed('Indianapolis'))
