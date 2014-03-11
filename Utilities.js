@@ -7,10 +7,25 @@
  *  @public
  */
 function descriptionHtml(layerSpec) {
-  return '<a href="' + layerSpec.sourceUrl + '">'
-         + layerSpec.description + '</a> '
-         + '(' + layerSpec.year + ', '
-         + layerSpec.source + ')';
+  var descriptor = layerSpec.description;
+  if(!descriptor) {
+    descriptor = layerSpec.shortDescription;
+    if(!descriptor) {
+      descriptor = "unnamed layer";
+    }
+  }
+
+  if(layerSpec.sourceUrl) {
+    descriptor = '<a href="' + layerSpec.sourceUrl + '">' + descriptor;
+  }
+
+  var source = layerSpec.source;
+  if(!source) {
+    source = "Unknown source";
+  }
+
+
+  return descriptor + ' (' + layerSpec.year + ', ' + source + ')';
 }
 
 /** Convenience method to make an HTTP request with the callback
@@ -41,8 +56,12 @@ function requestUrlWithScope(url, callback, scope) {
   }   
 }
 
+/** Convenience method to capitalize the first letter of the input
+ *  @param aString {string} The URL to be fetched.
+ *  @public
+ */
 // From
 // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+function capitalizeFirstLetter(aString) {
+    return aString.charAt(0).toUpperCase() + aString.slice(1);
 }
