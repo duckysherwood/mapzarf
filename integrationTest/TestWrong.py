@@ -40,6 +40,21 @@ class TestWrong(unittest.TestCase):
   def testWronglyTypedValues(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong1.html'
     self.assertTrue(self.checkAlert(urlString))
+
+  # TODO This should go in incomplete
+  def testMismatchedDotProjectionTableField(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrong2.html'
+    self.assertTrue(self.checkAlert(urlString))
+    
+  def testMissingDotTable(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrong3.html'
+    self.assertTrue(self.checkAlert(urlString))
+    
+  # TODO this should go in incomplete
+  def testMissingDotFieldTable(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrong4.html'
+    self.assertTrue(self.checkAlert(urlString))
+    
     
 
   def tearDown(self):
