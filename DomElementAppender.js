@@ -96,9 +96,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   
         if( layersCount == 1) {
           layerSelectionCheckbox.value = lastKey;
-          var longerDescription ='Show ' 
-               // + layerSpecs[key].shortDescription + '<br />';
-          layerDescriptionSpan.innerHTML = longerDescription;
+          layerDescriptionSpan.innerHTML = 'Show ';
           layerSelectionControl.appendChild(layerDescriptionSpan);
           var descriptionElem = document.createElement('span');
           descriptionElem.innerHTML = descriptionHtml(layerSpecs[key]);
