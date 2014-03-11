@@ -187,26 +187,34 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   };
 
-  // TODO document
   // TODO move into a DotLayerFactory
-  // TODO check that all required fields are there
-  // It's okay to have one or the other of the cartogram/mercator
-  // fields; it's okay not to have a description or shortDescription;
-  // it's okay to not have a source or sourceUrl.
+  /** Checks that the specification for a dot layer is
+   *  sensical and complete.
+   *  @returns {Object} Layer object describing a dots layer.
+   *  @private
+   */
   this.map.validateDotLayerspec = function(layerSpec) {
     var validator = new Validator();
-    var requiredFieldsTable = {'mercatorTable' : 'word',
-                               'mercatorFieldName' : 'word',
+    var requiredFieldsTable = {'mercatorFieldName' : 'word',
                                'year' : 'int',
                                'size' : 'int',
                                'color' : 'color'};
     var optionalFieldsTable = {'layerType' : 'word',
+                               'mercatorTable' : 'word',
                                'cartogramTable' : 'word',
                                'cartogramFieldName' : 'word',
                                'shortDescription' : 'text',
                                'description' : 'text',
                                'sourceUrl' : 'url',
                                'source' : 'text'};
+
+    // It's okay to only have one of mercator and cartogram specs,
+    // but you must have at least one (and the field name and table 
+    // need to match)
+    if(!((layerSpec.mercatorFieldName && layerSpec.mercatorTable) 
+      || (layerSpec.mercatorFieldName && layerSpec.mercatorTable))) {
+      return false;
+    }
 
     success = true;
     $.each(requiredFieldsTable, function(fieldName, fieldType) {
