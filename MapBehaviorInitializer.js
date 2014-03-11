@@ -217,7 +217,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   // TODO move into a MapeteriaChoroplethLayerFactory
   this.map.validateChoroplethLayerspec = function(layerSpec) {
-    var validator = new Validator();
     var requiredFieldsTable = {'fieldName' : 'word',
                                'table' : 'word',
                                'year' : 'int',
@@ -260,7 +259,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
         success = false;
         return false;
       }
-      if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+      if(!Validator.isLegal(fieldType, layerSpec[fieldName])) {
         console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
         success = false;
         return false;
@@ -270,7 +269,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
     $.each(optionalFieldsTable, function(fieldName, fieldType) {
       if(layerSpec[fieldName]) {
-        if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+        if(!Validator.isLegal(fieldType, layerSpec[fieldName])) {
           console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
           success = false;
           return false;
@@ -288,7 +287,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *  @private
    */
   this.map.validateDotLayerspec = function(layerSpec) {
-    var validator = new Validator();
     var requiredFieldsTable = {'year' : 'int',
                                'size' : 'int',
                                'color' : 'color'};
@@ -322,7 +320,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
         success = false;
         return false;
       }
-      if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+      if(!Validator.isLegal(fieldType, layerSpec[fieldName])) {
         console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
         success = false;
         return false;
@@ -331,7 +329,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
     $.each(optionalFieldsTable, function(fieldName, fieldType) {
       if(layerSpec[fieldName]) {
-        if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+        if(!Validator.isLegal(fieldType, layerSpec[fieldName])) {
           console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
           success = false;
           return false;

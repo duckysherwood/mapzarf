@@ -7,7 +7,7 @@ function Validator() {
  *  @return {boolean}
  *  @public
  */
-Validator.prototype.isLegalWord = function(candidate) {
+Validator.isLegalWord = function(candidate) {
   if(typeof candidate != 'string') {
     return false;
   }
@@ -22,7 +22,7 @@ Validator.prototype.isLegalWord = function(candidate) {
  *  @return {boolean} whether the candidate is a legal integer or not
  *  @public
  */
-Validator.prototype.isLegalInt = function(candidate) {
+Validator.isLegalInt = function(candidate) {
   if(!(typeof candidate == 'number')) {
     return false;
   }
@@ -35,7 +35,7 @@ Validator.prototype.isLegalInt = function(candidate) {
  *  @return {boolean} whether the candidate is a legal float or not
  *  @public
  */
-Validator.prototype.isLegalFloat = function(candidate) {
+Validator.isLegalFloat = function(candidate) {
   return typeof candidate == 'number';
 }
 
@@ -44,7 +44,7 @@ Validator.prototype.isLegalFloat = function(candidate) {
  *  @return {boolean} whether the candidate is a legal boolean or not
  *  @public
  */
-Validator.prototype.isLegalBoolean = function(candidate) {
+Validator.isLegalBoolean = function(candidate) {
   return typeof candidate == 'boolean';
 }
 
@@ -55,7 +55,7 @@ Validator.prototype.isLegalBoolean = function(candidate) {
  *  @return {boolean} Whether the value is legal.
  *  @public
  */
-Validator.prototype.isLegalColor = function(candidate) {
+Validator.isLegalColor = function(candidate) {
   if(typeof candidate != 'string') {
     return false;
   }
@@ -71,7 +71,7 @@ Validator.prototype.isLegalColor = function(candidate) {
  *  @return {boolean} Whether the value is legal.
  *  @public
  */
-Validator.prototype.isLegalText = function(candidate) {
+Validator.isLegalText = function(candidate) {
   if(!(typeof candidate == 'string')) {
     return false;
   }
@@ -179,7 +179,7 @@ var re_weburl = new RegExp(
  *  @return {boolean} Whether the value is legal.
  *  @public
  */
-Validator.prototype.isLegalUrl = function(candidate) {
+Validator.isLegalUrl = function(candidate) {
   if(!(typeof candidate == 'string')) {
     return false;
   }
@@ -194,7 +194,7 @@ Validator.prototype.isLegalUrl = function(candidate) {
  *  @return {boolean} Whether the candidate's value is legal.
  *  @public
  */
-Validator.prototype.isLegal = function(fieldType, candidate) {
+Validator.isLegal = function(fieldType, candidate) {
 
   // TODO There is probably a slick way to do this with introspection.
   switch (fieldType) {
@@ -232,3 +232,4 @@ Validator.prototype.isLegal = function(fieldType, candidate) {
   }
 
 }
+
