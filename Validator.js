@@ -23,7 +23,7 @@ Validator.prototype.isLegalWord = function(candidate) {
  *  @public
  */
 Validator.prototype.isLegalInt = function(candidate) {
-  if(!typeof candidate == 'number') {
+  if(!(typeof candidate == 'number')) {
     return false;
   }
 
@@ -72,7 +72,7 @@ Validator.prototype.isLegalColor = function(candidate) {
  *  @public
  */
 Validator.prototype.isLegalText = function(candidate) {
-  if(!typeof candidate == 'string') {
+  if(!(typeof candidate == 'string')) {
     return false;
   }
   return !candidate.match(/^[\"\'\!\%\<\>\&\;]/);
@@ -180,7 +180,7 @@ var re_weburl = new RegExp(
  *  @public
  */
 Validator.prototype.isLegalUrl = function(candidate) {
-  if(!typeof candidate == 'string') {
+  if(!(typeof candidate == 'string')) {
     return false;
   }
 
