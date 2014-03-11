@@ -29,7 +29,7 @@ class TestWrong(unittest.TestCase):
 
     except UnexpectedAlertPresentException as e:
       alertText = Alert(self.browser).text
-      if alertText and ("dot layer is not valid, alas" in alertText):
+      if alertText and ("layer is not valid, alas" in alertText):
         Alert(self.browser).accept()
         return True
     
@@ -54,7 +54,19 @@ class TestWrong(unittest.TestCase):
   def testMissingDotFieldTable(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong4.html'
     self.assertTrue(self.checkAlert(urlString))
+
+  def testMismatchedTablePolyYear1(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrong5.html'
+    self.assertTrue(self.checkAlert(urlString))
+
+  def testMismatchedTablePolyYear2(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrong6.html'
+    self.assertTrue(self.checkAlert(urlString))
     
+  # TODO this should go in incomplete
+  def testMissingChoroplethTablePolyYear(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrong7.html'
+    self.assertTrue(self.checkAlert(urlString))
     
 
   def tearDown(self):
