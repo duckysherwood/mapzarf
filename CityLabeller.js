@@ -86,7 +86,7 @@ function CityLabeller(aMap) {
     shouldShowCities = showCitiesCheckbox.checked;
     if(shouldShowCities) {
       var lat, lng, latlng, cityName, cityNameIconUrl, cityNameIcon, marker;
-      // TODO can I use $.each() instead?
+      scope = this;
       $.each(cities, function(index, city) {
         lat = city["lat"];
         lng = city["lng"];
@@ -100,8 +100,8 @@ function CityLabeller(aMap) {
         cityNameIcon = L.icon({iconUrl: cityNameIconUrl, iconAnchor: [2, 10]});
   
         marker = L.marker(latlng, {icon: cityNameIcon, clickable:false, draggable:false}); 
-        this.cityMarkers.push(marker);
-        this.mapObject.addLayer(marker);
+        scope.cityMarkers.push(marker);
+        scope.mapObject.addLayer(marker);
       });
     } 
   }
