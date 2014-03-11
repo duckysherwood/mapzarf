@@ -20,7 +20,7 @@ class TestWrong(unittest.TestCase):
     self.browser = webdriver.Chrome(CHROMEDRIVER_LOCATION)
     self.page = None
 
-  def checkAlert(self, urlString):
+  def checkAlert(self, urlString, message):
     try:
       self.page = MapApplicationPage(self.browser, urlString)
       WebDriverWait(self.browser, 3).until(
@@ -29,9 +29,13 @@ class TestWrong(unittest.TestCase):
 
     except UnexpectedAlertPresentException as e:
       alertText = Alert(self.browser).text
-      if alertText and ("layer is not valid, alas" in alertText):
+      if alertText and (message in alertText):
         Alert(self.browser).accept()
         return True
+      else:
+        print "Expected " + message + " and got " + alertText
+        Alert(self.browser).accept()
+        return False
     
     return False
 
@@ -39,35 +43,47 @@ class TestWrong(unittest.TestCase):
   # Tests 
   def testWronglyTypedValues(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong1.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "dot layer is not valid, alas"
+    self.assertTrue(self.checkAlert(urlString, message))
 
   # TODO This should go in incomplete
   def testMismatchedDotProjectionTableField(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong2.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "dot layer is not valid, alas"
+    self.assertTrue(self.checkAlert(urlString, message))
     
   def testMissingDotTable(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong3.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "dot layer is not valid, alas"
+    self.assertTrue(self.checkAlert(urlString, message))
     
   # TODO this should go in incomplete
   def testMissingDotFieldTable(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong4.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "dot layer is not valid, alas"
+    self.assertTrue(self.checkAlert(urlString, message))
 
   def testMismatchedTablePolyYear1(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong5.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "choropleth layer is not valid, alas"
+    self.assertTrue(self.checkAlert(urlString, message))
 
   def testMismatchedTablePolyYear2(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong6.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "choropleth layer is not valid, alas"
+    self.assertTrue(self.checkAlert(urlString, message))
     
   # TODO this should go in incomplete
   def testMissingChoroplethTablePolyYear(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong7.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "choropleth layer is not valid, alas"
+    self.assertTrue(self.checkAlert(urlString, message))
     
+  # hasCartogram is set, but there are no cartogram layers
+  def testMissingChoroplethTablePolyYear(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrong8.html'
+    message = "There is no information for the"
+    self.assertTrue(self.checkAlert(urlString, message))
 
   def tearDown(self):
     self.page.tearDown()
