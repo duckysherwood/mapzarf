@@ -86,11 +86,12 @@ function CityLabeller(aMap) {
     shouldShowCities = showCitiesCheckbox.checked;
     if(shouldShowCities) {
       var lat, lng, latlng, cityName, cityNameIconUrl, cityNameIcon, marker;
-      for (var i=0,len=cities.length; i<len; i++) {
-        lat = cities[i]["lat"];
-        lng = cities[i]["lng"];
+      // TODO can I use $.each() instead?
+      $.each(cities, function(index, city) {
+        lat = city["lat"];
+        lng = city["lng"];
         latlng = new L.LatLng(lat, lng);
-        cityName = cities[i]["description"];
+        cityName = city["description"];
         
         cityNameIconUrl = BINDIR + '/makeCityLabel.php?cityName=' + cityName
         if (typeof bulletChar != 'undefined') {
@@ -101,9 +102,8 @@ function CityLabeller(aMap) {
         marker = L.marker(latlng, {icon: cityNameIcon, clickable:false, draggable:false}); 
         this.cityMarkers.push(marker);
         this.mapObject.addLayer(marker);
-      }
-    }
-    
+      });
+    } 
   }
   
   /** Shows the largest cities on the map.

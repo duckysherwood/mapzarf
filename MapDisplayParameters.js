@@ -161,8 +161,7 @@ function MapDisplayParameters (mai) {
     // Now that we have the MAI, we can set more intelligent max
     // allowed indices for the layer dropdown selectors.
     var layerTypes = ['choropleth', 'dot', 'border'];
-    for (var i=0; i<3; i++) {
-      var layerType = layerTypes[i];
+    $.each(layerTypes, function(index, layerType) {
       var indexName = layerType + 'Index';
       var layersetName = layerType + 'Layers';
       if(defaults[indexName] &&
@@ -170,7 +169,7 @@ function MapDisplayParameters (mai) {
         defaults[indexName][3] = Object.keys(
                                        scope.mai[layersetName]).length - 1; 
       }
-    }
+    });
 
     $.each( translator , function ( key, value ) {
       if(scope.mai.hasOwnProperty(key) && value) {
