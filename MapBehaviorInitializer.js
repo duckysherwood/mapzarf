@@ -154,6 +154,14 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     var key = this.findSelectedKeyForLayerType(layersetName);
     var layerSpec = this.mai[layersetName][key] ;
 
+    var shapeType = layerSpec[this.projectionType() + 'ShapeType'];
+    var polyYear = layerSpec[this.projectionType() + 'PolyYear'];
+    if (!shapeType || !polyYear) {
+      alert("There is no information for the " + layerSpec.shortDescription 
+            + " layer for the " + this.projectionType() + " projection.");
+      return null;
+    }
+
     var url = BINDIR + "/choropleth.phpx?x={x}&y={y}&zoom={z}&";
 
     url += 'polyType=' + layerSpec[this.projectionType() + 'ShapeType'];
@@ -239,6 +247,8 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     var hasCartograms = layerSpec.mercatorShapeType 
                         && layerSpec.mercatorPolyYear;
     if(!(hasMercators || hasCartograms)) {
+      console.log("hasMercators: " + hasMercators);
+      console.log("hasCartograms: " + hasCartograms);
       return false;
     }
 
@@ -391,7 +401,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
     var key = this.findSelectedKeyForLayerType(layersetName);
     if(key == undefined) {
-      console.log('Warning: No ' + layersetName + ' layer selected');
+      console.log('Warning: No ' + layersetName + ' layer specified');
       return false;
     }
   
