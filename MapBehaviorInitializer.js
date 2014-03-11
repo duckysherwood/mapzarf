@@ -187,10 +187,69 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   };
 
+  // TODO document
+  // TODO move into a DotLayerFactory
+  // TODO check that all required fields are there
+  // It's okay to have one or the other of the cartogram/mercator
+  // fields; it's okay not to have a description or shortDescription;
+  // it's okay to not have a source or sourceUrl.
+  this.map.validateDotLayerspec = function(layerSpec) {
+    var validator = new Validator();
+    var requiredFieldsTable = {'mercatorTable' : 'word',
+                               'mercatorFieldName' : 'word',
+                               'year' : 'int',
+                               'size' : 'int',
+                               'color' : 'color'};
+    var optionalFieldsTable = {'layerType' : 'word',
+                               'cartogramTable' : 'word',
+                               'cartogramFieldName' : 'word',
+                               'shortDescription' : 'text',
+                               'description' : 'text',
+                               'sourceUrl' : 'url',
+                               'source' : 'text'};
+
+    success = true;
+    $.each(requiredFieldsTable, function(fieldName, fieldType) {
+      if(!layerSpec.hasOwnProperty(fieldName)) {
+        console.log("Dot layer is missing field " + fieldName);
+        success = false;
+        return false;
+      }
+      if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+        console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
+        success = false;
+        return false;
+      }
+    });
+
+    if(success) {
+      "The required fields are okay";
+    }
+
+    $.each(optionalFieldsTable, function(fieldName, fieldType) {
+      if(!layerSpec.hasOwnProperty(fieldName)) {
+        console.log("Layer doesn't have " + fieldName + ", but that's ok.");
+        return true;
+      }
+      if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+        console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
+        success = false;
+        return false;
+      }
+    });
+    
+
+    return success;
+
+  }
+
   /** Creates a dots layer for the map to use.
    *  @returns {Object} Layer object describing a dots layer.
    *  @private
    */
+  // TODO change this to a use a DotLayerFactory, and choose
+  // which LayerFactory type to use based on layersetType in the 
+  // layerspec.
   this.map.getDotLayer = function () {
     var layersetName = 'dotLayers';
     if(!this.layerSpecExists('dotLayers')) {
@@ -201,8 +260,20 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
       return null;
     }
 
+
+
     var key = this.findSelectedKeyForLayerType(layersetName);
     var layerSpec = this.mai[layersetName][key] ;
+
+    if(!this.validateDotLayerspec(layerSpec)) {
+      var descriptor = layerSpec.shortDescription;;
+      if(!descriptor) {
+        descriptor = 'unnamed';
+      }
+      alert("The specification for the " + key + " dot layer is not valid, alas.");
+      console.log('Invalid layer specification for ' + key);
+      return null;
+    }
   
     var url = BINDIR + "/dots.php?x={x}&y={y}&zoom={z}&";
     url += 'points=' + layerSpec[this.projectionType() + 'Table'];
@@ -303,6 +374,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      }
   
      var layerTypes = ['choropleth', 'dot', 'border'];
+     // TODO use $.each() instead
      for (var i=0; i<3; i++) {
        var layerType = layerTypes[i];
        var layer = layerType + 'Layers';
