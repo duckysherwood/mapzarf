@@ -192,7 +192,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   // pieces?
   this.createAndPopulateElements = function () {
 
-    document.title = mapApplicationInfo.pageTitle
+    document.title = this.mai.pageTitle
     
     $( '#explanation').html( "<b>" + this.mai.pageTitle + "</b><p>" 
                              + this.mai.pageDescription + "<p>");
