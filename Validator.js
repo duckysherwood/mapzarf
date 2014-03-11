@@ -36,7 +36,16 @@ Validator.prototype.isLegalInt = function(candidate) {
  *  @public
  */
 Validator.prototype.isLegalFloat = function(candidate) {
-  return typeof candidate == 'float';
+  return typeof candidate == 'number';
+}
+
+/** Checks a value to see if it is a legal boolean.
+ *  @param candidate A value to be checked
+ *  @return {boolean} whether the candidate is a legal boolean or not
+ *  @public
+ */
+Validator.prototype.isLegalBoolean = function(candidate) {
+  return typeof candidate == 'boolean';
 }
 
 
@@ -212,6 +221,10 @@ Validator.prototype.isLegal = function(fieldType, candidate) {
 
     case 'color':
       return this.isLegalColor(candidate);
+      break;
+
+    case 'bool':
+      return this.isLegalBoolean(candidate);
       break;
 
     default:
