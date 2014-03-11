@@ -17,10 +17,11 @@ from selenium.common.exceptions import NoSuchElementException
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 INCOMPLETE_PAGE_TITLE = 'Incomplete pageTitle'
-GOOD_JSON = 'http://localhost/mapzarf/test/testSanity.html'
-EMPTY_JSON = 'http://localhost/mapzarf/test/testIncompleteMai1.html'
-MINIMAL_JSON = 'http://localhost/mapzarf/test/testIncompleteMai2.html'
-ONE_LAYER_JSON = 'http://localhost/mapzarf/test/testIncompleteMai3.html'
+GOOD_JSON = 'http://localhost/mapzarf/integrationTest/testSanity.html'
+EMPTY_JSON = 'http://localhost/mapzarf/integrationTest/testIncompleteMai1.html'
+MINIMAL_JSON = 'http://localhost/mapzarf/integrationTest/testIncompleteMai2.html'
+ONE_LAYER_JSON = 'http://localhost/mapzarf/integrationTest/testIncompleteMai3.html'
+MINIMAL_LAYERSET = 'http://localhost/mapzarf/integrationTest/testIncompleteMai4.html'
 
 class TestIncomplete(unittest.TestCase):
 
@@ -114,7 +115,7 @@ class TestIncomplete(unittest.TestCase):
 
   def testForNoMarker(self):
     success = True
-    urlStrings = [EMPTY_JSON, MINIMAL_JSON, ONE_LAYER_JSON]
+    urlStrings = [EMPTY_JSON, MINIMAL_JSON, ONE_LAYER_JSON, MINIMAL_LAYERSET]
     for urlString in urlStrings:
       s = self.doesMarkerExist(urlString)
       success &= not s
@@ -135,7 +136,7 @@ class TestIncomplete(unittest.TestCase):
 
 
   def testForDotAndBorderExistence(self):
-    urlStrings = [GOOD_JSON]
+    urlStrings = [GOOD_JSON, MINIMAL_LAYERSET]
     success = True
     layerspecNames = ['dotLayers', 'borderLayers']
     success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, True)

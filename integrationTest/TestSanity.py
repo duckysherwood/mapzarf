@@ -4,7 +4,7 @@ from MapApplicationPage import MapApplicationPage
 from selenium import webdriver
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
-TEST_URL = 'http://localhost/mapzarf/test/testSanity.html'
+TEST_URL = 'http://localhost/mapzarf/integrationTest/testSanity.html'
 MARKER_TEXT = "asymmetrical skateboard Bushwick bitters"
 PAGE_TITLE = "TestSanity pageTitle"
 
