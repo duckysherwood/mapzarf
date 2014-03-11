@@ -99,6 +99,26 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *  @private
    */
   this.map.getChoroplethLayer = function () {
+    // TODO need to refactor when move this into a LayerFactory
+    var layersetName = 'choroplethLayers';
+
+    if(!$( '#' + layersetName + 'Checkbox').is(':checked')) {
+      return null;
+    }
+
+    var key = this.findSelectedKeyForLayerType(layersetName);
+    var layerSpec = this.mai[layersetName][key] ;
+
+    if(!this.validateChoroplethLayerspec(layerSpec)) {
+      var descriptor = layerSpec.shortDescription;;
+      if(!descriptor) {
+        descriptor = 'unnamed';
+      }
+      alert("The specification for the " + key + " choropleth layer is not valid, alas.");
+      console.log('Invalid layer specification for ' + key);
+      return null;
+    }
+
     return this.getPolygonLayer('choroplethLayers', false);
   };
 
@@ -187,7 +207,71 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   };
 
-  // TODO move into a DotLayerFactory
+  // TODO move into a MapeteriaChoroplethLayerFactory
+  this.map.validateChoroplethLayerspec = function(layerSpec) {
+    var validator = new Validator();
+    var requiredFieldsTable = {'fieldName' : 'word',
+                               'table' : 'word',
+                               'year' : 'int',
+                               'minColor' : 'color',
+                               'maxColor' : 'color',
+                               'minValue' : 'float',
+                               'maxValue' : 'float'
+                              };
+    var optionalFieldsTable = {'tileGenerator' : 'word',
+                               'tileGeneratorVersion' : 'float',
+                               'mercatorPolyYear' : 'int',
+                               'mercatorTable' : 'word',
+                               'cartogramPolyYear' : 'int',
+                               'cartogramTable' : 'word',
+                               'isPercentage' : 'bool',
+                               'shortDescription' : 'text',
+                               'description' : 'text',
+                               'mapping' : 'text',
+                               'sourceUrl' : 'url',
+                               'source' : 'text'};
+
+    // It's okay to only have one of mercator and cartogram specs,
+    // but you must have at least one (and the field name, table name,
+    // and polyYear all be the same projection type and all be there).
+    var hasMercators = layerSpec.mercatorShapeType 
+                       && layerSpec.mercatorPolyYear;
+    var hasCartograms = layerSpec.mercatorShapeType 
+                        && layerSpec.mercatorPolyYear;
+    if(!(hasMercators || hasCartograms)) {
+      return false;
+    }
+
+    // TODO move this into the superclass of the LayerFactory
+    success = true;
+    $.each(requiredFieldsTable, function(fieldName, fieldType) {
+      if(!layerSpec.hasOwnProperty(fieldName)) {
+        console.log("Choropleth layer is missing field " + fieldName);
+        success = false;
+        return false;
+      }
+      if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+        console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
+        success = false;
+        return false;
+      }
+    });
+
+
+    $.each(optionalFieldsTable, function(fieldName, fieldType) {
+      if(layerSpec[fieldName]) {
+        if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+          console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
+          success = false;
+          return false;
+        }
+      }
+    });
+    
+    return success;
+  }
+
+  // TODO move into a DotLayerFactory (MapeteriaDotLayerFactory?)
   /** Checks that the specification for a dot layer is
    *  sensical and complete.
    *  @returns {Object} Layer object describing a dots layer.
@@ -195,11 +279,12 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    */
   this.map.validateDotLayerspec = function(layerSpec) {
     var validator = new Validator();
-    var requiredFieldsTable = {'mercatorFieldName' : 'word',
-                               'year' : 'int',
+    var requiredFieldsTable = {'year' : 'int',
                                'size' : 'int',
                                'color' : 'color'};
-    var optionalFieldsTable = {'layerType' : 'word',
+    var optionalFieldsTable = {'tileGenerator' : 'word',
+                               'tileGeneratorVersion' : 'float',
+                               'mercatorFieldName' : 'word',
                                'mercatorTable' : 'word',
                                'cartogramTable' : 'word',
                                'cartogramFieldName' : 'word',
@@ -211,15 +296,19 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     // It's okay to only have one of mercator and cartogram specs,
     // but you must have at least one (and the field name and table 
     // need to match)
-    if(!((layerSpec.mercatorFieldName && layerSpec.mercatorTable) 
-      || (layerSpec.mercatorFieldName && layerSpec.mercatorTable))) {
+    var hasMercators = layerSpec.mercatorFieldName 
+                       && layerSpec.mercatorTable;
+    var hasCartograms = layerSpec.cartogramFieldName 
+                        && layerSpec.cartogramTable;
+    if(!(hasMercators || hasCartograms)) {
       return false;
     }
 
+    // TODO move this into the superclass of the LayerFactory
     success = true;
     $.each(requiredFieldsTable, function(fieldName, fieldType) {
       if(!layerSpec.hasOwnProperty(fieldName)) {
-        console.log("Dot layer is missing field " + fieldName);
+        console.log("Choropleth layer is missing field " + fieldName);
         success = false;
         return false;
       }
@@ -230,19 +319,13 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
       }
     });
 
-    if(success) {
-      "The required fields are okay";
-    }
-
     $.each(optionalFieldsTable, function(fieldName, fieldType) {
-      if(!layerSpec.hasOwnProperty(fieldName)) {
-        console.log("Layer doesn't have " + fieldName + ", but that's ok.");
-        return true;
-      }
-      if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
-        console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
-        success = false;
-        return false;
+      if(layerSpec[fieldName]) {
+        if(!validator.isLegal(fieldType, layerSpec[fieldName])) {
+          console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
+          success = false;
+          return false;
+        }
       }
     });
     
