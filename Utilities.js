@@ -7,20 +7,22 @@
  *  @public
  */
 function descriptionHtml(layerSpec) {
+  var validator = new Validator();
+
   var descriptor = layerSpec.description;
-  if(!descriptor) {
+  if(!descriptor || !validator.isLegalText(layerSpec.description)) {
     descriptor = layerSpec.shortDescription;
-    if(!descriptor) {
+    if(!descriptor || validator.isLegalText(layerSpec.shortDescription)) {
       descriptor = "unnamed layer";
     }
   }
 
-  if(layerSpec.sourceUrl) {
+  if(layerSpec.sourceUrl && validator.isLegalUrl(layerSpec.sourceUrl)) {
     descriptor = '<a href="' + layerSpec.sourceUrl + '">' + descriptor;
   }
 
   var source = layerSpec.source;
-  if(!source) {
+  if(!source || !validator.isLegalText(layerSpec.source)) {
     source = "Unknown source";
   }
 
