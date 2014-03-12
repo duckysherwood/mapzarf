@@ -23,7 +23,7 @@ class TestWrong(unittest.TestCase):
   def checkAlert(self, urlString, message):
     try:
       self.page = MapApplicationPage(self.browser, urlString)
-      WebDriverWait(self.browser, 3).until(
+      WebDriverWait(self.browser, 5).until(
           EC.presence_of_element_located((By.TAG_NAME, 'title')))
 
 
@@ -43,7 +43,7 @@ class TestWrong(unittest.TestCase):
   # Tests 
   def testWronglyTypedValues(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong1.html'
-    message = "dot layer is not valid, alas"
+    message = "map application info file is invalid"
     self.assertTrue(self.checkAlert(urlString, message))
 
   # TODO This should go in incomplete
@@ -82,7 +82,7 @@ class TestWrong(unittest.TestCase):
   # hasCartogram is set, but there are no cartogram layers
   def testMissingChoroplethTablePolyYear(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong8.html'
-    message = "There is no information for the"
+    message = "The map application info file is invalid"
     self.assertTrue(self.checkAlert(urlString, message))
 
   def tearDown(self):
