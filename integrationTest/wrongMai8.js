@@ -2,7 +2,7 @@
 mapApplicationInfo = {
   "pageTitle" : "Test Wrong8",
   "pageDescription" : "Test Wrong8",
-  "pointInfoUrlPrefix" : "./testSanityMarkerInfo.html",
+  "pointInfoUrlPrefix" : "http://127.0.0.1/maps/mapzarf/integrationTest/testSanityMarkerInfo.html",
   "startingMarkerLat" : 40,
   "startingMarkerLng" : -100,
   "startingCenterLat" : 38,
@@ -11,7 +11,7 @@ mapApplicationInfo = {
   "hasCartogram" : true,
   "slippyMapFramework" : "leaflet",
   "slippyMapFrameworkVersion" : 1.6,
-  "attribution" : "<a href=\"http://webfoot.com/ducky.home.html\">Kaitlin Duck Sherwood</a>",
+  "attribution" : "Kaitlin Duck Sherwood",
   "choroplethLayers" :
     {
        "taxRoiNormalized": { 

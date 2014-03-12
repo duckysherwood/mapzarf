@@ -11,7 +11,7 @@ mapApplicationInfo = {
   "hasCartogram" : true,
   "slippyMapFramework" : "leaflet",
   "slippyMapFrameworkVersion" : 1.6,
-  "attribution" : "<a href=\"http://webfoot.com/ducky.home.html\">Kaitlin Duck Sherwood</a>",
+  "attribution" : "Kaitlin Duck Sherwood http://webfoot.com",
   "choroplethLayers" :
     {
        "taxRoiNormalized": { 
