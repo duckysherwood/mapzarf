@@ -41,17 +41,18 @@ Runner.prototype.main = function () {
   }
 
   var domAppender = new DomElementAppender(myMap, this.mai, pageInitValues);
-  domAppender.createAndPopulateElements();
+  if(domAppender.createAndPopulateElements()) {
 
-  var cityLabeller = new CityLabeller(myMap);
+    var cityLabeller = new CityLabeller(myMap);
+  
+    var mbc = new MapBehaviorInitializer(myMap, this.mai, cityLabeller, 
+                                         jurisdictionMarker);
+    mbc.initialize();
+  
+    var listenerInitializer = 
+      new ListenerInitializer(myMap, this.mai, cityLabeller, jurisdictionMarker);
+  
+    cityLabeller.refreshCityLabels(cityLabeller);
 
-  var mbc = new MapBehaviorInitializer(myMap, this.mai, cityLabeller, 
-                                       jurisdictionMarker);
-  mbc.initialize();
-
-  var listenerInitializer = 
-    new ListenerInitializer(myMap, this.mai, cityLabeller, jurisdictionMarker);
-
-  cityLabeller.refreshCityLabels(cityLabeller);
-
+  }
 };
