@@ -142,9 +142,10 @@ Validator.isLegalText = function(candidate) {
 var re_weburl = new RegExp(
   "^" +
     // protocol identifier
-    "(?:(?:https?|ftp)://)" +
+    "(?:(?:https?|ftp)://)" +  
     // user:pass authentication
-    "(?:\\S+(?::\\S*)?@)?" +
+    "(?:\\w+(?::\\S*)?@)?" +
+    // "(?:\\S+(?::\\S*)?@)?" +
     "(?:" +
       // IP address exclusion
       // private & local networks
@@ -165,14 +166,21 @@ var re_weburl = new RegExp(
       // domain name
       "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*" +
       // TLD identifier
-      "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" +
+      "(\\.(?:[a-zA-Z]{2,}))" +
+      // "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" + // kds changed
     ")" +
     // port number
     "(?::\\d{2,5})?" +
-    // resource path
-    "(?:/[^\\s]*)?" +
+    // resource path   
+    "(/[%#=\\w\/\\+\\-\\?\\&\\.]*)?" +
+    // "(?:/[^\\s]*)?" +   // kds modified -- not struct enough @@@
   "$", "i"
 );
+
+// TODO the re_weburl doesn't check hard for illegal characters
+// in the resource path.  Query string (?, &, =) and local identifiers (#) 
+// are also legal.
+
 
 /** Checks a value to see if is a legal URL.  
  *  @param candidate {string} a Url to be checked
@@ -184,8 +192,11 @@ Validator.isLegalUrl = function(candidate) {
     return false;
   }
 
-  // The "!!" is to turn it from a char into a boolean
-  return !!candidate.match(re_weburl);
+  var relativePathPattern = "^((\\.{0,2}/)([%#=\\w\/\\+\\-\\?\\&\\.]+))+$"; 
+
+   // The "!!" is to turn it from a char into a boolean
+   // return !!(candidate.match(re_weburl))
+   return !!(candidate.match(re_weburl) || (candidate.match(relativePathPattern)));
 }
 
 /** Checks a value to see if is a legal URL.  
@@ -227,9 +238,100 @@ Validator.isLegal = function(fieldType, candidate) {
       return this.isLegalBoolean(candidate);
       break;
 
+    case 'lat':
+      return this.isLegalLat(candidate);
+      break;
+
+    case 'lng':
+      return this.isLegalLng(candidate);
+      break;
+
     default:
       return false;
   }
 
 }
 
+Validator.isLegalLat = function(candidate) {
+  if(!this.isLegalFloat(candidate)) {
+    return false;
+  }
+
+  return (candidate > -90) && (candidate < 90);
+
+}
+
+Validator.isLegalLng = function(candidate) {
+  if(!this.isLegalFloat(candidate)) {
+    return false;
+  }
+
+  return (candidate > -180) && (candidate < 180);
+
+}
+
+/** Checks a MapApplicationInfo object for validity.
+ *  @param mai {string} The MapApplicationInfo object to be checked.
+ *  @return {boolean} Whether the mai is legal
+ *  @public
+ */
+Validator.validateMai = function(mai) {
+  var requiredFields = { "pageTitle" : "text",
+                         "pageDescription" : "text" };
+  var optionalFields = { "pointInfoUrlPrefix" : "url", 
+                         "startingMarkerLat" : "lat",
+                         "startingMarkerLng" : "lng",
+                         "startingCenterLat" : "lat",
+                         "startingCenterLng" : "lng",
+                         "startingCenterZoom" : "int",
+                         "hasCartogram" : "bool",
+                         "slippyMapFramework" : "word",
+                         "slippyMapVersion" : "float",
+                         "attribution" : "text" };
+
+  return this.validateFields(mai, requiredFields, optionalFields);
+  
+}
+
+/** Checks a bunch of fields in a candidate object to see if they
+ *  are present if they need to be, also if the format is correct.
+ *  Candidate is usually a MapApplicationInfo object or a piece
+ *  of it.
+ *  @param candidate {object} Object to be examined
+ *  @param requiredFields {object} Table with keys of the fieldName and 
+ *         values of a string saying what type of field it is
+ *  @param optionalFields {object} Table with keys of the fieldName and 
+ *         values of a string saying what type of field it is
+ *  @return {boolean} Whether the candidate is legal
+ *  @public
+ */
+Validator.validateFields = function(candidate, 
+                              requiredFieldsTable, optionalFieldsTable) {
+
+  success = true;
+  $.each(requiredFieldsTable, function(fieldName, fieldType) {
+    if(!candidate.hasOwnProperty(fieldName)) {
+      console.log("Object is missing field " + fieldName);
+      success = false;
+      return false;
+    }
+    if(!Validator.isLegal(fieldType, candidate[fieldName])) {
+      console.log(fieldName + " of " + candidate[fieldName] + " is invalid");
+      success = false;
+      return false;
+    }
+  });
+
+  $.each(optionalFieldsTable, function(fieldName, fieldType) {
+    if(candidate[fieldName]) {   // field does not need to exist
+      if(!Validator.isLegal(fieldType, candidate[fieldName])) {
+        console.log(fieldName + " of " + candidate[fieldName] + " is invalid");
+        success = false;
+        return false;
+      }
+    }
+  });
+
+  return success;
+    
+}
