@@ -11,7 +11,6 @@ TEST_URL = 'http://localhost/mapzarf/integrationTest/testSanity.html'
 MARKER_TEXT = 'asymmetrical skateboard Bushwick bitters'
 PAGE_TITLE = 'TestSanity pageTitle'
 
-# TODO test proper creation of the query string
 
 class TestQueryString(unittest.TestCase):
 
