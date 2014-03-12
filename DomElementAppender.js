@@ -186,11 +186,18 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   /** Creates and initializes all the DOM elements relating to the
    *  map which depend upon the mapApplicationInfo.
    *
+   *  @returns {boolean} whether there were errors during processing
    *  @public 
    */
   // TODO this is honkin' long, maybe break it up into different
   // pieces?
   this.createAndPopulateElements = function () {
+
+    if(!Validator.validateMai(this.mai)) {
+      alert("Sorry, the map application info file is invalid.  See the "
+            + "console log for detailed error messages.");
+      return false;
+    }
 
     document.title = this.mai.pageTitle
     
@@ -249,13 +256,24 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
 
     $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.showCities);
 
-    // The sharingUrl needs to be updated; that will happen in 
-    // the constructor of ListenerInitializer, which happens after
-    // the DomElementAppender is done.  It's not a great place for it,
-    // but it has to go somewhere.
+    // Put in the attribution for the page/app (as opposed to the data)
+    if(this.mai.attribution) {
+      $('#attribution').append(', page customized by ' + this.mai.attribution);
+    } else {
+      $('#attribution').append('.');
+    }
+
+    return true;
   }
   
-  // put the legend update on the legend image
+  /** Updates the legend.  This gets called from the constructor
+   *  of ListenerInitializer, which happens after the DomElementAppender
+   *  is done.  That's not a great place for the update to happen, but
+   *  there isn't an obviously better one.
+   *
+   *  @param layerSpec {object} A piece of the MAI describing the current layer
+   *  @public 
+   */
   $( '#legendImage' )[0].update = function (layerSpec) {
     url = BINDIR + "/makeLegend.php?lbl=y&o=p" +
          "&minValue=" + layerSpec.minValue +
@@ -274,11 +292,5 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   
   }
 
-  // Put in the attribution
-  if(this.mai.attribution) {
-    $('#attribution').append(', page customized by ' + this.mai.attribution);
-  } else {
-    $('#attribution').append('.');
-  }
 
 }
