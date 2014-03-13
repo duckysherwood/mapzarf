@@ -2,7 +2,7 @@
 mapApplicationInfo = {
   "pageTitle" : "Test Wrong8",
   "pageDescription" : "Test Wrong8",
-  "pointInfoUrlPrefix" : "http://127.0.0.1/maps/mapzarf/integrationTest/testSanityMarkerInfo.html",
+  "pointInfoUrlPrefix" : "/testSanityMarkerInfo.html",
   "startingMarkerLat" : 40,
   "startingMarkerLng" : -100,
   "startingCenterLat" : 38,
