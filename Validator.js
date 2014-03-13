@@ -15,7 +15,7 @@ Validator.isLegalWord = function(candidate) {
   var regexp = /[^\w\-\_\.]/;
   return !candidate.match(regexp); 
 
-}
+};
 
 /** Checks a string to see if it is a legal integer.
  *  @param candidate {int} a value to be checked
@@ -23,12 +23,12 @@ Validator.isLegalWord = function(candidate) {
  *  @public
  */
 Validator.isLegalInt = function(candidate) {
-  if(!(typeof candidate == 'number')) {
+  if(typeof candidate != 'number') {
     return false;
   }
 
   return (Math.floor(candidate) == candidate);
-}
+};
 
 /** Checks a value to see if it is a legal float.
  *  @param candidate {float} a string to be checked
@@ -37,7 +37,7 @@ Validator.isLegalInt = function(candidate) {
  */
 Validator.isLegalFloat = function(candidate) {
   return typeof candidate == 'number';
-}
+};
 
 /** Checks a value to see if it is a legal boolean.
  *  @param candidate A value to be checked
@@ -46,7 +46,7 @@ Validator.isLegalFloat = function(candidate) {
  */
 Validator.isLegalBoolean = function(candidate) {
   return typeof candidate == 'boolean';
-}
+};
 
 
 /** Checks a string to see if it is a legal HTML color of the form
@@ -60,9 +60,9 @@ Validator.isLegalColor = function(candidate) {
     return false;
   }
 
-  return !!candidate.match(/[\dABCDEFabcdef]{6,6}/)
+  return !!candidate.match(/[\dABCDEFabcdef]{6,6}/);
 
-}
+};
 
 /** Checks a value to see if is legal free text.  The string
  *  is not allowed to contain any characters that might conceivably
@@ -72,11 +72,11 @@ Validator.isLegalColor = function(candidate) {
  *  @public
  */
 Validator.isLegalText = function(candidate) {
-  if(!(typeof candidate == 'string')) {
+  if(typeof candidate != 'string') {
     return false;
   }
-  return !candidate.match(/^[\"\'\!\%\<\>\&\;]/);
-}
+  return !candidate.match(/^[\"\'\!\%<>&;]/);
+};
 
 //
 // Regular Expression for URL validation
@@ -162,7 +162,7 @@ var re_weburl = new RegExp(
       "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
     "|" +
       // kds I want to be able to use local URLs
-      "([\\w\\-\.]{2,})*" + 
+      "([\\w\\-\\.]{2,})*" + 
       // kds // host name
       // kds "(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)" +
       // kds // domain name
@@ -186,7 +186,7 @@ var re_weburl = new RegExp(
  *  @public
  */
 Validator.isLegalUrl = function(candidate) {
-  if(!(typeof candidate == 'string')) {
+  if(typeof candidate != 'string') {
     return false;
   }
 
@@ -195,7 +195,7 @@ Validator.isLegalUrl = function(candidate) {
    // The "!!" is to turn it from a char into a boolean
    // return !!(candidate.match(re_weburl))
    return !!(candidate.match(re_weburl) || (candidate.match(relativePathPattern)));
-}
+};
 
 /** Checks a value to see if is a legal URL.  
  *  @param fieldType {string} The type which candidate is supposed to be
@@ -210,45 +210,36 @@ Validator.isLegal = function(fieldType, candidate) {
 
     case 'int':
       return this.isLegalInt(candidate);
-      break;  // belt AND suspenders
 
     case 'float':
       return this.isLegalFloat(candidate);
-      break;
 
     case 'word':
       return this.isLegalWord(candidate);
-      break;
 
     case 'text':
       return this.isLegalText(candidate);
-      break;
 
     case 'url':
       return this.isLegalUrl(candidate);
-      break;
 
     case 'color':
       return this.isLegalColor(candidate);
-      break;
 
     case 'bool':
       return this.isLegalBoolean(candidate);
-      break;
 
     case 'lat':
       return this.isLegalLat(candidate);
-      break;
 
     case 'lng':
       return this.isLegalLng(candidate);
-      break;
 
     default:
       return false;
   }
 
-}
+};
 
 Validator.isLegalLat = function(candidate) {
   if(!this.isLegalFloat(candidate)) {
@@ -257,7 +248,7 @@ Validator.isLegalLat = function(candidate) {
 
   return (candidate > -90) && (candidate < 90);
 
-}
+};
 
 Validator.isLegalLng = function(candidate) {
   if(!this.isLegalFloat(candidate)) {
@@ -266,7 +257,7 @@ Validator.isLegalLng = function(candidate) {
 
   return (candidate > -180) && (candidate < 180);
 
-}
+};
 
 /** Checks a MapApplicationInfo object for validity.
  *  @param mai {string} The MapApplicationInfo object to be checked.
@@ -289,7 +280,7 @@ Validator.validateMai = function(mai) {
 
   return this.validateFields(mai, requiredFields, optionalFields);
   
-}
+};
 
 /** Checks a bunch of fields in a candidate object to see if they
  *  are present if they need to be, also if the format is correct.
@@ -306,7 +297,7 @@ Validator.validateMai = function(mai) {
 Validator.validateFields = function(candidate, 
                               requiredFieldsTable, optionalFieldsTable) {
 
-  success = true;
+  var success = true;
   $.each(requiredFieldsTable, function(fieldName, fieldType) {
     if(!candidate.hasOwnProperty(fieldName)) {
       console.log("Object is missing field " + fieldName);
@@ -332,4 +323,4 @@ Validator.validateFields = function(candidate,
 
   return success;
     
-}
+};
