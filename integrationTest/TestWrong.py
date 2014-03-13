@@ -74,15 +74,15 @@ class TestWrong(unittest.TestCase):
     self.assertTrue(self.checkAlert(urlString, message))
     
   # TODO this should go in incomplete
-  def testMissingChoroplethTablePolyYear(self):
+  def testMissingPolyShapeYear(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong7.html'
     message = "choropleth layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # hasCartogram is set, but there are no cartogram layers
-  def testMissingChoroplethTablePolyYear(self):
+  def testMissingChoroplethPolyShapeYear(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrong8.html'
-    message = "The map application info file is invalid"
+    message = "layer for the cartogram projection"
     self.assertTrue(self.checkAlert(urlString, message))
 
   def tearDown(self):

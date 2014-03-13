@@ -115,7 +115,7 @@ class TestIncomplete(unittest.TestCase):
 
   def testForNoMarker(self):
     success = True
-    urlStrings = [EMPTY_JSON, MINIMAL_JSON, ONE_LAYER_JSON, MINIMAL_LAYERSET]
+    urlStrings = [MINIMAL_JSON, ONE_LAYER_JSON, MINIMAL_LAYERSET]
     for urlString in urlStrings:
       s = self.doesMarkerExist(urlString)
       success &= not s
@@ -123,7 +123,7 @@ class TestIncomplete(unittest.TestCase):
     self.assertTrue(success)
 
   def testForNoChoroplethControl(self):
-    urlStrings = [EMPTY_JSON, MINIMAL_JSON]
+    urlStrings = [MINIMAL_JSON]
     layerspecNames = ["choroplethLayers"]
     success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, False)
     self.assertTrue(success)
@@ -144,7 +144,7 @@ class TestIncomplete(unittest.TestCase):
 
 
   def testForNoDotAndBorderExistence(self):
-    urlStrings = [EMPTY_JSON, MINIMAL_JSON, ONE_LAYER_JSON]
+    urlStrings = [MINIMAL_JSON, ONE_LAYER_JSON]
     success = True
     layerspecNames = ['dotLayers', 'borderLayers']
     success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, False)

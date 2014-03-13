@@ -161,25 +161,23 @@ var re_weburl = new RegExp(
       "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
       "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
     "|" +
-      // host name
-      "(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)" +
-      // domain name
-      "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*" +
-      // TLD identifier
-      "(\\.(?:[a-zA-Z]{2,}))" +
-      // "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" + // kds changed
+      // kds I want to be able to use local URLs
+      "([\\w\\-\.]{2,})*" + 
+      // kds // host name
+      // kds "(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)" +
+      // kds // domain name
+      // kds "(?:\\.(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)*" +
+      // kds // TLD identifier
+      // kds "(\\.(?:[a-zA-Z]{2,}))" +
+      // kds // "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" + // kds changed
     ")" +
     // port number
     "(?::\\d{2,5})?" +
     // resource path   
     "(/[%#=\\w\/\\+\\-\\?\\&\\.]*)?" +
-    // "(?:/[^\\s]*)?" +   // kds modified -- not struct enough @@@
+    // "(?:/[^\\s]*)?" +   // kds modified -- not strict enough 
   "$", "i"
 );
-
-// TODO the re_weburl doesn't check hard for illegal characters
-// in the resource path.  Query string (?, &, =) and local identifiers (#) 
-// are also legal.
 
 
 /** Checks a value to see if is a legal URL.  
@@ -192,7 +190,7 @@ Validator.isLegalUrl = function(candidate) {
     return false;
   }
 
-  var relativePathPattern = "^((\\.{0,2}/)([%#=\\w\/\\+\\-\\?\\&\\.]+))+$"; 
+  var relativePathPattern = "^((\\.{1,2}/)*([%#=\\w\/\\+\\-\\?\\&\\.]+))+$"; 
 
    // The "!!" is to turn it from a char into a boolean
    // return !!(candidate.match(re_weburl))

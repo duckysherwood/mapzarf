@@ -1,6 +1,7 @@
 load("/appdata/lib/jsunit-1.3/jsunit/lib/JsUtil.js");
 load("/appdata/lib/jsunit-1.3/jsunit/lib/JsUnit.js");
 load("../Validator.js")
+load("../URI.js")
 print("starting validity-checking test cases");
 
 function ValidityTest(name)
@@ -51,9 +52,11 @@ function ValidityTest_testFloat() {
 }
 
 function ValidityTest_testUrlString() {
-  var url = ":http://ducky@tmp.webfoot.com/leading-colon/x/y?"; // leading colon
-  this.assertFalse(url, Validator.isLegalUrl(url));
 
+  var url = "http://localhost/y.html";
+  this.assertTrue(url, Validator.isLegalUrl(url));
+  var url = "http://tmp.webfoot.com/y.html";
+  this.assertTrue(url, Validator.isLegalUrl(url));
   var url = "http://tmp.webfoot.com/vanilla/x/y.html";
   this.assertTrue(url, Validator.isLegalUrl(url));
   var url = "http://tmp.webfoot.com/poundSign.html#toppage";
@@ -73,16 +76,27 @@ function ValidityTest_testUrlString() {
   var url = "http://ducky:#$%#^@webfoot.com:2222/uname-port/x/foo?bar=baz&x=3#foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
 
+  var url = "http://localhost.com/port/x/foo";
+  this.assertTrue(url, Validator.isLegalUrl(url));
+  var url = "http://localhost.com:2222/port/x/foo";
+  this.assertTrue(url, Validator.isLegalUrl(url));
+  var url = "http://localhost.com:2222/foo.html";
+  this.assertTrue(url, Validator.isLegalUrl(url));
+
+  // This could actually be a valid relative (file) URL
+  var url = "http//tmp.webfoot.com/no-colon/x/y"; // no colon
+  this.assertTrue(url, Validator.isLegalUrl(url));
+
   var url = "http://tmp.webfoot.com/space space/x/y?x-y"; // space
   this.assertFalse(url, Validator.isLegalUrl(url));
   var url = "http://tmp.webfoot.com/scary,chars!/x/y?x-y";  // scary chars
   this.assertFalse(url, Validator.isLegalUrl(url));
   var url = 'http://tmp.webfoot.com/evil");chars!/x/y';  // evil chars
   this.assertFalse(url, Validator.isLegalUrl(url));
-  var url = "http//tmp.webfoot.com/no-colon/x/y"; // no colon
-  this.assertFalse(url, Validator.isLegalUrl(url));
   this.assertFalse(url, Validator.isLegalUrl(url));
   var url = "http://23!9724@tmp.webfoot.com/bad-username/x/y?"; // bad username
+  this.assertFalse(url, Validator.isLegalUrl(url));
+  var url = ":http://ducky@tmp.webfoot.com/leading-colon/x/y?"; // leading colon
   this.assertFalse(url, Validator.isLegalUrl(url));
 
   // relative URLs
@@ -104,7 +118,21 @@ function ValidityTest_testUrlString() {
   this.assertTrue(url, Validator.isLegalUrl(url));
   var url = "../x/foo?bar=baz&x=3#foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
+  var url = "../../../x/triple-double?bar=baz&x=3#foo";
+  this.assertTrue(url, Validator.isLegalUrl(url));
+  var url = "./dotFile.html";
+  this.assertTrue(url, Validator.isLegalUrl(url));
+  var url = "nakedFile.html";
+  this.assertTrue(url, Validator.isLegalUrl(url));
 
+  var url = "space space/x/y?x-y"; // space
+  this.assertFalse(url, Validator.isLegalUrl(url));
+  var url = "scary,chars!/x/y?x-y";  // scary chars
+  this.assertFalse(url, Validator.isLegalUrl(url));
+  var url = '/evil");chars!/x/y';  // evil chars
+  this.assertFalse(url, Validator.isLegalUrl(url));
+
+  // booleans
   this.assertFalse("true", Validator.isLegalUrl(true));
   this.assertFalse("false", Validator.isLegalUrl(false));
 }
