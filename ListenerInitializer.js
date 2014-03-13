@@ -23,6 +23,9 @@ function ListenerInitializer (map, mapApplicationInfo,
   /* @private */ this.cityLabeller = labeller;
   /* @private */ this.jurisdictionMarker = jurisdictionMarker;
 
+};
+
+ListenerInitializer.prototype.initialize = function() {
   var scope = this;
   $.each(['choroplethLayers', 'borderLayers', 'dotLayers'], 
          function (index, value) {

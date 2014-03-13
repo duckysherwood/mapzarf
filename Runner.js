@@ -31,13 +31,13 @@ Runner.prototype.main = function () {
 
   // jurisdictionMarker needs to be in this scope
   var jurisdictionMarker = null;
-  if(this.mai.startingMarkerLat && this.mai.startingMarkerLng 
-     && pageInitValues.markerLat && pageInitValues.markerLng) {
+  if(this.mai.startingMarkerLat && this.mai.startingMarkerLng &&
+                 pageInitValues.markerLat && pageInitValues.markerLng) {
     jurisdictionMarker =  L.marker([pageInitValues.markerLat, 
                                     pageInitValues.markerLng])
                            .bindPopup("Fetching data, please wait...")
                            .addTo(myMap);
-    myMap.pointInfoUrlPrefix = mapApplicationInfo.pointInfoUrlPrefix;
+    myMap.pointInfoUrlPrefix = this.mai.pointInfoUrlPrefix;
   }
 
   var domAppender = new DomElementAppender(myMap, this.mai, pageInitValues);
@@ -51,6 +51,7 @@ Runner.prototype.main = function () {
   
     var listenerInitializer = 
       new ListenerInitializer(myMap, this.mai, cityLabeller, jurisdictionMarker);
+    listenerInitializer.initialize();
   
     cityLabeller.refreshCityLabels(cityLabeller);
 
