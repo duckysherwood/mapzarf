@@ -17,7 +17,7 @@ function MapDisplayParameters (mai) {
   /* @const */ var MARKER_LNG = -110.0;
   /* @const */ var MAX_CHOROPLETH_LAYERS = 30;
 
-  var defaults = Object.create(null)
+  var defaults = Object.create(null);
 
   this.toBoolean  = function (aString) {
     return (aString == "t");
@@ -132,7 +132,7 @@ function MapDisplayParameters (mai) {
     } else {
       defaults[paramKey][1] = paramDefault;  // i.e. unchanged
     }
-  return defaults[paramKey][1]
+  return defaults[paramKey][1];
   };
 
   /** Overwrites the hardcoded defaults with values taken from 
@@ -175,7 +175,7 @@ function MapDisplayParameters (mai) {
       if(scope.mai.hasOwnProperty(key) && value) {
         scope.validateAndUpdate(translator[key], mai[key]);
       }
-    })
+    });
 
     return defaults; // useful for testing
   };
@@ -192,7 +192,7 @@ function MapDisplayParameters (mai) {
       scope.validateAndUpdate(key, qstring[key]);
     });
 
-    return defaults
+    return defaults;
   };
 
   /** Translates the initialization values from a defaults object
@@ -203,11 +203,11 @@ function MapDisplayParameters (mai) {
    *  @private
    */
   this.getValues = function() {
-    var init = {}
+    var init = {};
     $.each(defaults, function(index, value) {
-      init[index] = value[1]
-    })
-    return init
+      init[index] = value[1];
+    });
+    return init;
   };
 
 
