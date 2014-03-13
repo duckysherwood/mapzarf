@@ -57,13 +57,13 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
     if(layersetName in this.mai) { 
       var layerSpecs = this.mai[layersetName];
       var $layerDiv = $( layerSpecs );
-      if( $layerDiv == undefined ) {
-        console.log('Warning: Missing div for ' + layersetName 
-                    + ', failing softly.');
+      if(!$layerDiv) {
+        console.log('Warning: Missing div for ' + layersetName + 
+                       ', failing softly.');
         return null;
       }
   
-      if (layerSpecs != undefined) {
+      if (layerSpecs) {
         var layerSelectionControl;
   
         // I can't just do a layerSpecs.length to get the number
@@ -71,13 +71,13 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
         // more than one layers in this layerSpec.
         var layersCount = 0;
         var lastKey;
-        for (var key in layerSpecs) {
+        $.each(layerSpecs, function(key, value) {
           layersCount++;
           lastKey = key;
-          if(layersCount > 1) break;
-        }
+          if(layersCount > 1) return false;
+        });
   
-        if(layersCount == 0) {
+        if(layersCount === 0) {
           return null;
         }
   
@@ -85,7 +85,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
         layerSelectionControl.id = layersetName + 'Control';
   
         // Checkbox to turn all the layers on or off
-        layerSelectionCheckbox = document.createElement('input');
+        var layerSelectionCheckbox = document.createElement('input');
         layerSelectionControl.appendChild (layerSelectionCheckbox);
         layerSelectionCheckbox.id = layersetName + 'Checkbox';
   
@@ -94,12 +94,13 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
 
         var layerDescriptionSpan = document.createElement('span');
   
+        var descriptionElem;
         if( layersCount == 1) {
           layerSelectionCheckbox.value = lastKey;
           layerDescriptionSpan.innerHTML = 'Show ';
           layerSelectionControl.appendChild(layerDescriptionSpan);
-          var descriptionElem = document.createElement('span');
-          descriptionElem.innerHTML = descriptionHtml(layerSpecs[key]);
+          descriptionElem = document.createElement('span');
+          descriptionElem.innerHTML = descriptionHtml(layerSpecs[lastKey]);
           descriptionElem.id = layersetName + 'Description';
           descriptionElem.className = 'indented';
           layerSelectionControl.appendChild(descriptionElem);
@@ -109,8 +110,8 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
           // When I tried making value=null, value was instead ="on".  ???
           layerSelectionCheckbox.value = SENTINEL_MULTIPLE;
   
-          layerDescriptionSpan.innerHTML = 'Show ' 
-            + layersetName.replace('Layer', ' layer') + ': <br />';
+          layerDescriptionSpan.innerHTML = 'Show ' +
+            layersetName.replace('Layer', ' layer') + ': <br />';
           layerSelectionControl.appendChild(layerDescriptionSpan);
           var selectElement = document.createElement('select');
           selectElement.className = 'indented';
@@ -119,32 +120,32 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
           layerSelectionControl.appendChild(document.createElement('br'));
   
           var alreadySelected = false;
-          for (var key in layerSpecs) {
+          $.each(layerSpecs, function (key, value) {
             if (layerSpecs.hasOwnProperty(key)) {
                var optionElement = document.createElement('option');
                optionElement.className = layersetName + 'Option';
                optionElement.text = layerSpecs[key].shortDescription;
-               optionElement.setAttribute['id'] = key;
+               optionElement.setAttribute.id = key;
                optionElement.value = key;
                selectElement.appendChild(optionElement);
                if(!alreadySelected) {
                  alreadySelected = true;
                  optionElement.selected = true;
-                 var descriptionElem = document.createElement('span');
+                 descriptionElem = document.createElement('span');
                  descriptionElem.id = layersetName + 'Description';
                  var spec = layerSpecs[key];
                  descriptionElem.innerHTML = descriptionHtml(spec);
                  descriptionElem.className = 'indented';
                  layerSelectionControl.appendChild(descriptionElem);
                }
-             }
-          }
+            }
+          });
         }
         return layerSelectionControl;
       }
     }
-    return null
-  }
+    return null;
+  };
 
  
   /** Helper: for a given layer type (like 'dot' or 'choropleth')
@@ -164,9 +165,8 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
     var $checkbox = $( checkboxName );
 
     if($checkbox) {
-      var qstringShowFieldName = 'show' 
-                                 + capitalizeFirstLetter(layersetType)
-                                 + 's';
+      var qstringShowFieldName = 'show' +
+                                 capitalizeFirstLetter(layersetType) + 's';
       var checkedBool = closurePageInitValues[qstringShowFieldName];
       $checkbox.prop('checked', checkedBool);
 
@@ -175,13 +175,13 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
         var $selector = $( '#' + layersetName + 'Selector');
         // TODO cope with illegal values
         $selector.prop('selectedIndex', closurePageInitValues[indexName]);
-        var fieldName = $selector[0].value
+        var fieldName = $selector[0].value;
         var spec = this.mai[layersetName][fieldName];
-        var $descriptor = $( '#' + layersetName + 'Description')
+        var $descriptor = $( '#' + layersetName + 'Description');
         $descriptor[0].innerHTML = descriptionHtml(spec);
       }
     }
-  }
+  };
   
   /** Creates and initializes all the DOM elements relating to the
    *  map which depend upon the mapApplicationInfo.
@@ -194,15 +194,15 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   this.createAndPopulateElements = function () {
 
     if(!Validator.validateMai(this.mai)) {
-      alert("Sorry, the map application info file is invalid.  See the "
-            + "console log for detailed error messages.");
+      alert("Sorry, the map application info file is invalid.  See the " +
+            "console log for detailed error messages.");
       return false;
     }
 
-    document.title = this.mai.pageTitle
+    document.title = this.mai.pageTitle;
     
-    $( '#explanation').html( "<b>" + this.mai.pageTitle + "</b><p>" 
-                             + this.mai.pageDescription + "<p>");
+    $( '#explanation').html( "<b>" + this.mai.pageTitle + "</b><p>" +
+                             this.mai.pageDescription + "<p>");
   
     
     // Add the dot layer selector (if needed)
@@ -237,7 +237,6 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
     // Allow switching between cartogram and not
   
     if (this.mai.hasOwnProperty('hasCartogram') &&
-        (this.mai.hasCartogram != undefined) && 
         this.mai.hasCartogram) {
        var cartogramCheckboxString;
        if(closurePageInitValues.cartogram) {
@@ -245,7 +244,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
        } else {
          cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" >'; // TODO clean up
        }
-       var cartogramText = 'Show as cartogram<p />'
+       var cartogramText = 'Show as cartogram<p />';
        $( '#cartogramSelector' ).append(cartogramCheckboxString + cartogramText);
     }
   
@@ -264,7 +263,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
     }
 
     return true;
-  }
+  };
   
   /** Updates the legend.  This gets called from the constructor
    *  of ListenerInitializer, which happens after the DomElementAppender
@@ -275,7 +274,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
    *  @public 
    */
   $( '#legendImage' )[0].update = function (layerSpec) {
-    url = BINDIR + "/makeLegend.php?lbl=y&o=p" +
+    var url = BINDIR + "/makeLegend.php?lbl=y&o=p" +
          "&minValue=" + layerSpec.minValue +
          "&maxValue=" + layerSpec.maxValue +
          "&minColour=" + layerSpec.minColor +
@@ -290,7 +289,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   
     this.src = url;
   
-  }
+  };
 
 
 }
