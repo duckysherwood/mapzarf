@@ -43,8 +43,8 @@ function CityLabeller(aMap) {
    *  SIDE EFFECT: removes all the city labels from the map
    */
   this.removeCityLabels = function() {
-    var mapDiv = $( '#map')[0]
-    var kids = mapDiv.childNodes
+    var mapDiv = $( '#map')[0];
+    var kids = mapDiv.childNodes;
     var klen = kids.length;
   
     // need to remove labels starting at the back of the list so that
@@ -66,7 +66,7 @@ function CityLabeller(aMap) {
         }
       }
     }
-  }
+  };
   
   /** Fetches the largest cities in a bounding box, with their name and lat/lng.
    *  @param responseText {object} A JSON string with information about 
@@ -78,25 +78,23 @@ function CityLabeller(aMap) {
     // http://stackoverflow.com/questions/9912145/leaflet-how-to-find-existing-markers-and-delete-markers
     var cities = JSON.parse(responseText);
     // delete all the markers which are there
-    for(i=0;i<this.cityMarkers.length;i++) {
+    for(var i=0;i<this.cityMarkers.length;i++) {
         this.mapObject.removeLayer(this.cityMarkers[i]);
     }  
     
     // add all the markers
-    shouldShowCities = showCitiesCheckbox.checked;
+    // TODO remove dependence on global variable L
+    var shouldShowCities = $('#showCitiesCheckbox')[0].checked;
     if(shouldShowCities) {
       var lat, lng, latlng, cityName, cityNameIconUrl, cityNameIcon, marker;
-      scope = this;
+      var scope = this;
       $.each(cities, function(index, city) {
-        lat = city["lat"];
-        lng = city["lng"];
+        lat = city.lat;
+        lng = city.lng;
         latlng = new L.LatLng(lat, lng);
-        cityName = city["description"];
+        cityName = city.description;
         
-        cityNameIconUrl = BINDIR + '/makeCityLabel.php?cityName=' + cityName
-        if (typeof bulletChar != 'undefined') {
-          cityNameIconUrl += "&bulletChar="+encodeURIComponent(bulletChar);
-        }
+        cityNameIconUrl = BINDIR + '/makeCityLabel.php?cityName=' + cityName;
         cityNameIcon = L.icon({iconUrl: cityNameIconUrl, iconAnchor: [2, 10]});
   
         marker = L.marker(latlng, {icon: cityNameIcon, clickable:false, draggable:false}); 
@@ -104,7 +102,7 @@ function CityLabeller(aMap) {
         scope.mapObject.addLayer(marker);
       });
     } 
-  }
+  };
   
   /** Shows the largest cities on the map.
    *  @param scope {object} The scope which should be used for removing
@@ -120,7 +118,7 @@ function CityLabeller(aMap) {
     var left = bounds.getSouthWest().lng;
     var right = bounds.getNorthEast().lng;
   
-    var isCartogram =  $( '#isCartogramCheckbox' ).is(':checked')
+    var isCartogram =  $( '#isCartogramCheckbox' ).is(':checked');
   
     // NOTE!  cgi-bin/getCities uses popCartDotAttributes, which only has data
     // from 2010.  The city labels are approximate enough that that's probably 
@@ -128,6 +126,6 @@ function CityLabeller(aMap) {
     // years and add a =polyYear= parameter.
     scope.removeCityLabels();
     scope.requestCityInfo(upper, lower, left, right, isCartogram);
-  }
+  };
 
 }
