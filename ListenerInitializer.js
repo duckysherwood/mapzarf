@@ -90,7 +90,8 @@ ListenerInitializer.prototype.addLayerControlSelectListener =
   selectElement.onchange = function () {
     var layer = $('option.' + closureLayersetName + 'Option:selected').val();
     var elementName = '#' + closureLayersetName + 'Description' ;
-    var description = descriptionHtml(scope.mai[closureLayersetName][layer]);
+    var description = 
+        Utilities.descriptionHtml(scope.mai[closureLayersetName][layer]);
     $( elementName ).html(description);
     scope.map.updateLayers();
     scope.updateSharingUrl();
@@ -207,7 +208,7 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
     setPopupContent("Looking up jurisdiction information, please wait...");
 
   // request is a verb here
-  requestUrlWithScope(url, this.setPopupInfoCallback, this);
+  Utilities.requestUrlWithScope(url, this.setPopupInfoCallback, this);
 };
 
 /**

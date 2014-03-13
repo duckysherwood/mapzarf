@@ -100,7 +100,8 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
           layerDescriptionSpan.innerHTML = 'Show ';
           layerSelectionControl.appendChild(layerDescriptionSpan);
           descriptionElem = document.createElement('span');
-          descriptionElem.innerHTML = descriptionHtml(layerSpecs[lastKey]);
+          descriptionElem.innerHTML = 
+             Utilities.descriptionHtml(layerSpecs[lastKey]);
           descriptionElem.id = layersetName + 'Description';
           descriptionElem.className = 'indented';
           layerSelectionControl.appendChild(descriptionElem);
@@ -134,7 +135,8 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
                  descriptionElem = document.createElement('span');
                  descriptionElem.id = layersetName + 'Description';
                  var spec = layerSpecs[key];
-                 descriptionElem.innerHTML = descriptionHtml(spec);
+                 descriptionElem.innerHTML = 
+                      Utilities.descriptionHtml(spec);
                  descriptionElem.className = 'indented';
                  layerSelectionControl.appendChild(descriptionElem);
                }
@@ -166,7 +168,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
 
     if($checkbox) {
       var qstringShowFieldName = 'show' +
-                                 capitalizeFirstLetter(layersetType) + 's';
+                    Utilities.capitalizeFirstLetter(layersetType) + 's';
       var checkedBool = closurePageInitValues[qstringShowFieldName];
       $checkbox.prop('checked', checkedBool);
 
@@ -178,7 +180,8 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
         var fieldName = $selector[0].value;
         var spec = this.mai[layersetName][fieldName];
         var $descriptor = $( '#' + layersetName + 'Description');
-        $descriptor[0].innerHTML = descriptionHtml(spec);
+        $descriptor[0].innerHTML = 
+             Utilities.descriptionHtml(spec);
       }
     }
   };

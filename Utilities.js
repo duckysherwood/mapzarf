@@ -1,3 +1,5 @@
+function Utilities() {
+}
 
 /** Convenience method to make a nice HTML string for a layer description.
  *  @param layerSpec {Object} In object form, the description of a layer from 
@@ -6,7 +8,7 @@
  *    the selected layer.
  *  @public
  */
-function descriptionHtml(layerSpec) {
+Utilities.descriptionHtml = function(layerSpec) {
 
   var descriptor = layerSpec.description;
   if(!descriptor || !Validator.isLegalText(layerSpec.description)) {
@@ -27,7 +29,7 @@ function descriptionHtml(layerSpec) {
 
 
   return descriptor + ' (' + layerSpec.year + ', ' + source + ')';
-}
+};
 
 /** Convenience method to make an HTTP request with the callback
  *  keeping the current scope, and only 
@@ -37,7 +39,7 @@ function descriptionHtml(layerSpec) {
  *  @public
  *  SIDE EFFECTS: causes a callback to happen
  */
-function requestUrlWithScope(url, callback, scope) {
+Utilities.requestUrlWithScope = function (url, callback, scope) {
   var xmlhttp;
   if (window.XMLHttpRequest) {
       // code for IE7+, Firefox, Chrome, Opera, Safari
@@ -55,7 +57,7 @@ function requestUrlWithScope(url, callback, scope) {
       callback.call(scope, xmlhttp.responseText);
     }
   }   
-}
+};
 
 /** Convenience method to capitalize the first letter of the input
  *  @param aString {string} The URL to be fetched.
@@ -63,6 +65,6 @@ function requestUrlWithScope(url, callback, scope) {
  */
 // From
 // http://stackoverflow.com/questions/1026069/capitalize-the-first-letter-of-string-in-javascript
-function capitalizeFirstLetter(aString) {
+Utilities.capitalizeFirstLetter = function (aString) {
     return aString.charAt(0).toUpperCase() + aString.slice(1);
-}
+};

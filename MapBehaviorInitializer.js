@@ -477,7 +477,8 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
        var checkboxId =  '#' + layer + 'Checkbox';
        var checkbox = $( checkboxId ).first()[0];
        if(checkbox) {
-         var fieldName = 'show' + capitalizeFirstLetter(layerType) + 's';
+         var fieldName = 'show' + 
+                Utilities.capitalizeFirstLetter(layerType) + 's';
          url += '&' + fieldName + '=' +
                 closureMap.getFlagForCheckbox(checkboxId);
        }

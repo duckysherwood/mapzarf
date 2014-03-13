@@ -34,7 +34,7 @@ function CityLabeller(aMap) {
     url += "&zoom="+this.mapObject.getZoom()+"&cartogram="+isCartogram;
 
     // request is a verb here
-    requestUrlWithScope(url, this.showCityLabels, this);  
+    Utilities.requestUrlWithScope(url, this.showCityLabels, this);  
   };
   
   
