@@ -23,15 +23,13 @@ function ListenerInitializer (map, mapApplicationInfo,
   /* @private */ this.cityLabeller = labeller;
   /* @private */ this.jurisdictionMarker = jurisdictionMarker;
 
-  // I suppose I could have added an "initialize" method, but
-  // these things only need to happen once per map, so I can't
-  // think of a good reason to not do it here.
-  this.addLayerControlSelectListener('choroplethLayers') ;
-  this.addLayerControlSelectListener('borderLayers') ;
-  this.addLayerControlSelectListener('dotLayers') ;
-  this.addLayerControlCheckboxListener('choroplethLayers');
-  this.addLayerControlCheckboxListener('borderLayers');
-  this.addLayerControlCheckboxListener('dotLayers');
+  var scope = this;
+  $.each(['choroplethLayers', 'borderLayers', 'dotLayers'], 
+         function (index, value) {
+    scope.addLayerControlSelectListener(value) ;
+    scope.addLayerControlCheckboxListener(value);
+  });
+
   this.addCitiesCheckboxListener();
   this.addIsCartogramCheckboxListener();
   this.addMapClickListener();
