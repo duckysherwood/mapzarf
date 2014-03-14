@@ -1,7 +1,6 @@
 load("/appdata/lib/jsunit-1.3/jsunit/lib/JsUtil.js");
 load("/appdata/lib/jsunit-1.3/jsunit/lib/JsUnit.js");
 load("../Validator.js")
-load("../URI.js")
 print("starting validity-checking test cases");
 
 function ValidityTest(name)
@@ -55,81 +54,85 @@ function ValidityTest_testUrlString() {
 
   var url = "http://localhost/y.html";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/y.html";
+  url = "http://tmp.webfoot.com/y.html";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/vanilla/x/y.html";
+  url = "http://tmp.webfoot.com/vanilla/x/y.html";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/poundSign.html#toppage";
+  url = "http://tmp.webfoot.com/poundSign.html#toppage";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/question-mark/x/y?";
+  url = "http://tmp.webfoot.com/question-mark/x/y?";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/small-qstring/x/y?a=b";
+  url = "http://tmp.webfoot.com/small-qstring/x/y?a=b";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/percent-20/x/y?a=b&c=d&f=%20";
+  url = "http://tmp.webfoot.com/percent-20/x/y?a=b&c=d&f=%20";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/gobs/x/foo%2F?bar=baz%20&x=3#foo";
+  url = "http://tmp.webfoot.com/gobs/x/foo%2F?bar=baz%20&x=3#foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/moo-blah/x/foo%2F+other?bar=baz%20&#foo"
+  url = "http://tmp.webfoot.com/moo-blah/x/foo%2F+other?bar=baz%20&#foo"
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://webfoot.com:2222/port/x/foo";
+  url = "http://webfoot.com:2222/port/x/foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://ducky:#$%#^@webfoot.com:2222/uname-port/x/foo?bar=baz&x=3#foo";
+  url = "http://ducky:#$%#^@webfoot.com:2222/uname-port/x/foo?bar=baz&x=3#foo";
+  this.assertTrue(url, Validator.isLegalUrl(url));
+  url = "http://www.data.gov.bc.ca/dbc/catalogue/detail.page?config=dbc&P110=recorduid%3A17554";
+  this.assertTrue(url, Validator.isLegalUrl(url));
+  url = "http://www.data.gov.bc.ca/dbc/catalogue/detail.page?config=dbc&P110=recorduid%3A175544&recorduid=175544&title=BC%20Schools%20-%20School%20Locations%20-%20Current";
   this.assertTrue(url, Validator.isLegalUrl(url));
 
-  var url = "http://localhost.com/port/x/foo";
+  url = "http://localhost.com/port/x/foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://localhost.com:2222/port/x/foo";
+  url = "http://localhost.com:2222/port/x/foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "http://localhost.com:2222/foo.html";
+  url = "http://localhost.com:2222/foo.html";
   this.assertTrue(url, Validator.isLegalUrl(url));
 
   // This could actually be a valid relative (file) URL
-  var url = "http//tmp.webfoot.com/no-colon/x/y"; // no colon
+  url = "http//tmp.webfoot.com/no-colon/x/y"; // no colon
   this.assertTrue(url, Validator.isLegalUrl(url));
 
-  var url = "http://tmp.webfoot.com/space space/x/y?x-y"; // space
+  url = "http://tmp.webfoot.com/space space/x/y?x-y"; // space
   this.assertFalse(url, Validator.isLegalUrl(url));
-  var url = "http://tmp.webfoot.com/scary,chars!/x/y?x-y";  // scary chars
+  url = "http://tmp.webfoot.com/scary,chars!/x/y?x-y";  // scary chars
   this.assertFalse(url, Validator.isLegalUrl(url));
-  var url = 'http://tmp.webfoot.com/evil");chars!/x/y';  // evil chars
+  url = 'http://tmp.webfoot.com/evil");chars!/x/y';  // evil chars
   this.assertFalse(url, Validator.isLegalUrl(url));
   this.assertFalse(url, Validator.isLegalUrl(url));
-  var url = "http://23!9724@tmp.webfoot.com/bad-username/x/y?"; // bad username
+  url = "http://23!9724@tmp.webfoot.com/bad-username/x/y?"; // bad username
   this.assertFalse(url, Validator.isLegalUrl(url));
-  var url = ":http://ducky@tmp.webfoot.com/leading-colon/x/y?"; // leading colon
+  url = ":http://ducky@tmp.webfoot.com/leading-colon/x/y?"; // leading colon
   this.assertFalse(url, Validator.isLegalUrl(url));
 
   // relative URLs
-  var url = "/vanilla/x/y";
+  url = "/vanilla/x/y";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "./poundSign#toppage";
+  url = "./poundSign#toppage";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "../question-mark/x/y?";
+  url = "../question-mark/x/y?";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "/small-qstring/x/y?a=b";
+  url = "/small-qstring/x/y?a=b";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "./percent-20/x/y?a=b&c=d&f=%20";
+  url = "./percent-20/x/y?a=b&c=d&f=%20";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "../gobs/x/foo%2F?bar=baz%20&x=3#foo";
+  url = "../gobs/x/foo%2F?bar=baz%20&x=3#foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "/moo-blah/x/foo%2F+other?bar=baz%20&#foo"
+  url = "/moo-blah/x/foo%2F+other?bar=baz%20&#foo"
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "./x/foo";
+  url = "./x/foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "../x/foo?bar=baz&x=3#foo";
+  url = "../x/foo?bar=baz&x=3#foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "../../../x/triple-double?bar=baz&x=3#foo";
+  url = "../../../x/triple-double?bar=baz&x=3#foo";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "./dotFile.html";
+  url = "./dotFile.html";
   this.assertTrue(url, Validator.isLegalUrl(url));
-  var url = "nakedFile.html";
+  url = "nakedFile.html";
   this.assertTrue(url, Validator.isLegalUrl(url));
 
-  var url = "space space/x/y?x-y"; // space
+  url = "space space/x/y?x-y"; // space
   this.assertFalse(url, Validator.isLegalUrl(url));
-  var url = "scary,chars!/x/y?x-y";  // scary chars
+  url = "scary,chars!/x/y?x-y";  // scary chars
   this.assertFalse(url, Validator.isLegalUrl(url));
-  var url = '/evil");chars!/x/y';  // evil chars
+  url = '/evil");chars!/x/y';  // evil chars
   this.assertFalse(url, Validator.isLegalUrl(url));
 
   // booleans
