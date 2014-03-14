@@ -182,8 +182,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     }
 
     // border layers don't have these
-    // TODO look for each one before printing it out, which probably means 
-    // TODO writing a helper method
     if(layerSpec.hasOwnProperty('minValue')) {
       url += '&minValue=' + layerSpec.minValue;
       url += '&maxValue=' + layerSpec.maxValue;

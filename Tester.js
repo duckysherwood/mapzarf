@@ -14,7 +14,6 @@ function Tester()  {
     };
 
 // This will only work if the query string is null
-// TODO how can I better test?
   this.pageInitValuesTest = function () {
   
     var testValues = new MapDisplayParameters(exampleMai)

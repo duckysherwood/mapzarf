@@ -25,7 +25,6 @@
  *  element on the page, but it probably wouldn't be *too* difficult 
  *  to instanttiate two different maps (with two different sets of controls).
  */
-// TODO check for existence of all the named elements
 
 /** 
  *  @constructor
@@ -175,7 +174,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
       var indexName = layersetType + 'Index';
       if(closurePageInitValues[indexName]) {
         var $selector = $( '#' + layersetName + 'Selector');
-        // TODO cope with illegal values
+        // values checked for legality earlier
         $selector.prop('selectedIndex', closurePageInitValues[indexName]);
         var fieldName = $selector[0].value;
         var spec = this.mai[layersetName][fieldName];
@@ -241,11 +240,10 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   
     if (this.mai.hasOwnProperty('hasCartogram') &&
         this.mai.hasCartogram) {
-       var cartogramCheckboxString;
-       if(closurePageInitValues.cartogram) {
-         cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" checked>';
-       } else {
-         cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox" >'; // TODO clean up
+          var checkedString = closurePageInitValues.cartogram ? 'checked' : '';
+          var cartogramCheckboxString = 
+          // TODO 
+          cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox'" + checkedString + '">';
        }
        var cartogramText = 'Show as cartogram<p />';
        $( '#cartogramSelector' ).append(cartogramCheckboxString + cartogramText);
