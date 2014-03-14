@@ -237,16 +237,12 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
     $( '#sharingUrl' )[0].href = '#';
   
     // Allow switching between cartogram and not
-  
-    if (this.mai.hasOwnProperty('hasCartogram') &&
-        this.mai.hasCartogram) {
-          var checkedString = closurePageInitValues.cartogram ? 'checked' : '';
-          var cartogramCheckboxString = 
-          // TODO 
-          cartogramCheckboxString = '<input type="checkbox" id="isCartogramCheckbox'" + checkedString + '">';
-       }
-       var cartogramText = 'Show as cartogram<p />';
-       $( '#cartogramSelector' ).append(cartogramCheckboxString + cartogramText);
+    var checkedString = closurePageInitValues.cartogram ? 'checked' : '';
+    if (this.mai.hasOwnProperty('hasCartogram')) {
+      var cartogramCheckboxString = 
+        '<input type="checkbox" id="isCartogramCheckbox" '+checkedString + '>';
+      var cartogramText = 'Show as cartogram<p />';
+      $( '#cartogramSelector' ).append(cartogramCheckboxString + cartogramText);
     }
   
     // Set up the map
