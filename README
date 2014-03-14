@@ -50,7 +50,7 @@ controls should be shared between the two and which should be separate,
 for one.)
 
 
-======= Why mapzarf?
+======= Why "mapzarf"?
 
 I decided that if I was going to put this on github, I would need to 
 call it something different than "my generalized map framework".  
