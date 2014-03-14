@@ -40,10 +40,13 @@ class MapApplicationPage:
 
   def doesMarkerExistForUrlFragment(self, urlFragment):
     try:
-      WebDriverWait(self.browser, 3).until(
+      WebDriverWait(self.browser, 4).until(
         EC.presence_of_element_located((By.CLASS_NAME, 'leaflet-marker-icon')))
     except TimeoutException:
       return False
+
+    # The teardrop marker shows up before the city markers, so wait a minute
+    time.sleep(1)
 
     # Must troll through the markers to see if any are actual like "teardrop"
     # markers, not just city names.  The "teardrop" markers have src which
@@ -204,7 +207,7 @@ class MapApplicationPage:
     # This will wait until *some* tile will be clickable, but
     # note that won't help when zooming because the old tiles
     # will still be clickable.
-    WebDriverWait(self.browser, 4).until(
+    WebDriverWait(self.browser, 5).until(
        EC.element_to_be_clickable((By.CLASS_NAME,'leaflet-tile-loaded')))    
 
 

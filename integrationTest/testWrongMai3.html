@@ -44,8 +44,6 @@
     <script type="text/javascript" 
             src="/thirdparty/jquery-1.11.0.min.js"></script>
 
-    <!-- wrongMai7 is missing table and polyYear specs -->
-    <script id="mai" type="text/javascript" src="./wrongMai7.js"></script>
 <!--
     <script type="text/javascript" src="/mapzarf/mapzarfAllCompressed.js"></script>
 -->
@@ -53,32 +51,13 @@
   
     <script type="text/javascript">
 
-      function maiAlert() {
-        var ignore = $( '#mai')[0].src;
-        alert("There was a problem with the JSON file "
-              + "used to determine the layout and capabilities of this page. "
-              + "Either the file doesn't exist, it can't be read, or it has "
-              + "a syntax error in it.\n")
-      }
 
-      try {
-        this.mai = mapApplicationInfo;
-        if(typeof this.mai != 'object') {
-          maiAlert();
-        }
-      }
-      catch(ReferenceError) {
-        maiAlert();
-      }
+      var maiFile = './testWrongMai3.json';
+
+      var runner = new Runner();
+      $.get( maiFile, runner.start, 'json' ).error(runner.maiAlert);
 
 
-      $(document).ready(function() {
-
-        var runner = new Runner(mapApplicationInfo);
-        runner.main();
-
-
-      });
     </script>
 
   </body>

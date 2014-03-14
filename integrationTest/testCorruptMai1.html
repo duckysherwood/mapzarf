@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>TestInsanity pageTitle</title>
+    <title>TestSanity pageTitle</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- FIXME TODO NOTE Set this to the locations of your Leaflet
@@ -44,41 +44,21 @@
     <script type="text/javascript" 
             src="/thirdparty/jquery-1.11.0.min.js"></script>
 
-    <!-- this mapApplicationInfo is totally corrupt, not even JS -->
-    <script id="mai" type="text/javascript" src="./corruptMai1.js"></script>
 <!--
     <script type="text/javascript" src="/mapzarf/mapzarfAllCompressed.js"></script>
 -->
-
     <script type="text/javascript" src="/mapzarf/mapzarfAll.js"></script>
   
     <script type="text/javascript">
 
-      function maiAlert() {
-        var urlString = $( '#mai')[0].src;
-        alert("There was a problem with the JSON file "
-              + "used to determine the layout and capabilities of this page. "
-              + "Either the file doesn't exist, it can't be read, or it has "
-              + "a syntax error in it.\n")
-      }
 
-      try {
-        this.mai = mapApplicationInfo;
-        if(typeof this.mai != 'object') {
-          maiAlert();
-        }
-      }
-      catch(ReferenceError) {
-        maiAlert();
-      }
+      var maiFile = './testCorruptMai1.json';
 
-      $(document).ready(function() {
-
-        var runner = new Runner(mapApplicationInfo);
-        runner.main();
+      var runner = new Runner();
+      $.get( maiFile, runner.start, 'json' ).error(runner.maiAlert);
 
 
-      });
+
     </script>
 
   </body>

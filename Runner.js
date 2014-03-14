@@ -7,19 +7,23 @@
  *  @param mapApplicationInfo {object} A JSON object with information 
  *    about how to set up the map.
  */
-function Runner(mapApplicationInfo) {
-  this.mai = mapApplicationInfo;  
+function Runner() {
+  this.mai = null;
 }
 
-/** This is the start of execution, much like =main()= in C programs.
- *  @private
- *  SIDE EFFECT: removes all the city labels from the map
+/** This is where execution really kicks off.  This is a callback from
+ *  the $.get of the MAI file.
+ *  @public
  */
-Runner.prototype.main = function () {
-  // var tester = new Tester();
-  // tester.pageInitValuesTest();
-  // tester.testCongressionalDistrictInfoMercator();
-  // tester.testCongressionalDistrictInfoCartogram();
+Runner.prototype.start = function (data, textStatus, jqXhr) {
+
+  if(textStatus != 'success') {
+    this.maiAlert();
+  }
+
+console.log(jqXhr);
+  this.mai = data;
+
 
   var mapDisplayParameters = new MapDisplayParameters(this.mai);
   var pageInitValues = mapDisplayParameters.getPageValueParameters();
@@ -57,3 +61,13 @@ Runner.prototype.main = function () {
 
   }
 };
+
+/** Convenience method to put up an alert if the MAI file was wrong.
+ *  @private
+ */
+Runner.prototype.maiAlert = function() {
+   alert("There was a problem with the JSON file "
+          + "used to determine the layout and capabilities of this page. "
+          + "Either the file doesn't exist, it can't be read, or it has "
+          + "a syntax error in it.\n");
+}   

@@ -1,5 +1,4 @@
-/* This file is corrupt by missing a comma -- a very easy mistake to make. */
-mapApplicationInfo = {
+{
   'pageTitle' : 'TestSanity pageTitle',
   'pageDescription' : 'TestSanity pageDescription',
   'pointInfoUrlPrefix' : './testSanityMarkerInfo.html',
@@ -129,6 +128,4 @@ mapApplicationInfo = {
           'source' : 'Freedom Works'
        }
     }
-	
-
 }

@@ -21,7 +21,7 @@ class TestInsanity(unittest.TestCase):
     self.browser = webdriver.Chrome(CHROMEDRIVER_LOCATION)
     self.page = None
 
-  def checkAlert(self, urlString):
+  def checkAlert(self, urlString, message):
     try:
       self.page = MapApplicationPage(self.browser, urlString)
       WebDriverWait(self.browser, 3).until(
@@ -30,9 +30,12 @@ class TestInsanity(unittest.TestCase):
 
     except UnexpectedAlertPresentException as e:
       alertText = Alert(self.browser).text
-      if alertText and ("problem with the JSON file" in alertText):
+      if alertText and (message in alertText):
         Alert(self.browser).accept()
         return True
+      else:
+        print("Expected " + message + ", got " + alertText)
+        return False
     
     return False
 
@@ -40,26 +43,31 @@ class TestInsanity(unittest.TestCase):
   # Tests 
   def testGoodJson(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testSanity.html'
-    self.assertTrue(not self.checkAlert(urlString))
+    message = "application info file is invalid"
+    self.assertFalse(self.checkAlert(urlString, message))
 
   def testPlainString(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testCorruptMai1.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "There was a problem with the JSON file"
+    self.assertTrue(self.checkAlert(urlString, message))
 
   def testDelimitedString(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testCorruptMai2.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "application info file is invalid";
+    self.assertTrue(self.checkAlert(urlString, message))
 
   # MAI3 is a string inside brackets
   def testInvalidJson(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testCorruptMai3.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "There was a problem with the JSON file"
+    self.assertTrue(self.checkAlert(urlString, message))
 
   # MAI4 is just like the good one (in testSanity) but it is
   # missing a comma
   def testMissingCommaJSON(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testCorruptMai4.html'
-    self.assertTrue(self.checkAlert(urlString))
+    message = "There was a problem with the JSON file"
+    self.assertTrue(self.checkAlert(urlString, message))
 
   def tearDown(self):
     self.page.tearDown()

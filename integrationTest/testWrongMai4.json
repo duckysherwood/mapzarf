@@ -1,5 +1,4 @@
-/* if missing cartogram table, then don"t have a cartogram checkbox */
-mapApplicationInfo = {
+{
   "pageTitle" : "TestSanity pageTitle",
   "pageDescription" : "TestSanity pageDescription",
   "pointInfoUrlPrefix" : "./testSanityMarkerInfo.html",
@@ -15,8 +14,6 @@ mapApplicationInfo = {
   "dotLayers" :
     {
        "gunDeaths": {
-          "mercatorTable":"dotAttributes",
-          "cartogramFieldName":"gunDeathCount",
           "year":2013,
           "size":3,
           "color": "0000ff",

@@ -1,9 +1,4 @@
-/* This MAI is designed to be maximally incorrect for value types: every field 
- * has the incorrect type: numbers where there should be strings and vice 
- * versa, etc. 
- */
- 
-mapApplicationInfo = {
+{
   "pageTitle" : 32,
   "pageDescription" : -46,
   "pointInfoUrlPrefix" : 255,
@@ -97,6 +92,4 @@ mapApplicationInfo = {
           "source" : 4734.868
        }
     }
-	
-
 }

@@ -23,8 +23,8 @@ class TestWrong(unittest.TestCase):
   def checkAlert(self, urlString, message):
     try:
       self.page = MapApplicationPage(self.browser, urlString)
-      WebDriverWait(self.browser, 5).until(
-          EC.presence_of_element_located((By.TAG_NAME, 'title')))
+      WebDriverWait(self.browser, 6).until(
+          EC.presence_of_element_located((By.TAG_NAME, 'dotLayersCheckbox')))
 
 
     except UnexpectedAlertPresentException as e:
@@ -41,47 +41,47 @@ class TestWrong(unittest.TestCase):
 
 
   # Tests 
-  def testWronglyTypedValues(self):
-    urlString = 'http://localhost/mapzarf/integrationTest/testWrong1.html'
+  def testWrongMailyTypedValues(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai1.html'
     message = "map application info file is invalid"
     self.assertTrue(self.checkAlert(urlString, message))
 
   # TODO This should go in incomplete
   def testMismatchedDotProjectionTableField(self):
-    urlString = 'http://localhost/mapzarf/integrationTest/testWrong2.html'
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai2.html'
     message = "dot layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   def testMissingDotTable(self):
-    urlString = 'http://localhost/mapzarf/integrationTest/testWrong3.html'
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai3.html'
     message = "dot layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # TODO this should go in incomplete
   def testMissingDotFieldTable(self):
-    urlString = 'http://localhost/mapzarf/integrationTest/testWrong4.html'
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai4.html'
     message = "dot layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
 
   def testMismatchedTablePolyYear1(self):
-    urlString = 'http://localhost/mapzarf/integrationTest/testWrong5.html'
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai5.html'
     message = "choropleth layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
 
   def testMismatchedTablePolyYear2(self):
-    urlString = 'http://localhost/mapzarf/integrationTest/testWrong6.html'
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai6.html'
     message = "choropleth layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # TODO this should go in incomplete
   def testMissingPolyShapeYear(self):
-    urlString = 'http://localhost/mapzarf/integrationTest/testWrong7.html'
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai7.html'
     message = "choropleth layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # hasCartogram is set, but there are no cartogram layers
   def testMissingChoroplethPolyShapeYear(self):
-    urlString = 'http://localhost/mapzarf/integrationTest/testWrong8.html'
+    urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai8.html'
     message = "layer for the cartogram projection"
     self.assertTrue(self.checkAlert(urlString, message))
 

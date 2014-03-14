@@ -76,7 +76,7 @@ class TestQueryString(unittest.TestCase):
     page.tearDown()
 
 
-  def xtestTurningAllLayersOffAndIndex1(self):
+  def testTurningAllLayersOffAndIndex1(self):
     queryString = "lat=38.5&lng=-122&zoom=8&markerLat=37.5&markerLng=-121.5&cartogram=f&showDots=f&showChoropleths=f&showBorders=f&dotIndex=1&borderIndex=1&choroplethIndex=1&showCities=f"
 
     url = TEST_URL + "?" + queryString
@@ -118,6 +118,7 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     page.showCities(False)
+    time.sleep(1)
 
     # The marker was not moved, so it should still be at defaults
     # (i.e. off screen).
@@ -127,7 +128,7 @@ class TestQueryString(unittest.TestCase):
     # but I can look for a tile which would not be visible in the
     # default coordinates.  This will raise an exception if the tile
     # is not visible.
-    page.clickOnDotTile(41, 99, 8)
+    page.clickOnDotTile(40, 98, 8)
 
     # Clicking on the tile should make the marker visible.
     self.assertTrue(page.doesTeardropMarkerExist())

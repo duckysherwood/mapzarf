@@ -1,5 +1,4 @@
-/* if missing cartogram table, then don"t have a cartogram checkbox */
-mapApplicationInfo = {
+{
   "pageTitle" : "TestSanity pageTitle",
   "pageDescription" : "TestSanity pageDescription",
   "pointInfoUrlPrefix" : "./testSanityMarkerInfo.html",
@@ -32,7 +31,6 @@ mapApplicationInfo = {
           "description":"Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes",
           "source":"Tax Foundation",
           "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
-       },
+       }
     }
-
 }
