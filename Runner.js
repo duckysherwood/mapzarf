@@ -21,7 +21,6 @@ Runner.prototype.start = function (data, textStatus, jqXhr) {
     this.maiAlert();
   }
 
-console.log(jqXhr);
   this.mai = data;
 
 
