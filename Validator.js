@@ -142,7 +142,8 @@ Validator.isLegalText = function(candidate) {
 var re_weburl = new RegExp(
   "^" +
     // protocol identifier
-    "(?:(?:https?|ftp)://)" +  
+    // "(?:(?:https?|ftp)://)" +  // @@@ kds added file
+    "(?:(?:https?|ftp|file)://)" +  
     // user:pass authentication
     "(?:\\w+(?::\\S*)?@)?" +
     // "(?:\\S+(?::\\S*)?@)?" +
