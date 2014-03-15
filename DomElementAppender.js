@@ -91,28 +91,28 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
         layerSelectionCheckbox.type = 'checkbox';
         layerSelectionCheckbox.checked = true;
 
-        var layerDescriptionSpan = document.createElement('span');
+        var layerDescriptionLabel = document.createElement('label');
+        layerDescriptionLabel.htmlFor = layersetName + 'Checkbox';
   
         var descriptionElem;
         if( layersCount == 1) {
           layerSelectionCheckbox.value = lastKey;
-          layerDescriptionSpan.innerHTML = 'Show ';
-          layerSelectionControl.appendChild(layerDescriptionSpan);
-          descriptionElem = document.createElement('span');
-          descriptionElem.innerHTML = 
+
+          layerDescriptionLabel.innerHTML = 'Show ' +
              Utilities.descriptionHtml(layerSpecs[lastKey]);
-          descriptionElem.id = layersetName + 'Description';
-          descriptionElem.className = 'indented';
-          layerSelectionControl.appendChild(descriptionElem);
+          layerDescriptionLabel.id = layersetName + 'Description';
+          layerDescriptionLabel.className = 'indented';
+
+          layerSelectionControl.appendChild(layerDescriptionLabel);
   
         } else {
           
           // When I tried making value=null, value was instead ="on".  ???
           layerSelectionCheckbox.value = SENTINEL_MULTIPLE;
   
-          layerDescriptionSpan.innerHTML = 'Show ' +
+          layerDescriptionLabel.innerHTML = 'Show ' +
             layersetName.replace('Layer', ' layer') + ': <br />';
-          layerSelectionControl.appendChild(layerDescriptionSpan);
+          layerSelectionControl.appendChild(layerDescriptionLabel);
           var selectElement = document.createElement('select');
           selectElement.className = 'indented';
           selectElement.id = layersetName + 'Selector';
