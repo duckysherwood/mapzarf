@@ -10,6 +10,9 @@ few more) based on one JSON file.
 
 ======= Terminology
 
+MAI: Short for MapApplicationInfo, the JSON file which describes how the
+page will be laid out, which layers will be used, etc.
+
 Choropleth: Maps where jurisdiction polygons are coloured based on an attribute
 of the jurisdiction are called choropleth maps.  The important point is that
 it is polygons, not points.
@@ -20,7 +23,11 @@ median income, the location of schools, or the state borders -- is a layer.
 Layerset: Each *type* of layer -- choropleth, dot, or border -- is grouped
 together in mapzarf.  That grouping is called a layerset.  
 
+LayerSpec: The second of the MAI file which describes a specific layer.
+           NOTE: the "S" is capitalized.
 
+Slippy map framework: A framework/API for making an draggable/zoomable
+map with map tiles, e.g. Google Maps, Bing Maps, Leaflet, etc.
 
 ======= What is NOT covered by the JSON file?
 
