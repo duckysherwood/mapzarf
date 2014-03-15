@@ -325,3 +325,13 @@ Validator.validateFields = function(candidate,
   return success;
     
 };
+
+Validator.classForTileType = function (tileType) {
+  var classTable = {
+    'mapeteriaChoropleth' : MapeteriaChoroplethLayerSpecFormatSupport,
+    'mapeteriaBorder' : MapeteriaBorderLayerSpecFormatSupport
+    // 'mapeteriaDot' : MapeteriaDotLayerSpecFormatSupport,
+    };
+
+  return classTable[tileType];
+}

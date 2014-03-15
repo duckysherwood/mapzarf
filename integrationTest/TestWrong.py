@@ -65,18 +65,18 @@ class TestWrong(unittest.TestCase):
 
   def testMismatchedTablePolyYear1(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai5.html'
-    message = "choropleth layer is not valid, alas"
+    message = "Choropleth layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
 
   def testMismatchedTablePolyYear2(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai6.html'
-    message = "choropleth layer is not valid, alas"
+    message = "Choropleth layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # TODO this should go in incomplete
   def testMissingPolyShapeYear(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai7.html'
-    message = "choropleth layer is not valid, alas"
+    message = "Choropleth layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # hasCartogram is set, but there are no cartogram layers

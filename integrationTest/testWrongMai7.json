@@ -14,8 +14,8 @@
   "choroplethLayers" :
    {
      "taxRoiNormalized": { 
-        "tileGenerator" : "mapeteria",
-        "tileGeneratorVersion" : 2,
+        "tileEngine" : "mapeteriaChoropleth",
+        "tileEngineVersion" : 2,
         "table":"provinceAttributes",
         "fieldName":"taxRoiNormalized",
         "year":2005,

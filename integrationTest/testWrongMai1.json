@@ -14,8 +14,8 @@
   "choroplethLayers" :
     {
        "taxRoiNormalized": { 
-          "tileGenerator" : 35,
-          "tileGeneratorVersion" : "asljf",
+          "tileEngine" : 35,
+          "tileEngineVersion" : "asljf",
           "table" : 365,
           "fieldName" : -456,
           "year" : "nancy",
@@ -35,8 +35,8 @@
           "sourceUrl" : 47676
        },
        "populationPovertyPct": {
-          "tileGenerator" : 4753,
-          "tileGeneratorVersion" : "aslfkj",
+          "tileEngine" : 4753,
+          "tileEngineVersion" : "aslfkj",
           "table" : 7347,
           "fieldName" : 354.46,
           "mercatorShapeType" : 5674567.34,
@@ -58,8 +58,8 @@
   "borderLayers" :
     {
        "state": {
-          "tileGenerator" : 353,
-          "tileGeneratorVersion" : "aslfkj",
+          "tileEngine" : 353,
+          "tileEngineVersion" : "aslfkj",
           "table" : -34532,
           "mercatorShapeType" : 5854,
           "mercatorPolyYear" : "house on a hill",

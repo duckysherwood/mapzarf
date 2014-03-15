@@ -5,8 +5,8 @@
   "choroplethLayers" :
     {
        "taxRoiNormalized": { 
-          "tileGenerator" : "mapeteria",
-          "tileGeneratorVersion" : 2,
+          "tileEngine" : "mapeteriaChoropleth",
+          "tileEngineVersion" : 2,
           "table":"provinceAttributes",
           "fieldName":"taxRoiNormalized",
           "mercatorShapeType" : "state", 
@@ -24,6 +24,8 @@
     "dotLayers" :
     {
        "gunDeaths": {
+          "tileEngine" : "mapeteriaDot",
+          "tileEngineVersion" : 2,
           "mercatorTable":"dotAttributes",
           "mercatorFieldName":"gunDeathCount",
           "year":2013,
@@ -34,8 +36,8 @@
     "borderLayers" :
       {
        "state": {
-          "tileGenerator" : "mapeteria",
-          "tileGeneratorVersion" : 2,
+          "tileEngine" : "mapeteriaBorder",
+          "tileEngineVersion" : 2,
           "table":"provinceAttributes",
           "mercatorShapeType" : "state",
           "mercatorPolyYear" : 2006,

@@ -1,0 +1,41 @@
+LayerspecFormatSupport interface:
+
+LayerspecFormatSupport classes contain all the information you need to 
+support a new type of tile.
+
+One *could* use a BareLayerspecFormatSupport class for any tile type, no
+need to create a new LayerspecFormatSupport class BUT 
+   1. It is a whole lot easier to read a bunch of pieces of a URL
+      than an entire URL.
+   2. There is no validation of the individual pieces in the 
+      BareLayerspecFormatSupport.  Sure, you can verify that it's 
+      a legitimate URL, but can you verify that the things that are
+      supposed to be numbers are numbers?  Can you verify that things
+      that are supposed to be strings are strings?  
+
+TileEngineSupport implementations must implement the class methods
+
+   FooTileLayerFactory.getLayerUrl(layerSpec, projection)
+which returns
+  a partial url to a tile, to be used to create a map layer.  
+The partial URL does NOT have map coordinates in it already, or even
+the *template* for the map coordinates (e.g. x={x}&y={y}&zoom={z})
+in the URL because not all maps use x/y/z.  Bing, for example, uses
+a quadkey notation.  That piece needs to get attached later, in the 
+code specific to a particular slippy-map type (e.g. Leaflet, Google, Bing).
+
+and has parameter:
+  layerSpec -- a piece of of the MapApplicationInfo JSON
+               file corresponding to a specific layer) 
+  projection -- a string which right now can either be 'cartogram' or
+                'mercator'
+
+   FooTileLayerFactory.validate(layerSpec)
+
+which returns
+  a boolean which says whether or not the layerSpec is valid for this
+tile type.
+
+NOTE: The layerSpecs need to be verified on load (so that the DOM doesn't
+get controls which allow choosing invalid layerSpecs), so the layerSpecs
+should already be validated by the time you get to getLayerUrl().

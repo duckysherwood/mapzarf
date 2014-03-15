@@ -96,27 +96,16 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *  @private
    */
   this.map.getChoroplethLayer = function () {
-    // TODO need to refactor when move this into a LayerFactory
     var layersetName = 'choroplethLayers';
+    var layerSpec = this.getLayerSpec(layersetName);
 
-    if(!$( '#' + layersetName + 'Checkbox').is(':checked')) {
+    if(!layerSpec) {
       return null;
     }
 
-    var key = this.findSelectedKeyForLayerType(layersetName);
-    var layerSpec = this.mai[layersetName][key] ;
+    $( '#legendImage' )[0].update(layerSpec);
 
-    if(!this.validateChoroplethLayerspec(layerSpec)) {
-      var descriptor = layerSpec.shortDescription;
-      if(!descriptor) {
-        descriptor = 'unnamed';
-      }
-      alert("The specification for the " + key + " choropleth layer is not valid, alas.");
-      console.log('Invalid layer specification for ' + key);
-      return null;
-    }
-
-    return this.getPolygonLayer('choroplethLayers', false);
+    return this.getPolygonLayer(layerSpec);
   };
 
   /** Creates a border layer for the map to use
@@ -124,8 +113,51 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    * @private
    */
   this.map.getBorderLayer = function () {
-    return this.getPolygonLayer('borderLayers', true);
+    var layersetName = 'borderLayers';
+    var layerSpec = this.getLayerSpec(layersetName);
+
+    if(!layerSpec) { 
+      return null;
+    }
+
+    var fakeSpec = MapeteriaBorderLayerSpecFormatSupport
+                                    .asChoroplethLayerSpec(layerSpec);
+    return this.getPolygonLayer(fakeSpec);
   };
+
+  /** Gets the layerSpec for the currently-selected layer of the 
+   *  given layerset.
+   *  @param {string} layersetName A string describing what type of
+   *    layerset it is (valid strings: 'borderLayers' or 'choroplethLayers')
+   *  @returns {Object} LayerSpec object describing a layer.
+   *  @private
+   */
+  this.map.getLayerSpec = function(layersetName) {
+    if(!this.layerSpecExists(layersetName)) {
+      return null;
+    }
+
+    if(!$( '#' + layersetName + 'Checkbox').is(':checked')) {
+      return null;
+    }
+
+    var key = this.findSelectedKeyForLayerType(layersetName);
+    var layerSpec = this.mai[layersetName][key];
+
+    if(!layerSpec.tileEngine) {
+      return null;
+    }
+    var validator = Validator.classForTileType(layerSpec.tileEngine);
+
+    if(!validator.validate(layerSpec)) {
+      alert("The specification for the " + key + " " + layerSpec.tileEngine + 
+            " layer is not valid, alas.");
+      console.log('Invalid layer specification for ' + key);
+      return null;
+    }
+
+    return this.mai[layersetName][key] ;
+  }
 
   /** Creates a polygon layer -- either choropleth or border --
    *  for the map to use.
@@ -139,17 +171,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *  @returns {Object} Layer object describing a border or choropleth layer.
    *  @private
    */
-  this.map.getPolygonLayer = function (layersetName, showBorder) {
-    if(!this.layerSpecExists(layersetName)) {
-      return null;
-    }
-
-    if(!$( '#' + layersetName + 'Checkbox').is(':checked')) {
-      return null;
-    }
-
-    var key = this.findSelectedKeyForLayerType(layersetName);
-    var layerSpec = this.mai[layersetName][key] ;
+  this.map.getPolygonLayer = function (layerSpec) {
 
     var shapeType = layerSpec[this.projectionType() + 'ShapeType'];
     var polyYear = layerSpec[this.projectionType() + 'PolyYear'];
@@ -159,49 +181,9 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
       return null;
     }
 
-    var url = BINDIR + "/choropleth.phpx?x={x}&y={y}&zoom={z}&";
+    url = MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl(
+                          layerSpec, this.projectionType())
 
-    url += 'polyType=' + layerSpec[this.projectionType() + 'ShapeType'];
-    url += '&polyYear=' + layerSpec[this.projectionType() + 'PolyYear'];
-    url += '&table=' + layerSpec.table;
-    url += '&field=' + layerSpec.fieldName;
-    url += '&year=' + layerSpec.year;
-
-
-    // @@@ I suppose I could also check for null or undefined...
-    if(layerSpec.hasOwnProperty('normalizerType') &&
-       layerSpec.hasOwnProperty('normalizerField') &&
-       layerSpec.hasOwnProperty('normalizerYear') ) {
-      url += '&normalizer=' + layerSpec.normalizerField;
-      url += '&normalizerType=' + layerSpec.normalizerType;
-      url += '&normalizerYear=' + layerSpec.normalizerYear;
-    } else {
-      url += '&normalizer=null' ;
-      url += '&normalizerYear=1';
-      url += '&normalizerType=n';
-    }
-
-    // border layers don't have these
-    if(layerSpec.hasOwnProperty('minValue')) {
-      url += '&minValue=' + layerSpec.minValue;
-      url += '&maxValue=' + layerSpec.maxValue;
-      url += '&minColor=' + layerSpec.minColor;
-      url += '&maxColor=' + layerSpec.maxColor;
-    }
-    url += '&mapping=' + layerSpec.mapping;
-
-    if(showBorder) {
-      var borderWidth = 1;
-      if(layerSpec.hasOwnProperty('borderWidth')) {
-        borderWidth = layerSpec.borderWidth;
-      }
-      url += "&borderColor="+layerSpec.borderColor +
-             "&border=solid&width="+layerSpec.borderWidth;
-    }
-
-    if(layersetName == "choroplethLayers") {
-      $( '#legendImage' )[0].update(layerSpec);
-    }
        
     return L.tileLayer(url, {
       maxZoom: 18,
@@ -210,70 +192,9 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   };
 
-  // TODO move into a MapeteriaChoroplethLayerFactory
-  this.map.validateChoroplethLayerspec = function(layerSpec) {
-    var requiredFieldsTable = {'fieldName' : 'word',
-                               'table' : 'word',
-                               'year' : 'int',
-                               'minColor' : 'color',
-                               'maxColor' : 'color',
-                               'minValue' : 'float',
-                               'maxValue' : 'float'
-                              };
-    var optionalFieldsTable = {'tileGenerator' : 'word',
-                               'tileGeneratorVersion' : 'float',
-                               'mercatorPolyYear' : 'int',
-                               'mercatorTable' : 'word',
-                               'cartogramPolyYear' : 'int',
-                               'cartogramTable' : 'word',
-                               'isPercentage' : 'bool',
-                               'shortDescription' : 'text',
-                               'description' : 'text',
-                               'mapping' : 'text',
-                               'sourceUrl' : 'url',
-                               'source' : 'text'};
+  this.map.validateChoroplethLayerSpec = 
+              MapeteriaChoroplethLayerSpecFormatSupport.validate;
 
-    // It's okay to only have one of mercator and cartogram specs,
-    // but you must have at least one (and the field name, table name,
-    // and polyYear all be the same projection type and all be there).
-    var hasMercators = layerSpec.mercatorShapeType &&
-                       layerSpec.mercatorPolyYear;
-    var hasCartograms = layerSpec.mercatorShapeType &&
-                        layerSpec.mercatorPolyYear;
-    if(!(hasMercators || hasCartograms)) {
-      console.log("hasMercators: " + hasMercators);
-      console.log("hasCartograms: " + hasCartograms);
-      return false;
-    }
-
-    // TODO move this into the superclass of the LayerFactory
-    var success = true;
-    $.each(requiredFieldsTable, function(fieldName, fieldType) {
-      if(!layerSpec.hasOwnProperty(fieldName)) {
-        console.log("Choropleth layer is missing field " + fieldName);
-        success = false;
-        return false;
-      }
-      if(!Validator.isLegal(fieldType, layerSpec[fieldName])) {
-        console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
-        success = false;
-        return false;
-      }
-    });
-
-
-    $.each(optionalFieldsTable, function(fieldName, fieldType) {
-      if(layerSpec[fieldName]) {
-        if(!Validator.isLegal(fieldType, layerSpec[fieldName])) {
-          console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
-          success = false;
-          return false;
-        }
-      }
-    });
-    
-    return success;
-  };
 
   // TODO move into a DotLayerFactory (MapeteriaDotLayerFactory?)
   /** Checks that the specification for a dot layer is
@@ -281,7 +202,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *  @returns {Object} Layer object describing a dots layer.
    *  @private
    */
-  this.map.validateDotLayerspec = function(layerSpec) {
+  this.map.validateDotLayerSpec = function(layerSpec) {
     var requiredFieldsTable = {'year' : 'int',
                                'size' : 'int',
                                'color' : 'color'};
@@ -359,7 +280,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     var key = this.findSelectedKeyForLayerType(layersetName);
     var layerSpec = this.mai[layersetName][key] ;
 
-    if(!this.validateDotLayerspec(layerSpec)) {
+    if(!this.validateDotLayerSpec(layerSpec)) {
       var descriptor = layerSpec.shortDescription;
       if(!descriptor) {
         descriptor = 'unnamed';

@@ -170,12 +170,12 @@ class TestQueryString(unittest.TestCase):
     page.showCities(False)
 
     self.assertTrue(page.tileLayerOfTypeAndAttributeExists(
-                         "choroplethLayers", "polyType=state"))
+                         "choroplethLayers", "polyType=state&"))
  
-    # Now switch to cartogram, and tile 3,7,4 should be found
+    # Now switch to cartogram, cartogram polytype should be found
     page.showAsCartogram(True)
     self.assertTrue(page.tileLayerOfTypeAndAttributeExists(
-                         "choroplethLayers", "polyType=statePopCartogram"))
+                         "choroplethLayers", "polyType=statePopCartogram&"))
 
     page.tearDown()
 
