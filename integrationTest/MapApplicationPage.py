@@ -207,7 +207,7 @@ class MapApplicationPage:
     # This will wait until *some* tile will be clickable, but
     # note that won't help when zooming because the old tiles
     # will still be clickable.
-    WebDriverWait(self.browser, 5).until(
+    WebDriverWait(self.browser, 6).until(
        EC.element_to_be_clickable((By.CLASS_NAME,'leaflet-tile-loaded')))    
 
 
