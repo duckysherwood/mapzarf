@@ -101,11 +101,12 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    */
   this.map.getChoroplethLayer = function () {
     var layersetName = 'choroplethLayers';
-    var layerSpec = this.getLayerSpec(layersetName);
+    var layerSpec = this.getLayerSpec(layersetName); // validation happens there
 
     if(!layerSpec) {
       return null;
     }
+
 
     $( '#legendImage' )[0].update(layerSpec);
 
@@ -118,7 +119,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    */
   this.map.getBorderLayer = function () {
     var layersetName = 'borderLayers';
-    var layerSpec = this.getLayerSpec(layersetName);
+    var layerSpec = this.getLayerSpec(layersetName); // and validates
 
     if(!layerSpec) { 
       return null;
@@ -153,7 +154,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     }
     var validator = Validator.classForTileType(layerSpec.tileEngine);
 
-    if(!validator.validate(layerSpec)) {
+    if(!validator || !validator.validate(layerSpec)) {
       alert("The specification for the " + key + " " + layerSpec.tileEngine + 
             " layer is not valid, alas.");
       console.log('Invalid layer specification for ' + key);
@@ -177,13 +178,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    */
   this.map.getPolygonLayer = function (layerSpec) {
 
-    var shapeType = layerSpec[this.projectionType() + 'ShapeType'];
-    var polyYear = layerSpec[this.projectionType() + 'PolyYear'];
-    if (!shapeType || !polyYear) {
-      alert("There is no information for the " + layerSpec.shortDescription +
-            " layer for the " + this.projectionType() + " projection.");
-      return null;
-    }
 
     url = MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl(
                           layerSpec, this.projectionType())
@@ -196,71 +190,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   };
 
-  this.map.validateChoroplethLayerSpec = 
-              MapeteriaChoroplethLayerSpecFormatSupport.validate;
-
-
-  // TODO move into a DotLayerFactory (MapeteriaDotLayerFactory?)
-  /** Checks that the specification for a dot layer is
-   *  sensical and complete.
-   *  @returns {Object} Layer object describing a dots layer.
-   *  @private
-   */
-  this.map.validateDotLayerSpec = function(layerSpec) {
-    var requiredFieldsTable = {'year' : 'int',
-                               'size' : 'int',
-                               'color' : 'color'};
-    var optionalFieldsTable = {'tileGenerator' : 'word',
-                               'tileGeneratorVersion' : 'float',
-                               'mercatorFieldName' : 'word',
-                               'mercatorTable' : 'word',
-                               'cartogramTable' : 'word',
-                               'cartogramFieldName' : 'word',
-                               'shortDescription' : 'text',
-                               'description' : 'text',
-                               'sourceUrl' : 'url',
-                               'source' : 'text'};
-
-    // It's okay to only have one of mercator and cartogram specs,
-    // but you must have at least one (and the field name and table 
-    // need to match)
-    var hasMercators = layerSpec.mercatorFieldName &&
-                       layerSpec.mercatorTable;
-    var hasCartograms = layerSpec.cartogramFieldName &&
-                        layerSpec.cartogramTable;
-    if(!(hasMercators || hasCartograms)) {
-      return false;
-    }
-
-    // TODO move this into the superclass of the LayerFactory
-    var success = true;
-    $.each(requiredFieldsTable, function(fieldName, fieldType) {
-      if(!layerSpec.hasOwnProperty(fieldName)) {
-        console.log("Choropleth layer is missing field " + fieldName);
-        success = false;
-        return false;
-      }
-      if(!Validator.isLegal(fieldType, layerSpec[fieldName])) {
-        console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
-        success = false;
-        return false;
-      }
-    });
-
-    $.each(optionalFieldsTable, function(fieldName, fieldType) {
-      if(layerSpec[fieldName]) {
-        if(!Validator.isLegal(fieldType, layerSpec[fieldName])) {
-          console.log(fieldName + " of " + layerSpec[fieldName] + " is invalid");
-          success = false;
-          return false;
-        }
-      }
-    });
-    
-
-    return success;
-
-  };
 
   /** Creates a dots layer for the map to use.
    *  @returns {Object} Layer object describing a dots layer.
@@ -271,36 +200,15 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
   // layerspec.
   this.map.getDotLayer = function () {
     var layersetName = 'dotLayers';
-    if(!this.layerSpecExists('dotLayers')) {
-      return null;
-    }
 
     if(!$( '#dotLayersCheckbox').is(':checked')) {
       return null;
     }
 
+    var layerSpec = this.getLayerSpec(layersetName);
 
-
-    var key = this.findSelectedKeyForLayerType(layersetName);
-    var layerSpec = this.mai[layersetName][key] ;
-
-    if(!this.validateDotLayerSpec(layerSpec)) {
-      var descriptor = layerSpec.shortDescription;
-      if(!descriptor) {
-        descriptor = 'unnamed';
-      }
-      alert("The specification for the " + key + " dot layer is not valid, alas.");
-      console.log('Invalid layer specification for ' + key);
-      return null;
-    }
-  
-    var url = BINDIR + "/dots.php?x={x}&y={y}&zoom={z}&";
-    url += 'points=' + layerSpec[this.projectionType() + 'Table'];
-    url += '&name=' + layerSpec[this.projectionType() + 'FieldName'];
-    url += '&year=' + layerSpec.year;
-    url += '&colour=' + layerSpec.color;
-    url += '&size=' + layerSpec.size;
-    url += '&jId=0';	// I think this is just for symmetry with MapRequest
+    projection = this.projectionType();
+    var url = MapeteriaDotLayerSpecFormatSupport.getLayerUrl(layerSpec, projection);
   
     return L.tileLayer(url, {
       maxZoom: 18,

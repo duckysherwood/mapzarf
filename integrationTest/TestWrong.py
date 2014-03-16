@@ -49,18 +49,18 @@ class TestWrong(unittest.TestCase):
   # TODO This should go in incomplete
   def testMismatchedDotProjectionTableField(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai2.html'
-    message = "dot layer is not valid, alas"
+    message = "layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   def testMissingDotTable(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai3.html'
-    message = "dot layer is not valid, alas"
+    message = "layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # TODO this should go in incomplete
   def testMissingDotFieldTable(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai4.html'
-    message = "dot layer is not valid, alas"
+    message = "layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
 
   def testMismatchedTablePolyYear1(self):
