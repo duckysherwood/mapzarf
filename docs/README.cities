@@ -1,0 +1,36 @@
+To show cities (or other things with labels), set "citiesUrl" in the
+MapApplicationInfo file (at the top level) to a URL which will return data
+as a JSON object.  The object needs to be an array of record-objects; 
+each record-object needs to have description, lat, and lng fields.
+(Any other fields get ignored.)
+
+You also need a images for the bullet+name, and I highly recommend putting
+a white outline around the text.  Otherwise, it gets hard to read the 
+names.
+
+Here is an example of data for 23 cities in the USA:
+
+[{ "description":"New York", "lat":41.352122,"lng":-70.664961 },
+{ "description":"Los Angeles", "lat":34.822085,"lng":-124.424735 },
+{ "description":"Chicago", "lat":46.360331,"lng":-95.01061 },
+{ "description":"Houston", "lat":29.016936,"lng":-101.444146 },
+{ "description":"Phoenix", "lat":38.588297,"lng":-113.473939 },
+{ "description":"San Diego", "lat":31.732213,"lng":-121.219996 },
+{ "description":"Dallas", "lat":35.656268,"lng":-104.513352 },
+{ "description":"Jacksonville", "lat":28.672926,"lng":-83.404901 },
+{ "description":"Indianapolis", "lat":41.885914,"lng":-94.379219 },
+{ "description":"Austin", "lat":31.63998,"lng":-106.042817 },
+{ "description":"Charlotte", "lat":33.778448,"lng":-82.806911 },
+{ "description":"Boston", "lat":45.942362,"lng":-64.6659 },
+{ "description":"Seattle", "lat":50.331666,"lng":-125.757228 },
+{ "description":"Washington", "lat":38.407365,"lng":-78.128824 },
+{ "description":"Denver", "lat":44.852952,"lng":-111.341111 },
+{ "description":"Louisville", "lat":39.279771,"lng":-93.1627 },
+{ "description":"Milwaukee", "lat":49.402553,"lng":-95.955996 },
+{ "description":"Portland", "lat":47.916587,"lng":-124.145893 },
+{ "description":"Fresno", "lat":42.69272,"lng":-121.087171 },
+{ "description":"Miami", "lat":21.208139,"lng":-78.377768 },
+{ "description":"Tampa", "lat":24.929802,"lng":-86.776105 },
+{ "description":"Corpus Christi", "lat":26.317656,"lng":-103.064889 },
+{ "description":"Winston-Salem", "lat":36.219077,"lng":-83.256285 },
+{ "description":"Rochester", "lat":49.660591,"lng":-80.196913 }]
