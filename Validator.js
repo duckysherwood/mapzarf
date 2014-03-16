@@ -332,7 +332,8 @@ Validator.classForTileType = function (tileType) {
   var classTable = {
     'mapeteriaChoropleth' : MapeteriaChoroplethLayerSpecFormatSupport,
     'mapeteriaBorder' : MapeteriaBorderLayerSpecFormatSupport,
-    'mapeteriaDot' : MapeteriaDotLayerSpecFormatSupport
+    'mapeteriaDot' : MapeteriaDotLayerSpecFormatSupport,
+    'bare' : BareLayerSpecFormatSupport
     };
 
   return classTable[tileType];
