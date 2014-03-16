@@ -2,6 +2,8 @@
   "pageTitle" : "TestSanity pageTitle",
   "pageDescription" : "TestSanity pageDescription",
   "attribution" : "Kaitlin Duck Sherwood",
+  "citiesUrl" : "/cgi-bin/getCities.py?",
+  "cityIconUrl" : "../../mapeteria2/makeCityLabel.php?",
   "choroplethLayers" :
     {
        "taxRoiNormalized": { 
