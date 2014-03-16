@@ -97,7 +97,7 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
         latlng = new L.LatLng(lat, lng);
         cityName = city.description;
         
-        cityNameIconUrl = this.cityIconUrl + 'cityName=' + cityName;
+        cityNameIconUrl = scope.cityIconUrl + 'cityName=' + cityName;
         cityNameIcon = L.icon({iconUrl: cityNameIconUrl, iconAnchor: [2, 10]});
   
         marker = L.marker(latlng, {icon: cityNameIcon, clickable:false, draggable:false}); 
