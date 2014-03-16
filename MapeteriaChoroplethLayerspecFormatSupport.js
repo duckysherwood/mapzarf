@@ -1,9 +1,24 @@
-// Sorry about the name being so long.
-
+/** @author Kaitlin Duck Sherwood
+ *  @class MapeteriaDotLayerSpecFormatSupport
+ *  @classdesc This class is as simple as it gets for tile layers.
+ *    It has a URL in it and some metadata, but really there's just the URL.
+ *    This class needs no storage, so all the methods are class methods.
+ * 
+ *  @constructor
+ *  @this {BareLayerSpecFormatSupport}
+ */
 function MapeteriaChoroplethLayerSpecFormatSupport() {
   console.log("init"); 
 };
 
+/** Gives a URL which tells how to fetch a tile.  
+ *  The tile coordinates will get modified by the mapping framework.
+ *  @public 
+ *  @param {object} layerSpec Information about the layer
+ *  @param {string} projection Identifier for the projection type
+ *  @returns {string} A URL which tells how to fetch a tile
+ *  (Used by MapBehaviorInitializer)
+ */
 MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl = function(layerSpec, projection) {
 
   var shapeType = layerSpec[projection + 'ShapeType'];
@@ -58,6 +73,13 @@ MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl = function(layerSpec, proj
 };
 
 
+/** Renders a verdict on whether or not the layerSpec is valid.  Attempts
+ *  to do some semantic checking as well as syntactic checking.
+ *  @public 
+ *  @param {object} layerSpec Information about the layer
+ *  @returns {boolean} If the layerSpec is valid or not.
+ *  (Used by MapBehaviorInitializer)
+ */
 MapeteriaChoroplethLayerSpecFormatSupport.validate = function(layerSpec) {
   var requiredFieldsTable = {'tileEngine' : 'word',
                              'tileEngineVersion' : 'float',
