@@ -26,6 +26,10 @@ MapeteriaDotLayerSpecFormatSupport.validate = function(layerSpec) {
                              'size' : 'int',
                              'mercatorPoints' : 'word',
                              'cartogramPoints' : 'word',
+                             'shortDescription' : 'text',
+                             'description' : 'text',
+                             'sourceUrl' : 'url',
+                             'source' : 'text'
                             };
 
   if(!layerSpec.tileEngine) {
