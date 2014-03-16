@@ -1,6 +1,7 @@
 {
   "pageTitle" : "TestSanity pageTitle",
   "pageDescription" : "TestSanity pageDescription",
+  "legendUrl" : "http://localhost/maps/mapeteria2/makeLegend.php?lbl=y&o=p",
   "attribution" : "Kaitlin Duck Sherwood",
   "citiesUrl" : "/cgi-bin/getCities.py?",
   "cityIconUrl" : "../../mapeteria2/makeCityLabel.php?",

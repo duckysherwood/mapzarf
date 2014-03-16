@@ -10,6 +10,7 @@
   "hasCartogram" : "asf",
   "slippyMapFramework" : 23,
   "slippyMapFrameworkVersion" : "alsfj",
+  "legendUrl" : "http://localhost/maps/mapeteria2/makeLegend.php?lbl=y&o=p",
   "attribution" : 25,
   "choroplethLayers" :
     {

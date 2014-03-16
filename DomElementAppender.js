@@ -262,29 +262,32 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
     return true;
   };
   
-  /** Updates the legend.  This gets called from the constructor
-   *  of ListenerInitializer, which happens after the DomElementAppender
-   *  is done.  That's not a great place for the update to happen, but
-   *  there isn't an obviously better one.
+  /** Updates the legend.  
    *
    *  @param layerSpec {object} A piece of the MAI describing the current layer
+   *  @param urlFragment {object} The base of a URL which describes the legend
    *  @public 
    */
-  $( '#legendImage' )[0].update = function (layerSpec) {
-    var url = BINDIR + "/makeLegend.php?lbl=y&o=p" +
-         "&minValue=" + layerSpec.minValue +
-         "&maxValue=" + layerSpec.maxValue +
-         "&minColour=" + layerSpec.minColor +
-         "&maxColour=" + layerSpec.maxColor +
-         "&mapping=" + layerSpec.mapping ;
-  
-    if(layerSpec.hasOwnProperty('isPercentage')) {
+  $( '#legendImage' )[0].update = function (layerSpec, urlFragment) {
+    if(!urlFragment || 
+       !layerSpec.hasOwnProperty('minValue') || 
+       !layerSpec.hasOwnProperty('maxValue') ||
+       !layerSpec.minColor || !layerSpec.maxColor || !layerSpec.mapping) {
+      this.src = "http://maps.webfoot.com/mapeteria2/tiles/clearTile.png";
+    } else {
+      var url = urlFragment +
+           "&minValue=" + layerSpec.minValue +
+           "&maxValue=" + layerSpec.maxValue +
+           "&minColour=" + layerSpec.minColor +
+           "&maxColour=" + layerSpec.maxColor +
+           "&mapping=" + layerSpec.mapping ;
+    
       if(layerSpec.isPercentage) {
         url += "&pct=y";
       }
+    
+      this.src = url;
     }
-  
-    this.src = url;
   
   };
 

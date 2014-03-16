@@ -1,6 +1,7 @@
 {
   "pageTitle" : "TestSanity pageTitle",
   "pageDescription" : "TestSanity pageDescription",
+  "legendUrl" : "http://localhost/maps/mapeteria2/makeLegend.php?lbl=y&o=p",
   "pointInfoUrlPrefix" : "./testSanityMarkerInfo.html",
   "startingMarkerLat" : 40,
   "startingMarkerLng" : -100,

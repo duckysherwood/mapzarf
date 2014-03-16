@@ -277,6 +277,7 @@ Validator.validateMai = function(mai) {
                          "hasCartogram" : "bool",
                          "citiesUrl" : "url",
                          "cityIconUrl" : "url",
+                         "legendUrl" : "url",
                          "slippyMapFramework" : "word",
                          "slippyMapVersion" : "float",
                          "attribution" : "text" };
