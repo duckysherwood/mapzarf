@@ -23,7 +23,6 @@ Runner.prototype.start = function (data, textStatus, jqXhr) {
 
   this.mai = data;
 
-
   var mapDisplayParameters = new MapDisplayParameters(this.mai);
   var pageInitValues = mapDisplayParameters.getPageValueParameters();
 
@@ -44,9 +43,13 @@ Runner.prototype.start = function (data, textStatus, jqXhr) {
   }
 
   var domAppender = new DomElementAppender(myMap, this.mai, pageInitValues);
-  if(domAppender.createAndPopulateElements()) {
+  if(domAppender.createAndPopulateElements()) { // VALIDATION HAPPENS HERE
 
-    var cityLabeller = new CityLabeller(myMap);
+    var cityLabeller;
+    if(this.mai.citiesUrl && this.mai.cityIconUrl) {
+      cityLabeller = new CityLabeller(myMap, 
+                     this.mai.citiesUrl, this.mai.cityIconUrl);
+    }
   
     var mbc = new MapBehaviorInitializer(myMap, this.mai, cityLabeller, 
                                          jurisdictionMarker);

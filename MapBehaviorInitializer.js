@@ -39,13 +39,17 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
   // Refreshes the city labels and sharing URL when the user moves the map.
   this.map.on("zoomend", function () {
-    closureCityLabeller.refreshCityLabels(closureCityLabeller);
+    if(closureCityLabeller) {
+      closureCityLabeller.refreshCityLabels(closureCityLabeller);
+    }
     $( '#sharingUrl' )[0].href = closureMap.getSharingUrl();
   });
 
   // Refreshes the city labels and sharing URL when the user moves the map.
   this.map.on("dragend", function () {
-    closureCityLabeller.refreshCityLabels(closureCityLabeller);
+    if(closureCityLabeller) {
+      closureCityLabeller.refreshCityLabels(closureCityLabeller);
+    }
     $( '#sharingUrl' )[0].href = closureMap.getSharingUrl();
   });
 

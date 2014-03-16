@@ -275,6 +275,8 @@ Validator.validateMai = function(mai) {
                          "startingCenterLng" : "lng",
                          "startingCenterZoom" : "int",
                          "hasCartogram" : "bool",
+                         "citiesUrl" : "url",
+                         "cityIconUrl" : "url",
                          "slippyMapFramework" : "word",
                          "slippyMapVersion" : "float",
                          "attribution" : "text" };

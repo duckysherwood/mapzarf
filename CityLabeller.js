@@ -12,9 +12,11 @@
  *  @param aMap {object} A Leaflet map object.
  *  @param aJurisdictionMarker {object} A Leaflet marker
  */
-function CityLabeller(aMap) {
+function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
   this.mapObject = aMap;
   this.cityMarkers = [];
+  this.citiesUrl = aCitiesUrl;
+  this.cityIconUrl = aCityIconUrl;
 
   /** Fetches the largest cities in a bounding box, with their name and lat/lng.
    *  @param anUpper {float} The northernmost boundary of the map's view
@@ -27,10 +29,11 @@ function CityLabeller(aMap) {
    */
   this.requestCityInfo = function (anUpper, aLower, aLeft, aRight, 
                                    isCartogram) {
-    // Because this is python, it needs to be in cgi-bin.  PHP is the only
-    // one that can be in the local directory
-    var url = "/cgi-bin/getCities.py";
-    url += "?upper="+anUpper+"&lower="+aLower+"&left="+aLeft+"&right="+aRight;
+    if(!this.citiesUrl || !this.cityIconUrl ) {
+      return;
+    }
+    var url = this.citiesUrl;  // purely to shorten the line lengths
+    url += "upper="+anUpper+"&lower="+aLower+"&left="+aLeft+"&right="+aRight;
     url += "&zoom="+this.mapObject.getZoom()+"&cartogram="+isCartogram;
 
     // request is a verb here
@@ -94,7 +97,7 @@ function CityLabeller(aMap) {
         latlng = new L.LatLng(lat, lng);
         cityName = city.description;
         
-        cityNameIconUrl = BINDIR + '/makeCityLabel.php?cityName=' + cityName;
+        cityNameIconUrl = this.cityIconUrl + 'cityName=' + cityName;
         cityNameIcon = L.icon({iconUrl: cityNameIconUrl, iconAnchor: [2, 10]});
   
         marker = L.marker(latlng, {icon: cityNameIcon, clickable:false, draggable:false}); 
