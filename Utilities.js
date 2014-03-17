@@ -19,7 +19,7 @@ Utilities.descriptionHtml = function(layerSpec) {
   }
 
   if(layerSpec.sourceUrl && Validator.isLegalUrl(layerSpec.sourceUrl)) {
-    descriptor = '<a href="' + layerSpec.sourceUrl + '">' + descriptor;
+    descriptor = '<a href="' + layerSpec.sourceUrl + '">' + descriptor + '</a>';
   }
 
   var source = layerSpec.source;
