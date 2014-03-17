@@ -75,7 +75,7 @@ Validator.isLegalText = function(candidate) {
   if(typeof candidate != 'string') {
     return false;
   }
-  return !candidate.match(/[\"\'\!\%<>&;]/);
+  return !candidate.match(/[\"\'\!\%<>&]/);
 };
 
 //

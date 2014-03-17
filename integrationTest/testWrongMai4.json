@@ -23,7 +23,7 @@
           "shortDescription" : "gun deaths",
           "description": "gun deaths in the 100 days after Sandy Hook",
           "sourceUrl" : "http://data.huffingtonpost.com/2013/03/gun-deaths",
-          "source" : "Huffington Post; some geocoding provided by <a href=\"http://geocoder.ca\">GeoCoder.ca</a>"
+          "source" : "Huffington Post; some geocoding provided by GeoCoder.ca"
        }
   }
 }

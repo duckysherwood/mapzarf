@@ -13,6 +13,15 @@ function ValidityTest_setUp() {
   print("ValidityTest set up");
 }
 
+function ValidityTest_testText() {
+  this.assertTrue(Validator.isLegalText('Four score and seven years ago'));
+  this.assertTrue(Validator.isLegalText('U.S. Census Bureau. Top Brass.'));
+
+  this.assertFalse(Validator.isLegalText('<a href="http://foo.com/lasjf?alsjf">blah</a>'));
+  this.assertFalse(Validator.isLegalText('\);drop tables'));
+   
+}
+
 function ValidityTest_testInt() {
   this.assertTrue(Validator.isLegalInt(3));
   this.assertTrue(Validator.isLegalInt(-3));
