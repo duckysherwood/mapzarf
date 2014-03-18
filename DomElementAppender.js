@@ -251,7 +251,6 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   
 
     if(this.mai.citiesUrl && this.mai.cityIconUrl) {
-// @@@
       var showCitiesCheckbox = document.createElement('input');
       showCitiesCheckbox.id = 'showCitiesCheckbox';
       showCitiesCheckbox.type = 'checkbox';
@@ -284,27 +283,13 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
    *  @param urlFragment {object} The base of a URL which describes the legend
    *  @public 
    */
-  $( '#legendImage' )[0].update = function (layerSpec, urlFragment) {
-    if(!urlFragment || 
-       !layerSpec.hasOwnProperty('minValue') || 
-       !layerSpec.hasOwnProperty('maxValue') ||
-       !layerSpec.minColor || !layerSpec.maxColor || !layerSpec.mapping) {
-      this.src = "http://maps.webfoot.com/mapeteria2/tiles/clearTile.png";
+  $( '#legendImage' )[0].update = function (layerSpec) {
+    if(layerSpec.legendUrl) {
+      this.src = layerSpec.legendUrl;
     } else {
-      var url = urlFragment +
-           "&minValue=" + layerSpec.minValue +
-           "&maxValue=" + layerSpec.maxValue +
-           "&minColour=" + layerSpec.minColor +
-           "&maxColour=" + layerSpec.maxColor +
-           "&mapping=" + layerSpec.mapping ;
-    
-      if(layerSpec.isPercentage) {
-        url += "&pct=y";
-      }
-    
-      this.src = url;
+      this.src = "http://maps.webfoot.com/mapeteria2/tiles/clearTile.png";
     }
-  
+
   };
 
 
