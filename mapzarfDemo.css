@@ -39,8 +39,9 @@ html, body, table {
    font-family:Verdana,Arial,sans-serif;
    font-size: 11pt;
    position: absolute;
-   margin: 3pt;
-   left:25px;
+   width: 60%;
+   margin: 2pt;
+   left:15px;
 }
 
 p.indented {
