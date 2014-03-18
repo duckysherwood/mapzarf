@@ -14,7 +14,7 @@ from selenium.common.exceptions import UnexpectedAlertPresentException
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 
-class TestInsanity(unittest.TestCase):
+class TestCorrupt(unittest.TestCase):
 
   # Is there a way to not do this overhead every time?
   def setUp(self):
