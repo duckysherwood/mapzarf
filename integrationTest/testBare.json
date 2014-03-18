@@ -1,0 +1,64 @@
+{
+  "pageTitle" : "TestBare pageTitle",
+  "pageDescription" : "TestBare pageDescription",
+  "pointInfoUrlPrefix" : "./testSanityMarkerInfo.html",
+  "startingMarkerLat" : 40,
+  "startingMarkerLng" : -100,
+  "startingCenterLat" : 38,
+  "startingCenterLng" : -95,
+  "startingCenterZoom" : 4,
+  "slippyMapFramework" : "leaflet",
+  "slippyMapFrameworkVersion" : 1.6,
+  "attribution" : "Kaitlin Duck Sherwood",
+  "citiesUrl" : "/cgi-bin/getCities.py?",
+  "cityIconUrl" : "/maps/mapeteria2/makeCityLabel.php?",
+  "choroplethLayers" :
+    {
+       "mapnik": { 
+          "tileEngine" : "bare",
+          "tileEngineVersion" : 2,
+          "shortDescription" : "OSM Mapnik basic map",
+          "description":"Open Street Maps, licensed under Open Data Commons Open Database License",
+          "url" : "http://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+           "source" : "Open Street Maps",
+           "sourceUrl" : "http://www.openstreetmap.org/copyright"
+       },
+       "mapquest": { 
+          "tileEngine" : "bare",
+          "tileEngineVersion" : 2,
+          "shortDescription" : "OSM Mapnik MapQuest",
+          "description":"Open Street Maps, licensed under Open Data Commons Open Database License",
+          "url" : "http://otile1.mqcdn.com/tiles/1.0.0/osm/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+           "source" : "Open Street Maps",
+           "sourceUrl" : "http://www.openstreetmap.org/copyright"
+       },
+       "openCycle": { 
+          "tileEngine" : "bare",
+          "tileEngineVersion" : 2,
+          "shortDescription" : "OpenCycleMap",
+          "description":"Open Street Maps, licensed under Open Data Commons Open Database License",
+          "url" : "http://a.tile.opencyclemap.org/cycle/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+           "source" : "Open Street Maps",
+           "sourceUrl" : "http://www.openstreetmap.org/copyright"
+       },
+       "terrain": { 
+          "tileEngine" : "bare",
+          "tileEngineVersion" : 2,
+          "shortDescription" : "Terrain",
+          "description":"Open Street Maps, licensed under Open Data Commons Open Database License",
+          "url" : "http://toolserver.org/%7Ecmarqu/hill/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+           "source" : "Open Street Maps",
+           "sourceUrl" : "http://www.openstreetmap.org/copyright"
+       },
+       "religion": { 
+          "tileEngine" : "bare",
+          "tileEngineVersion" : 2,
+          "shortDescription" : "Catholics",
+          "description":"Percent of populations which adhere to Catholicism",
+          "legendUrl" : "http://webfoot.com/pictures/webfoot.gif",
+          "url" : "http://localhost/maps/mapeteria2/choropleth.phpx?polyType=county&table=countyAttributes&field=catholicAdherents&year=1990&normalizer=population&normalizerYear=1990&normalizerType=d&mapping=linear&minColour=ffffff&maxColour=ff0000&minValue=0&maxValue=1&x=%7Bx%7D&y=%7By%7D&zoom=%7Bz%7D",
+          "source" : "Churches and Church Membership in the United States, 1990. Collected by the Association of Statisticians of American Religious Bodies (ASARB) and distributed by the Association of Religion Data Archives.",
+          "sourceUrl" : "http://www.thearda.com/Archive/Files/Descriptions/CMS90CNT.asp"
+       }
+   }
+}

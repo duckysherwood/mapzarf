@@ -184,8 +184,14 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
   this.map.getPolygonLayer = function (layerSpec) {
 
 
-    url = MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl(
-                          layerSpec, this.projectionType())
+   var supportClass;
+    if(layerSpec.tileEngine) {
+      supportClass = Validator.classForTileType(layerSpec.tileEngine);
+    } else {
+      supportClass = MapeteriaChoroplethLayerSpecFormatSupport;
+    }
+
+    url = supportClass.getLayerUrl(layerSpec, this.projectionType())
 
        
     return L.tileLayer(url, {
