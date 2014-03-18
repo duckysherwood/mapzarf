@@ -133,6 +133,11 @@ class TestSanity(unittest.TestCase):
   def testBogusCityLabel(self):
     self.assertFalse(self.page.doesLabelExistForCityNamed('lasjfasf'))
 
+  def testLegendExistence(self):
+    legendUrl = self.page.getLegendUrl()
+    pieces = legendUrl.split("/")
+    self.assertTrue(pieces[-1] == "taxRoiLegend.png")
+
 
 if __name__ == "__main__":
     unittest.main()

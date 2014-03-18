@@ -244,5 +244,12 @@ class MapApplicationPage:
   def zoomOut(self):
     self.browser.find_element_by_class_name("leaflet-control-zoom-out").click()
 
+  def getLegendUrl(self):
+    legend = self.browser.find_element_by_id('legendImage')
+    return legend.get_attribute('src')
 
+  def getPageUrl(self):
+    WebDriverWait(self.browser, 2).until(
+            EC.presence_of_element_located((By.ID, 'map')))
+    return self.browser.current_url
 
