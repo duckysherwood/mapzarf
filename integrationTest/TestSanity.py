@@ -2,6 +2,10 @@ import unittest
 import time
 from MapApplicationPage import MapApplicationPage
 from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 CHROMEDRIVER_LOCATION = '/appdata/bin/chromedriver'
 TEST_URL = 'http://localhost/mapzarf/integrationTest/testSanity.html'
@@ -24,6 +28,18 @@ class TestSanity(unittest.TestCase):
   # Tests ----------------
   def testClickOnMap(self):
     self.page.clickOnDotTile(4,6,4)
+
+    try:
+      WebDriverWait(self.browser, 5).until(
+        EC.presence_of_element_located((By.ID, 'markerText')))
+    except TimeoutException as e:
+      print("Exception " + repr(e))
+      self.assertTrue(False, "The popup never appeared.")
+      return
+    except Exception as e:
+      print("Exception: " + repr(e))
+      raise e
+
     element = self.browser.find_element_by_id('markerText')
     self.assertTrue(MARKER_TEXT in element.text)
 
