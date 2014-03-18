@@ -40,6 +40,7 @@ MapeteriaBorderLayerSpecFormatSupport.asChoroplethLayerSpec =
     }
   });
 
+  fakeSpec.tileEngine = 'mapeteriaChoropleth';
   fakeSpec.fieldName = 'jurisdictionId';
   fakeSpec.mapping = 'none';
   fakeSpec.showBorder = true;
