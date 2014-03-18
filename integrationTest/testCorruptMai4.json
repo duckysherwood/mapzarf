@@ -1,7 +1,6 @@
 {
   "pageTitle" : "TestSanity pageTitle",
   "pageDescription" : "TestSanity pageDescription",
-  "legendUrl" : "http://localhost/maps/mapeteria2/makeLegend.php?lbl=y&o=p",
   "pointInfoUrlPrefix" : "./testSanityMarkerInfo.html",
   "startingMarkerLat" : 40,
   "startingMarkerLng" : -100,
@@ -32,6 +31,7 @@
           "minColor" : "0000ff",
           "maxColor" : "ff0000",
           "mapping" : "plusminus",
+          "legendUrl" : "./taxRoiLegend.png",
           "shortDescription" : "Tax ROI",
           "description":"Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes",
           "source":"Tax Foundation",
@@ -52,6 +52,7 @@
           "minColor" : "ffffff",
           "maxColor" : "ff0000",
           "mapping" : "linear",
+          "legendUrl" : "./poverty.png",
           "shortDescription" : "Poverty Level",
           "description":"Population earning less than the poverty line",
           "source":"US Census Bureau",

@@ -10,7 +10,6 @@
   "hasCartogram" : true,
   "slippyMapFramework" : "leaflet",
   "slippyMapFrameworkVersion" : 1.6,
-  "legendUrl" : "http://localhost/maps/mapeteria2/makeLegend.php?lbl=y&o=p",
   "attribution" : "Kaitlin Duck Sherwood",
   "choroplethLayers" :
     {

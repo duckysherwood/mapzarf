@@ -23,6 +23,7 @@
           "minColor" : "0000ff",
           "maxColor" : "ff0000",
           "mapping" : "plusminus",
+          "legendUrl" : "taxRoiLegend.png",
           "shortDescription" : "Tax ROI",
           "description":"Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes",
           "source":"Tax Foundation",

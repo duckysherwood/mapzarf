@@ -102,6 +102,7 @@ MapeteriaChoroplethLayerSpecFormatSupport.validate = function(layerSpec) {
                              'description' : 'text',
                              'mapping' : 'text',
                              'showBorder' : 'bool',
+                             'legendUrl' : 'url',
                              'sourceUrl' : 'url',
                              'source' : 'text'};
 

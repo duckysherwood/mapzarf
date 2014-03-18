@@ -75,7 +75,7 @@ Validator.isLegalText = function(candidate) {
   if(typeof candidate != 'string') {
     return false;
   }
-  return !candidate.match(/[\"\'\!\%<>&]/);
+  return !candidate.match(/[\"\!<>]/);
 };
 
 //
@@ -277,7 +277,6 @@ Validator.validateMai = function(mai) {
                          "hasCartogram" : "bool",
                          "citiesUrl" : "url",
                          "cityIconUrl" : "url",
-                         "legendUrl" : "url",
                          "slippyMapFramework" : "word",
                          "slippyMapVersion" : "float",
                          "attribution" : "text" };

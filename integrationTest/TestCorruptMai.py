@@ -69,6 +69,12 @@ class TestInsanity(unittest.TestCase):
     message = "There was a problem with the JSON file"
     self.assertTrue(self.checkAlert(urlString, message))
 
+  def testInvalidLegendSpec(self):
+    urlString = 'http://localhost/mapzarf/integrationTest/testCorruptMai5.html'
+    message = "layer is not valid, alas"
+    self.assertTrue(self.checkAlert(urlString, message))
+
+
   def tearDown(self):
     self.page.tearDown()
     

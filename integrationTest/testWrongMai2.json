@@ -10,7 +10,6 @@
   "hasCartogram" : true,
   "slippyMapFramework" : "leaflet",
   "slippyMapFrameworkVersion" : 1.6,
-  "legendUrl" : "http://localhost/maps/mapeteria2/makeLegend.php?lbl=y&o=p",
   "attribution" : "Kaitlin Duck Sherwood",
   "dotLayers" :
     {
@@ -23,6 +22,7 @@
           "size" : 3,
           "color" : "0000ff",
           "shortDescription" : "gun deaths",
+          "legendUrl" : "taxRoiLegend.png",
           "description" : "gun deaths in the 100 days after Sandy Hook",
           "sourceUrl" : "http://data.huffingtonpost.com/2013/03/gun-deaths",
           "source" : "Huffington Post; some geocoding provided by GeoCoder.ca"

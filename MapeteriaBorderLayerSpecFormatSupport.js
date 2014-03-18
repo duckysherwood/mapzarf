@@ -101,6 +101,7 @@ MapeteriaBorderLayerSpecFormatSupport.validate = function(layerSpec) {
                              'maxColor' : 'color',
                              'minValue' : 'float',
                              'maxValue' : 'float',
+                             'legendUrl' : 'url',
                              'sourceUrl' : 'url',
                              'source' : 'text'};
 

@@ -108,7 +108,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     }
 
 
-    $( '#legendImage' )[0].update(layerSpec, this.mai.legendUrl);
+    $( '#legendImage' )[0].update(layerSpec);
 
     return this.getPolygonLayer(layerSpec);
   };
