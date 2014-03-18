@@ -52,7 +52,8 @@
     <script type="text/javascript">
 
 
-      var maiFile = './testWrongMai5.json';
+      <!-- This MAI file has an invalid legendUrl.  --> 
+      var maiFile = './testWrongMai9.json';
 
       var runner = new Runner();
       $.get( maiFile, runner.start, 'json' ).error(runner.maiAlert);

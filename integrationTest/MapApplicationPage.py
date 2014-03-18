@@ -142,6 +142,15 @@ class MapApplicationPage:
   def showBorders(self, value):
     self.setCheckbox('borderLayersCheckbox', value)
 
+  def areCitiesVisible(self):
+    try:
+      element = self.browser.find_element_by_id('showCitiesCheckbox')
+    except:
+      return False
+
+    return True
+   
+
   def showCities(self, value):
     self.setCheckbox('showCitiesCheckbox', value)
 

@@ -52,8 +52,9 @@ class TestIncomplete(unittest.TestCase):
     self.browser = webdriver.Chrome(CHROMEDRIVER_LOCATION)
     page = MapApplicationPage(self.browser, urlString)
     WebDriverWait(self.browser, 3).until(
-        EC.presence_of_element_located((By.ID, 'showCitiesCheckbox')))
-    page.showCities(False)
+        EC.presence_of_element_located((By.ID, 'cartogramSelector')))
+    if(page.areCitiesVisible()):
+      page.showCities(False)
 
     exists = page.doesTeardropMarkerExist()
     page.tearDown()
@@ -69,14 +70,14 @@ class TestIncomplete(unittest.TestCase):
      self.browser = webdriver.Chrome(CHROMEDRIVER_LOCATION)
      page = MapApplicationPage(self.browser, urlString)
 
-     # Check for the cities checkbox; when that shows up, the other
-     # controls should be ready
-     elemId = "showCitiesCheckbox"
+     # After the cartogram selector div shows up, it shouldn't take long 
+     # for the others to show up.
+     elemId = "cartogramSelector"
      try: 
        WebDriverWait(self.browser, 3).until(
          EC.presence_of_element_located((By.ID, elemId)))
      except TimeoutException:
-       print "The showCitiesCheckbox isn't showing up, something is wrong."
+       print "The cartogramSelector div isn't showing up, something is wrong."
        exit()
  
      for layerspecName in layerspecNames:

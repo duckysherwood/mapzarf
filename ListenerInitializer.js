@@ -127,10 +127,12 @@ ListenerInitializer.prototype.addLayerControlCheckboxListener =
 ListenerInitializer.prototype.addCitiesCheckboxListener =
   function () {
   var scope = this;
-  $('#showCitiesCheckbox')[0].onchange = function() {
-    scope.cityLabeller.refreshCityLabels(scope.cityLabeller);
-    scope.updateSharingUrl();
-  };
+  if(this.cityLabeller) {
+    $('#showCitiesCheckbox')[0].onchange = function() {
+      scope.cityLabeller.refreshCityLabels(scope.cityLabeller);
+      scope.updateSharingUrl();
+    };
+  }
 };
 
 /** Enables changing whether the map shows a mercator projection or
@@ -148,7 +150,9 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener =
   /** @private */
   cartogramCheckboxElement.onchange = function () {
     scope.map.updateLayers();
-    scope.cityLabeller.refreshCityLabels(scope.cityLabeller)    ;
+    if(scope.cityLabeller) {
+      scope.cityLabeller.refreshCityLabels(scope.cityLabeller)    ;
+    }
     scope.updateSharingUrl();
   };
 };

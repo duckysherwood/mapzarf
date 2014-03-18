@@ -59,7 +59,9 @@ Runner.prototype.start = function (data, textStatus, jqXhr) {
       new ListenerInitializer(myMap, this.mai, cityLabeller, jurisdictionMarker);
     listenerInitializer.initialize();
   
-    cityLabeller.refreshCityLabels(cityLabeller);
+    if(cityLabeller) {
+      cityLabeller.refreshCityLabels(cityLabeller);
+    }
 
   }
 };

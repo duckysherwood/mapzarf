@@ -250,7 +250,23 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
                  closurePageInitValues.zoom);
   
 
-    $( '#showCitiesCheckbox').prop('checked', closurePageInitValues.showCities);
+    if(this.mai.citiesUrl && this.mai.cityIconUrl) {
+// @@@
+      var showCitiesCheckbox = document.createElement('input');
+      showCitiesCheckbox.id = 'showCitiesCheckbox';
+      showCitiesCheckbox.type = 'checkbox';
+      showCitiesCheckbox.checked = closurePageInitValues.showCities;
+
+      var showCitiesLabel = document.createElement('label');
+      showCitiesLabel.htmlFor = 'showCitiesCheckbox';
+      showCitiesLabel.innerHTML = 'Show city names ';
+      showCitiesLabel.id = 'showCitiesLabel';
+      showCitiesLabel.className = 'indented';
+
+      $( '#showCities' )[0].appendChild(showCitiesCheckbox);
+      $( '#showCities' )[0].appendChild(showCitiesLabel);
+    }
+
 
     // Put in the attribution for the page/app (as opposed to the data)
     if(this.mai.attribution) {
