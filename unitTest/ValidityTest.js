@@ -18,7 +18,7 @@ function ValidityTest_testText() {
   this.assertTrue(Validator.isLegalText('U.S. Census Bureau. Top Brass.'));
 
   this.assertFalse(Validator.isLegalText('<a href="http://foo.com/lasjf?alsjf">blah</a>'));
-  this.assertFalse(Validator.isLegalText('\);drop tables'));
+  this.assertTrue(Validator.isLegalText('\);drop tables'));
    
 }
 
@@ -62,87 +62,91 @@ function ValidityTest_testFloat() {
 function ValidityTest_testUrlString() {
 
   var url = "http://localhost/y.html";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "http://tmp.webfoot.com/y.html";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "http://tmp.webfoot.com/vanilla/x/y.html";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "http://tmp.webfoot.com/poundSign.html#toppage";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "http://tmp.webfoot.com/question-mark/x/y?";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "http://tmp.webfoot.com/small-qstring/x/y?a=b";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "http://tmp.webfoot.com/percent-20/x/y?a=b&c=d&f=%20";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "http://tmp.webfoot.com/gobs/x/foo%2F?bar=baz%20&x=3#foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "http://tmp.webfoot.com/moo-blah/x/foo%2F+other?bar=baz%20&#foo"
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "http://tmp.webfoot.com/percent-20/x/y?a=b&c=d&f=//20";
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "http://tmp.webfoot.com/gobs/x/foo//2F?bar=baz//20&x=3#foo";
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "http://tmp.webfoot.com/moo-blah/x/foo//2F+other?bar=baz//20&#foo"
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "http://webfoot.com:2222/port/x/foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "http://ducky:#$%#^@webfoot.com:2222/uname-port/x/foo?bar=baz&x=3#foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "http://www.data.gov.bc.ca/dbc/catalogue/detail.page?config=dbc&P110=recorduid%3A17554";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "http://www.data.gov.bc.ca/dbc/catalogue/detail.page?config=dbc&P110=recorduid%3A175544&recorduid=175544&title=BC%20Schools%20-%20School%20Locations%20-%20Current";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "http://ducky:#$//#^@webfoot.com:2222/uname-port/x/foo?bar=baz&x=3#foo";
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "http://www.data.gov.bc.ca/dbc/catalogue/detail.page?config=dbc&P110=recorduid//3A17554";
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "http://www.data.gov.bc.ca/dbc/catalogue/detail.page?config=dbc&P110=recorduid//3A175544&recorduid=175544&title=BC//20Schools//20-%20School%20Locations%20-%20Current";
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
 
   url = "http://localhost.com/port/x/foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "http://localhost.com:2222/port/x/foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "http://localhost.com:2222/foo.html";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
 
   // This could actually be a valid relative (file) URL
   url = "http//tmp.webfoot.com/no-colon/x/y"; // no colon
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
 
   url = "http://tmp.webfoot.com/space space/x/y?x-y"; // space
-  this.assertFalse(url, Validator.isLegalUrl(url));
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
   url = "http://tmp.webfoot.com/scary,chars!/x/y?x-y";  // scary chars
-  this.assertFalse(url, Validator.isLegalUrl(url));
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
   url = 'http://tmp.webfoot.com/evil");chars!/x/y';  // evil chars
-  this.assertFalse(url, Validator.isLegalUrl(url));
-  this.assertFalse(url, Validator.isLegalUrl(url));
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
   url = "http://23!9724@tmp.webfoot.com/bad-username/x/y?"; // bad username
-  this.assertFalse(url, Validator.isLegalUrl(url));
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
   url = ":http://ducky@tmp.webfoot.com/leading-colon/x/y?"; // leading colon
-  this.assertFalse(url, Validator.isLegalUrl(url));
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
+
+  // @@@ why is this failing?
+  url = "http://a.tile.openstreetmap.org/%24%7Bz%7D/%24%7Bx%7D/%24%7By%7D.png";
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
 
   // relative URLs
   url = "/vanilla/x/y";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "./poundSign#toppage";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "../question-mark/x/y?";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "/small-qstring/x/y?a=b";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "./percent-20/x/y?a=b&c=d&f=%20";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "../gobs/x/foo%2F?bar=baz%20&x=3#foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
-  url = "/moo-blah/x/foo%2F+other?bar=baz%20&#foo"
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "./percent-20/x/y?a=b&c=d&f=//20";
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "../gobs/x/foo//2F?bar=baz//20&x=3#foo";
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
+  url = "/moo-blah/x/foo//2F+other?bar=baz//20&#foo"
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "./x/foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "../x/foo?bar=baz&x=3#foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "../../../x/triple-double?bar=baz&x=3#foo";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "./dotFile.html";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
   url = "nakedFile.html";
-  this.assertTrue(url, Validator.isLegalUrl(url));
+  this.assertTrue(url, Validator.isLegalUrl(url), url);
 
   url = "space space/x/y?x-y"; // space
-  this.assertFalse(url, Validator.isLegalUrl(url));
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
   url = "scary,chars!/x/y?x-y";  // scary chars
-  this.assertFalse(url, Validator.isLegalUrl(url));
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
   url = '/evil");chars!/x/y';  // evil chars
-  this.assertFalse(url, Validator.isLegalUrl(url));
+  this.assertFalse(url, Validator.isLegalUrl(url), url);
 
   // booleans
   this.assertFalse("true", Validator.isLegalUrl(true));
