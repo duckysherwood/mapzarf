@@ -150,11 +150,16 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     var layerSpec = this.mai[layersetName][key];
 
     if(!layerSpec.tileEngine) {
+      alert('There is no tileEngine specified in the layer ' + key);
       return null;
     }
-    var validator = Validator.classForTileType(layerSpec.tileEngine);
 
-    if(!validator || !validator.validate(layerSpec)) {
+    var validator = Validator.classForTileType(layerSpec.tileEngine);
+    if(!validator) {
+      alert('There tileEngine specified is incorrect in the layer ' + key);
+    }
+
+    if(!validator.validate(layerSpec)) {
       alert("The specification for the " + key + " " + layerSpec.tileEngine + 
             " layer is not valid, alas.");
       console.log('Invalid layer specification for ' + key);
