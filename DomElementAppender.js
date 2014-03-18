@@ -238,7 +238,7 @@ function DomElementAppender ( map, mapApplicationInfo, pageInitValues ) {
   
     // Allow switching between cartogram and not
     var checkedString = closurePageInitValues.cartogram ? 'checked' : '';
-    if (this.mai.hasOwnProperty('hasCartogram')) {
+    if (this.mai.hasCartogram) {
       var cartogramCheckboxString = 
         '<input type="checkbox" id="isCartogramCheckbox" '+checkedString + '>';
       var cartogramText = 'Show as cartogram<p />';
