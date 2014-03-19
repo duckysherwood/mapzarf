@@ -64,9 +64,7 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
   
         if(kids[k].nodeName == "P") {
           this.mapDiv.removeChild( kids[k] );
-        } else {
-          console.log("Error: Node name is not P for "+kids[k].tagName);
-        }
+        } 
       }
     }
   };
