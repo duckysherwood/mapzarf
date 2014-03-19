@@ -74,9 +74,9 @@ MapeteriaBorderLayerSpecFormatSupport.asChoroplethLayerSpec =
  */
 MapeteriaBorderLayerSpecFormatSupport.getLayerUrl = function(layerSpec, projection) {
 
-  var fakeSpec =  MapeteriaChoroplethBorderLayerSpecFormatSupport
+  var fakeSpec =  MapeteriaBorderLayerSpecFormatSupport
                                .asChoroplethLayerSpec(layerSpec);
-  return MapeteriaChoroplethBorderLayerSpecFormatSupport.getLayerUrl(fakeSpec);
+  return MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl(fakeSpec, projection);
 
 };
 
