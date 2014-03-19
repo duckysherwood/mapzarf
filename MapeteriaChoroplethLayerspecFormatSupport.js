@@ -100,7 +100,7 @@ MapeteriaChoroplethLayerSpecFormatSupport.validate = function(layerSpec) {
                              'isPercentage' : 'bool',
                              'shortDescription' : 'text',
                              'description' : 'text',
-                             'sourceUrl' : 'url'
+                             'sourceUrl' : 'url',
                              'mapping' : 'text',
                              'showBorder' : 'bool',
                              'legendUrl' : 'url',
