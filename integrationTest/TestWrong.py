@@ -24,7 +24,7 @@ class TestWrong(unittest.TestCase):
     try:
       self.page = MapApplicationPage(self.browser, urlString)
       WebDriverWait(self.browser, 6).until(
-          EC.presence_of_element_located((By.TAG_NAME, 'dotLayersCheckbox')))
+          EC.presence_of_element_located((By.ID, 'layerControls')))
 
 
     except UnexpectedAlertPresentException as e:
@@ -41,13 +41,13 @@ class TestWrong(unittest.TestCase):
 
 
   # Tests 
-  def testWrongMailyTypedValues(self):
+  def testWrongMaiTypedValues(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai1.html'
     message = "map application info file is invalid"
     self.assertTrue(self.checkAlert(urlString, message))
 
   # TODO This should go in incomplete
-  def testMismatchedDotProjectionTableField(self):
+  def testMismatchedDotProjectionTableAndField(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai2.html'
     message = "layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
@@ -65,18 +65,18 @@ class TestWrong(unittest.TestCase):
 
   def testMismatchedTablePolyYear1(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai5.html'
-    message = "Choropleth layer is not valid, alas"
+    message = "taxRoiNormalized layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
 
   def testMismatchedTablePolyYear2(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai6.html'
-    message = "Choropleth layer is not valid, alas"
+    message = "taxRoiNormalized layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # TODO this should go in incomplete
   def testMissingPolyShapeYear(self):
     urlString = 'http://localhost/mapzarf/integrationTest/testWrongMai7.html'
-    message = "Choropleth layer is not valid, alas"
+    message = "taxRoiNormalized layer is not valid, alas"
     self.assertTrue(self.checkAlert(urlString, message))
     
   # hasCartogram is set, but there are no cartogram layers

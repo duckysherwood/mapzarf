@@ -7,6 +7,18 @@ Utilities.assertIsNotNull = function (expression, messsage) {
   }
 }
 
+Utilities.assertTrue = function (expression, messsage) {
+  if(!expression) {
+    alert("Assertion failed! " + message);
+  }
+}
+
+Utilities.assertFalse = function (expression, messsage) {
+  if(expression) {
+    alert("Assertion failed! " + message);
+  }
+}
+
 /** Convenience method to make a nice HTML string for a layer description.
  *  @param layerSpec {Object} In object form, the description of a layer from 
  *    the mapApplicationInfo file.
@@ -19,7 +31,7 @@ Utilities.descriptionHtml = function(layerSpec) {
   var descriptor = layerSpec.description;
   if(!descriptor || !Validator.isLegalText(layerSpec.description)) {
     descriptor = layerSpec.shortDescription;
-    if(!descriptor || Validator.isLegalText(layerSpec.shortDescription)) {
+    if(!descriptor || !Validator.isLegalText(layerSpec.shortDescription)) {
       descriptor = "unnamed layer";
     }
   }

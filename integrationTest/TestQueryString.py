@@ -1,3 +1,4 @@
+import pdb
 import unittest
 import urllib
 import urlparse
@@ -22,68 +23,81 @@ class TestQueryString(unittest.TestCase):
 
   # Tests ----------------
   def testSelectingChoroplethLayer(self):
-    queryString = "choroplethIndex=1"
+    queryString = "noImportaIndex=1"
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
-    self.assertTrue("less than the poverty" in page.getChoroplethDescription())
+    time.sleep(1)
+    # pdb.set_trace()
+    self.assertTrue("less than the poverty" in page.getDescription('noImporta'))
 
     page.tearDown()
 
   def testSelectingChoroplethLayerWithLayerOff(self):
-    queryString = "choroplethIndex=1&showChoropleths=f"
+    queryString = "noImportaIndex=1&showNoImportas=f"
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
-    self.assertTrue("less than the poverty" in page.getChoroplethDescription())
+    time.sleep(1)
+    # pdb.set_trace()
+    self.assertTrue("less than the poverty" in page.getDescription('noImporta'))
 
     page.tearDown()
 
   def testSelectingDotLayer(self):
-    queryString = "dotIndex=1"
+    queryString = "whateverIndex=1"
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
-    self.assertTrue("Congressional Representatives" in page.getDotDescription())
+    time.sleep(1)
+    # pdb.set_trace()
+    self.assertTrue("Congressional Representatives" in page.getDescription('whatever'))
 
     page.tearDown()
 
   def testSelectingDotLayerWithLayerOff(self):
-    queryString = "dotIndex=1&showDots=f"
+    queryString = "whateverIndex=1&showWhatever=f"
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
-    self.assertTrue("Congressional Representatives" in page.getDotDescription())
+    time.sleep(1)
+    # pdb.set_trace()
+    self.assertTrue("Congressional Representatives" in page.getDescription('whatever'))
 
     page.tearDown()
 
   def testSelectingBorderLayer(self):
-    queryString = "borderIndex=1"
+    queryString = "arbitraryIndex=1"
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
-    self.assertTrue("County borders" in page.getBorderDescription())
+    time.sleep(2)
+    self.assertTrue("County borders" in page.getDescription('arbitrary'))
 
     page.tearDown()
 
   def testSelectingBorderLayerWithLayerOff(self):
-    queryString = "borderIndex=1&showBorders=f"
+    queryString = "arbitraryIndex=1&showArbitrary=f"
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
-    self.assertTrue("County borders" in page.getBorderDescription())
+    time.sleep(2)
+    # pdb.set_trace()
+    self.assertTrue("County borders" in page.getDescription('arbitrary'))
 
     page.tearDown()
 
 
   def testTurningAllLayersOffAndIndex1(self):
-    queryString = "lat=38.5&lng=-122&zoom=8&markerLat=37.5&markerLng=-121.5&cartogram=f&showDots=f&showChoropleths=f&showBorders=f&dotIndex=1&borderIndex=1&choroplethIndex=1&showCities=f"
+    queryString = "lat=38.5&lng=-122&zoom=8&markerLat=37.5&markerLng=-121.5&cartogram=f&showWhatever=f&showNoImporta=f&showArbitrary=f&whateverIndex=1&arbitraryIndex=1&noImportaIndex=1&showCities=f"
 
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
+    time.sleep(1)
     
     # None of the possible choropleth layers should be showing
+    # pdb.set_trace()
     self.assertFalse(page.choroplethTileForAttributeExists(
                                'taxRoiNormalized'))
     self.assertFalse(page.choroplethTileForAttributeExists(
@@ -101,13 +115,14 @@ class TestQueryString(unittest.TestCase):
     self.assertFalse(page.borderTileForTypeExists('state'))
     self.assertFalse(page.borderTileForTypeExists(
                               'countyPopulationCartogram'))
+    # pdb.set_trace()
     self.assertFalse(page.borderTileForTypeExists('county'))
 
     # The descriptions, however, should show that the non-default has
     # been selected
-    self.assertTrue("Shutdown signers" in page.getDotDescription())
-    self.assertTrue("less than the poverty" in page.getChoroplethDescription())
-    self.assertTrue("County borders" in page.getBorderDescription())
+    self.assertTrue("Congressional Representatives" in page.getDescription('whatever'))
+    self.assertTrue("less than the poverty" in page.getDescription('noImporta'))
+    self.assertTrue("County borders" in page.getDescription('arbitrary'))
 
     page.tearDown()
 
@@ -149,6 +164,7 @@ class TestQueryString(unittest.TestCase):
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
+    time.sleep(1)
     page.showCities(False)
 
     # the marker should not be visible at first
@@ -167,15 +183,16 @@ class TestQueryString(unittest.TestCase):
     url = TEST_URL + '?' + queryString
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
+    time.sleep(1)
     page.showCities(False)
 
     self.assertTrue(page.tileLayerOfTypeAndAttributeExists(
-                         "choroplethLayers", "polyType=state&"))
+                         "choropleth", "polyType=state&"))
  
     # Now switch to cartogram, cartogram polytype should be found
     page.showAsCartogram(True)
     self.assertTrue(page.tileLayerOfTypeAndAttributeExists(
-                         "choroplethLayers", "polyType=statePopCartogram&"))
+                         "choropleth", "polyType=statePopCartogram&"))
 
     page.tearDown()
 
@@ -193,15 +210,16 @@ class TestQueryString(unittest.TestCase):
     url = TEST_URL 
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
+    time.sleep(1)
 
     sharingUrl = page.getSharingUrl()
     qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
-    for field in ['showChoropleths', 'showDots', 'showBorders',
+    for field in ['showNoImporta', 'showWhatever', 'showArbitrary',
                   'cartogram', 'showCities']:
       if field in qs:
         self.assertTrue(qs[field][0] == 't')
 
-    for field in ['choroplethIndex', 'dotIndex', 'borderIndex']:
+    for field in ['noImportaIndex', 'whateverIndex', 'arbitraryIndex']:
       if field in qs:
         self.assertTrue(qs[field][0] == '0')
 
@@ -214,26 +232,27 @@ class TestQueryString(unittest.TestCase):
     page.showAsCartogram(False)
     self.queryStringCreationHelper(page, 'cartogram', 'f')
 
-    page.showChoropleths(False)
-    self.queryStringCreationHelper(page, 'showChoropleths', 'f')
+    page.showLayerset('noImporta', False)
+    self.queryStringCreationHelper(page, 'showNoImporta', 'f')
 
 
-    page.showDots(False)
+    page.showLayerset('whatever', False) 
     sharingUrl = page.getSharingUrl()
     qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
-    self.assertTrue(qs['showDots'][0] == 'f')
+    self.assertTrue(qs['showWhatever'][0] == 'f')
 
     page.showCities(False)
+    # pdb.set_trace()
     self.queryStringCreationHelper(page, 'showCities', 'f')
 
-    page.changeDotLayerToIndex(1)
-    self.queryStringCreationHelper(page, 'dotIndex', '1')
+    page.changeLayerToIndex('whatever', 1)
+    self.queryStringCreationHelper(page, 'whateverIndex', '1')
 
-    page.changeBorderLayerToIndex(1)
-    self.queryStringCreationHelper(page, 'borderIndex', '1')
+    page.changeLayerToIndex('arbitrary', 1)
+    self.queryStringCreationHelper(page, 'arbitraryIndex', '1')
 
-    page.changeChoroplethLayerToIndex(1)
-    self.queryStringCreationHelper(page, 'choroplethIndex', '1')
+    page.changeLayerToIndex('noImporta', 1)
+    self.queryStringCreationHelper(page, 'noImportaIndex', '1')
 
     page.zoomIn()
     time.sleep(1)  # zoom takes a minute to settle
@@ -245,7 +264,7 @@ class TestQueryString(unittest.TestCase):
 
   # Does it crash or fail gracefully?
   def testEvilQueryString(self):
-    queryString = "lat=380&lng=-950&zoom=-3&cartogram=7&showCities=2&markerLat=100&markerLng=squirrelshowChoropleths=maybe&choroplethIndex=-2&showDots=t&dotIndex=17&showBorders=t&borderIndex=32"
+    queryString = "lat=380&lng=-950&zoom=-3&cartogram=7&showCities=2&markerLat=100&markerLng=squirrelshowNoImporta=maybe&noImportaIndex=-2&showWhatever=t&whateverIndex=17&showArbitrary=t&arbitraryIndex=32"
 
     url = TEST_URL + "?" + queryString
     page = MapApplicationPage(self.browser, url)

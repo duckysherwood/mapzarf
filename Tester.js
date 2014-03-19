@@ -14,27 +14,27 @@ function Tester()  {
     };
 
 // This will only work if the query string is null
-  this.pageInitValuesTest = function () {
-  
+  this.pageInitValuesTest = function() {
+
     var testValues = new MapDisplayParameters(exampleMai)
                        .createDefaultsFromMapApplicationInfo(exampleMai);
-  
+
     var successFlag = true;
-    $.each(exampleMai, function (key, value) {
+    $.each(exampleMai, function(key, value) {
       var tKey = maiToPageInitTranslator[key];
-      if(value != testValues[tKey][1]) {
+      if (value != testValues[tKey][1]) {
         console.log('testValues[' + tKey + '] was ' + testValues[tKey][1] +
                     ', expected ' + value);
         successFlag = false;
         return false;
-      } 
+      }
     });
-  
-    console.log("PageInitValuesTest passed? " + successFlag);
+
+    console.log('PageInitValuesTest passed? ' + successFlag);
     return successFlag;
   };
 
-  this.testCongressionalDistrictInfoMercator = function () {
+  this.testCongressionalDistrictInfoMercator = function() {
     var exampleMercatorLocations = {
       'IL-13' : { 'lat' : 40.1, 'lng' : -88.5},
       'CA-20' : { 'lat' : 37, 'lng' : -122},
@@ -44,7 +44,7 @@ function Tester()  {
     this.testDistrictInfo(exampleMercatorLocations, 'f');
   };
 
-  this.testCongressionalDistrictInfoCartogram = function () {
+  this.testCongressionalDistrictInfoCartogram = function() {
     var exampleCartogramLocations = {
       'IL-13' : { 'lat' : 42.27, 'lng' : -98.67},
       'CA-20' : { 'lat' : 38.65, 'lng' : -127.18},
@@ -54,14 +54,14 @@ function Tester()  {
     this.testDistrictInfo(exampleCartogramLocations, 't');
   };
 
-  this.testDistrictInfo = function (testData, cartogramFlag) {
+  this.testDistrictInfo = function(testData, cartogramFlag) {
     var urlBase = 'http://localhost/maps/demos/congress2012/districtPopupInformation.php?cartogram=' + cartogramFlag;
    urlBase += '&zoom=4&fieldName=null&polyYear=2011&year=2011';
-   $.each(testData, function (key, value)  {
+   $.each(testData, function(key, value)  {
      var url = urlBase + '&lat=' + value.lat + '&lng=' + value.lng;
-     $.get(url, function (data) { 
-       var districtFound = data.substring(3,8).replace('<', '');
-       if(key != districtFound) {
+     $.get(url, function(data) {
+       var districtFound = data.substring(3, 8).replace('<', '');
+       if (key != districtFound) {
          console.log('ERROR: expected ' + key + ' and got ' + districtFound);
          console.log(data);
        } else {

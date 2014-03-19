@@ -1,54 +1,64 @@
 {
-  "pageTitle" : "TestSanity pageTitle",
-  "pageDescription" : "TestSanity pageDescription",
-  "legendUrl" : "http://localhost/maps/mapeteria2/makeLegend.php?lbl=y&o=p",
-  "attribution" : "Kaitlin Duck Sherwood",
-  "choroplethLayers" :
-    {
-       "taxRoiNormalized": { 
-          "tileEngine" : "mapeteriaChoropleth",
-          "tileEngineVersion" : 2,
-          "table":"provinceAttributes",
-          "fieldName":"taxRoiNormalized",
-          "mercatorShapeType" : "state", 
-          "mercatorPolyYear" : 2006,
-          "year" : 2005,
-          "minValue":-1.0,
-          "maxValue":1.0,
-          "isPercentage" : true,
-          "minColor" : "0000ff",
-          "maxColor" : "ff0000",
-          "mapping" : "plusminus",
-          "shortDescription" : "Tax ROI"
-       }
-    },
-    "dotLayers" :
-    {
-       "gunDeaths": {
-          "tileEngine" : "mapeteriaDot",
-          "tileEngineVersion" : 2,
-          "mercatorTable":"dotAttributes",
-          "mercatorFieldName":"gunDeathCount",
-          "year":2013,
-          "size":3,
-          "color": "0000ff"
-       }
-    },
-    "borderLayers" :
+   "pageTitle":"TestIncomplete pageTitle",
+   "pageDescription":"TestIncomplete pageDescription",
+   "attribution": "Kaitlin Duck Sherwood",
+   "layersets":[
       {
-       "state": {
-          "tileEngine" : "mapeteriaBorder",
-          "tileEngineVersion" : 2,
-          "table":"provinceAttributes",
-          "mercatorShapeType" : "state",
-          "mercatorPolyYear" : 2006,
-          "fieldName":"jurisdictionId",
-          "year":2000,
-          "mapping" : "none",
-          "borderColor" : "000000",
-          "borderWidth" : "2",
-          "shortDescription" : "State"
-       }
-    }
+         "shortName" : "noImporta",
+         "layers":[
+            {
+               "shortName":"taxRoiNormalized",
+               "tileEngine":"mapeteriaChoropleth",
+               "tileEngineVersion":2,
+               "table":"provinceAttributes",
+               "fieldName":"taxRoiNormalized",
+               "year":2005,
+               "mercatorShapeType":"state",
+               "mercatorPolyYear":2006,
+               "minValue":-1.0,
+               "maxValue":1.0,
+               "isPercentage":true,
+               "minColor":"0000ff",
+               "maxColor":"ff0000",
+               "mapping":"plusminus",
+               "shortDescription":"Tax ROI"
+            }
+         ]
+      },
+      {
+         "shortName":"arbitrary",
+         "layers":[
+            {
+               "shortName":"state",
+               "tileEngine":"mapeteriaBorder",
+               "tileEngineVersion":2,
+               "table":"provinceAttributes",
+               "mercatorShapeType":"state",
+               "mercatorPolyYear":2006,
+               "fieldName":"jurisdictionId",
+               "year":2000,
+               "mapping":"none",
+               "borderColor":"000000",
+               "borderWidth":"2",
+               "shortDescription":"State"
+            }
+         ]
+      },
+      {
+         "shortName":"whatever",
+         "layers":[
+            {
+               "shortName":"gunDeaths",
+               "tileEngine":"mapeteriaDot",
+               "tileEngineVersion":2,
+               "mercatorTable":"dotAttributes",
+               "mercatorFieldName":"gunDeathCount",
+               "year":2013,
+               "size":3,
+               "color":"0000ff",
+               "shortDescription":"gun deaths"
+            }
+         ]
+      }
+   ]
 }
-

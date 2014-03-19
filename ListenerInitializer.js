@@ -16,20 +16,20 @@
 // TODO instead of adding all these listeners directly to the map, make a
 // TODO Facade element instead
 // TODO someday add links to social media sites like FB, Twitter, etc
-function ListenerInitializer (map, mapApplicationInfo,
+function ListenerInitializer(map, mapApplicationInfo,
                               labeller, jurisdictionMarker) {
   /* @private */ this.map = map;
   /* @private */ this.mai = mapApplicationInfo;
   /* @private */ this.cityLabeller = labeller;
   /* @private */ this.jurisdictionMarker = jurisdictionMarker;
 
-};
+}
 
 ListenerInitializer.prototype.initialize = function() {
   var scope = this;
-  $.each(['choroplethLayers', 'borderLayers', 'dotLayers'], 
-         function (index, value) {
-    scope.addLayerControlSelectListener(value) ;
+  var layersetNames = DomFacade.getLayersetNames();
+  $.each(layersetNames, function(index, value) {
+    scope.addLayerControlSelectListener(value);
     scope.addLayerControlCheckboxListener(value);
   });
 
@@ -41,7 +41,7 @@ ListenerInitializer.prototype.initialize = function() {
 
   // There isn't an obvious place to put this, alas.
   this.updateSharingUrl();
-}
+};
 
 
 /** Updates the shareable link
@@ -50,7 +50,7 @@ ListenerInitializer.prototype.initialize = function() {
  *  @private
  */
 ListenerInitializer.prototype.updateSharingUrl = function() {
-  $( '#sharingUrl' )[0].href = this.map.getSharingUrl();
+  $('#sharingUrl')[0].href = this.map.getSharingUrl();
 };
 
 /** Enables clicking on the marker to get info about the dot
@@ -62,8 +62,8 @@ ListenerInitializer.prototype.updateSharingUrl = function() {
  */
 ListenerInitializer.prototype.addMarkerClickListener = function() {
   var scope = this;
-  if(this.jurisdictionMarker) {
-    this.jurisdictionMarker.on("click", function (e) {
+  if (this.jurisdictionMarker) {
+    this.jurisdictionMarker.on('click', function(e) {
       scope.requestPopupInformation(e);
     });
   }
@@ -75,10 +75,10 @@ ListenerInitializer.prototype.addMarkerClickListener = function() {
  *  @private
  */
 ListenerInitializer.prototype.addLayerControlSelectListener =
-  function (layersetName) {
+  function(layersetName) {
 
-  var selectElement = $( '#' + layersetName + 'Selector' )[0];
-  if(!selectElement) {
+  var selectElement = $('#' + layersetName + 'Selector')[0];
+  if (!selectElement) {
     return null;
   }
 
@@ -87,12 +87,12 @@ ListenerInitializer.prototype.addLayerControlSelectListener =
   var scope = this;
 
   /** @private */
-  selectElement.onchange = function () {
+  selectElement.onchange = function() {
     var layer = $('option.' + closureLayersetName + 'Option:selected').val();
-    var elementName = '#' + closureLayersetName + 'Description' ;
-    var description = 
+    var elementName = '#' + closureLayersetName + 'Description';
+    var description =
         Utilities.descriptionHtml(scope.mai[closureLayersetName][layer]);
-    $( elementName ).html(description);
+    $(elementName).html(description);
     scope.map.updateLayers();
     scope.updateSharingUrl();
   };
@@ -104,17 +104,17 @@ ListenerInitializer.prototype.addLayerControlSelectListener =
  *  @private
  */
 ListenerInitializer.prototype.addLayerControlCheckboxListener =
-  function (layersetName) {
+  function(layersetName) {
 
   /** @private */
-  var checkboxElement = $( '#' + layersetName + 'Checkbox' )[0];
-  if(!checkboxElement) {
+  var checkboxElement = $('#' + layersetName + 'Checkbox')[0];
+  if (!checkboxElement) {
     return null;
   }
 
   var scope = this;
   /** @private */
-  checkboxElement.onchange = function () {
+  checkboxElement.onchange = function() {
     scope.map.updateLayers();
     scope.updateSharingUrl();
   };
@@ -125,9 +125,9 @@ ListenerInitializer.prototype.addLayerControlCheckboxListener =
  *  @private
  */
 ListenerInitializer.prototype.addCitiesCheckboxListener =
-  function () {
+  function() {
   var scope = this;
-  if(this.cityLabeller) {
+  if (this.cityLabeller) {
     $('#showCitiesCheckbox')[0].onchange = function() {
       scope.cityLabeller.refreshCityLabels(scope.cityLabeller);
       scope.updateSharingUrl();
@@ -140,18 +140,18 @@ ListenerInitializer.prototype.addCitiesCheckboxListener =
  *  @private
  */
 ListenerInitializer.prototype.addIsCartogramCheckboxListener =
-  function () {
-  var cartogramCheckboxElement = $( '#isCartogramCheckbox' )[0];
-  if(!cartogramCheckboxElement) {
+  function() {
+  var cartogramCheckboxElement = $('#isCartogramCheckbox')[0];
+  if (!cartogramCheckboxElement) {
     return null;
   }
 
   var scope = this;
   /** @private */
-  cartogramCheckboxElement.onchange = function () {
+  cartogramCheckboxElement.onchange = function() {
     scope.map.updateLayers();
-    if(scope.cityLabeller) {
-      scope.cityLabeller.refreshCityLabels(scope.cityLabeller)    ;
+    if (scope.cityLabeller) {
+      scope.cityLabeller.refreshCityLabels(scope.cityLabeller);
     }
     scope.updateSharingUrl();
   };
@@ -167,9 +167,9 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener =
  *  @private
  *  SIDE EFFECTS: changes the DOM's sharing URL and the map's infowindow
  */
-ListenerInitializer.prototype.setPopupInfoCallback = function (responseText) {
+ListenerInitializer.prototype.setPopupInfoCallback = function(responseText) {
   this.jurisdictionMarker.setPopupContent(responseText);
-  this.updateSharingUrl() ;
+  this.updateSharingUrl();
 };
 
 /** Event handler for clicking on the map or marker.  Kicks off a request
@@ -184,7 +184,7 @@ ListenerInitializer.prototype.setPopupInfoCallback = function (responseText) {
  *  @private
  *  @callback marker
  */
-ListenerInitializer.prototype.requestPopupInformation = function (e) {
+ListenerInitializer.prototype.requestPopupInformation = function(e) {
   var latlng = e.latlng;
   var lat = latlng.lat;
   var lng = latlng.lng;
@@ -200,16 +200,16 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
   year = layersetName ? this.mai.dotLayers[layersetName].year : null;
 
 
-  var url = this.map.pointInfoUrl + 
-     "lat=" + lat + "&lng=" + lng +
-     "&zoom=" + this.map.getZoom() +
-     "&fieldName=" + fieldName  +
-     "&polyYear=2011&year=2011&cartogram=" + cartogramFlag;
+  var url = this.map.pointInfoUrl +
+     'lat=' + lat + '&lng=' + lng +
+     '&zoom=' + this.map.getZoom() +
+     '&fieldName=' + fieldName +
+     '&polyYear=2011&year=2011&cartogram=' + cartogramFlag;
 
   // console.log(url);
 
   this.jurisdictionMarker.
-    setPopupContent("Looking up jurisdiction information, please wait...");
+    setPopupContent('Looking up jurisdiction information, please wait...');
 
   // request is a verb here
   Utilities.requestUrlWithScope(url, this.setPopupInfoCallback, this);
@@ -224,13 +224,13 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
 ListenerInitializer.prototype.addMapClickListener = function() {
 
   var scope = this;
-  this.map.on("click", function (e) {
+  this.map.on('click', function(e) {
 
     var latlng = e.latlng;
     var lat = latlng.lat;
     var lng = latlng.lng;
 
-    if(scope.jurisdictionMarker) {
+    if (scope.jurisdictionMarker) {
       scope.jurisdictionMarker.setLatLng([lat, lng]);
       // @@@ TODO set flag in mapApplicationInfo.js to say whether
       // popup should open always

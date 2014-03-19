@@ -1,34 +1,46 @@
 {
-  "pageTitle" : "TestSanity pageTitle",
-  "pageDescription" : "TestSanity pageDescription",
-  "legendUrl" : "http://localhost/maps/mapeteria2/makeLegend.php?lbl=y&o=p",
-  "attribution" : "Kaitlin Duck Sherwood",
-  "citiesUrl" : "/cgi-bin/getCities.py?",
-  "cityIconUrl" : "../../mapeteria2/makeCityLabel.php?",
-  "choroplethLayers" :
-    {
-       "taxRoiNormalized": { 
-          "tileEngine" : "mapeteriaChoropleth",
-          "tileEngineVersion" : 2,
-          "table":"provinceAttributes",
-          "fieldName":"taxRoiNormalized",
-          "year":2005,
-          "mercatorShapeType" : "state", 
-          "mercatorPolyYear" : 2006,
-          "cartogramShapeType" : "statePopCartogram",
-          "cartogramPolyYear" : 2011,
-          "minValue":-1.0,
-          "maxValue":1.0,
-          "isPercentage" : true,
-          "minColor" : "0000ff",
-          "maxColor" : "ff0000",
-          "mapping" : "plusminus",
-          "legendUrl" : "taxRoiLegend.png",
-          "shortDescription" : "Tax ROI",
-          "description":"Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes",
-          "provider":"Tax Foundation",
-          "providerUrl":"http://taxfoundation.org",
-          "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
-       }
-    }
+   "pageTitle":"TestIncomplete pageTitle",
+   "pageDescription":"TestIncomplete pageDescription",
+   "attribution":"Kaitlin Duck Sherwood",
+   "startingCenterLat":38,
+   "startingCenterLng":-95,
+   "startingCenterZoom":4,
+   "hasCartogram":true,
+   "slippyMapFramework":"leaflet",
+   "slippyMapFrameworkVersion":1.6,
+   "pointInfoUrl":"./testSanityMarkerInfo.html?",
+   "citiesUrl":"/cgi-bin/getCities.py?",
+   "cityIconUrl":"/maps/mapeteria2/makeCityLabel.php?",
+   "layersets":[
+      {
+         "shortName":"noImporta",
+         "displayName":"Choropleth",
+         "layers":[
+            {
+               "shortName":"taxRoiNormalized",
+               "tileEngine":"mapeteriaChoropleth",
+               "tileEngineVersion":2,
+               "table":"provinceAttributes",
+               "fieldName":"taxRoiNormalized",
+               "year":2005,
+               "mercatorShapeType":"state",
+               "mercatorPolyYear":2006,
+               "cartogramShapeType":"statePopCartogram",
+               "cartogramPolyYear":2011,
+               "minValue":-1.0,
+               "maxValue":1.0,
+               "isPercentage":true,
+               "minColor":"0000ff",
+               "maxColor":"ff0000",
+               "mapping":"plusminus",
+               "legendUrl":"./taxRoiLegend.png",
+               "shortDescription":"Tax ROI",
+               "description":"Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes",
+               "provider":"Tax Foundation",
+               "providerUrl":"http://taxfoundation.org",
+               "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
+            }
+         ]
+      }
+   ]
 }

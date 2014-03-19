@@ -3,27 +3,27 @@
  *  @classdesc This class is as simple as it gets for tile layers.
  *    It has a URL in it and some metadata, but really there's just the URL.
  *    This class needs no storage, so all the methods are class methods.
- * 
+ *
  *  @constructor
  *  @this {BareLayerSpecFormatSupport}
  */
 function BareLayerSpecFormatSupport() {
-};
+}
 
 
 /** Gives a URL which tells how to fetch a tile.   Note that there
  *  needs to be some extra added on which will be modified by the
  *  mapping framework to give the tile location.
- *  @public 
+ *  @public
  *  @param {object} layerSpec Information about the layer
  *  @param {string} projection Identifier for the projection type
- *  @returns {string} A URL which tells how to fetch a tile
+ *  @return {string} A URL which tells how to fetch a tile
  *  (Used by MapBehaviorInitializer)
  */
 BareLayerSpecFormatSupport.getLayerUrl = function(layerSpec, projection) {
     url = layerSpec.url;
-    url = url.replace(/%7B/g, "{");
-    url = url.replace(/%7D/g, "}");
+    url = url.replace(/%7B/g, '{');
+    url = url.replace(/%7D/g, '}');
     console.log(url);
     return url;
 };
@@ -33,15 +33,16 @@ BareLayerSpecFormatSupport.getLayerUrl = function(layerSpec, projection) {
  *  Because this only has the URL, it can't really make any judgements
  *  about whether the URL is semantically correct; this method can only
  *  judge if the URL is syntactically correcxt.
- *  @public 
+ *  @public
  *  @param {object} layerSpec Information about the layer
- *  @returns {boolean} If the layerSpec is valid or not.
+ *  @return {boolean} If the layerSpec is valid or not.
  *  (Used by MapBehaviorInitializer)
  */
 BareLayerSpecFormatSupport.validate = function(layerSpec) {
-  var requiredFieldsTable = {'tileEngine' : 'word',
+  var requiredFieldsTable = {'shortName' : 'word',
+                             'tileEngine' : 'word',
                              'tileEngineVersion' : 'float',
-                             'url' : 'url',
+                             'url' : 'url'
                             };
   var optionalFieldsTable = {'shortDescription' : 'text',
                              'description' : 'text',
@@ -53,18 +54,18 @@ BareLayerSpecFormatSupport.validate = function(layerSpec) {
                              'year' : 'int'
                             };
 
-  if(!layerSpec.tileEngine) {
+  if (!layerSpec.tileEngine) {
     console.log('Tile engine not specified for bare layer');
     return false;
   }
 
-  if(layerSpec.tileEngine != 'bare' && layerSpec.tileEngine != 'Bare') {
-    console.log('Called bare class but requested ' + 
-                layerSpec.tileType + " tile type");
+  if (layerSpec.tileEngine != 'bare' && layerSpec.tileEngine != 'Bare') {
+    console.log('Called bare class but requested ' +
+                layerSpec.tileType + ' tile type');
     return false;
   }
 
-  return Validator.validateFields(layerSpec, 
+  return Validator.validateFields(layerSpec,
                                requiredFieldsTable, optionalFieldsTable);
 
 };

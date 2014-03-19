@@ -1,3 +1,4 @@
+import pdb
 import unittest
 import time
 from MapApplicationPage import MapApplicationPage
@@ -82,51 +83,51 @@ class TestSanity(unittest.TestCase):
   def testStartingChoropleth(self): 
     self.assertTrue(self.page.choroplethTileForAttributeExists(
                               'taxRoiNormalized'))
-    self.assertTrue("Federal Spending" in self.page.getChoroplethDescription())
+    self.assertTrue("Federal Spending" in self.page.getDescription('noImporta'))
 
   def testStartingBorder(self): 
     self.assertTrue(self.page.borderTileForTypeExists('statePopCartogram'))
-    self.assertTrue("State borders" in self.page.getBorderDescription())
+    self.assertTrue("State borders" in self.page.getDescription('arbitrary'))
 
   def testStartingDots(self):
     self.assertTrue(self.page.dotTileForAttributeExists('gunDeathCountPopCart'))
-    self.assertTrue("un deaths in" in self.page.getDotDescription())
+    self.assertTrue("un deaths in" in self.page.getDescription('whatever'))
 
   # check check the second layers
   def testChangeChoropleth(self):
-    self.page.changeChoroplethLayerToIndex(1)
+    self.page.changeLayerToIndex('noImporta', 1)
     self.assertTrue(self.page.choroplethTileForAttributeExists(
                                                  'populationPovertyPct'))
-    self.assertTrue("less than the poverty" in self.page.getChoroplethDescription())
+    self.assertTrue("less than the poverty" in self.page.getDescription('noImporta'))
 
   def testChangeDots(self):
-    self.page.changeDotLayerToIndex(1)
+    self.page.changeLayerToIndex('whatever', 1)
     self.assertTrue(self.page.dotTileForAttributeExists('shutdownSignerCart'))
-    self.assertTrue("Shutdown signers" in self.page.getDotDescription())
+    self.assertTrue("Congressional Representatives" in self.page.getDescription('whatever'))
 
   def testChangeBorder(self):
-    self.page.changeBorderLayerToIndex(1)
+    self.page.changeLayerToIndex('arbitrary', 1)
     time.sleep(1)
     self.assertTrue(self.page.borderTileForTypeExists(
                               'countyPopulationCartogram'))
-    self.assertTrue("County borders" in self.page.getBorderDescription())
+    self.assertTrue("County borders" in self.page.getDescription('arbitrary'))
 
   # check after changing to mercator
   def testMercatorChoropleth(self):
     self.page.showAsCartogram(False)
     self.assertTrue(self.page.choroplethTileForAttributeExists(
                               'taxRoiNormalized'))
-    self.assertTrue("Federal Spending" in self.page.getChoroplethDescription())
+    self.assertTrue("Federal Spending" in self.page.getDescription('noImporta'))
 
   def testMercatorDots(self):
     self.page.showAsCartogram(False)
     self.assertTrue(self.page.dotTileForAttributeExists('gunDeathCount'))
-    self.assertTrue("un deaths in" in self.page.getDotDescription())
+    self.assertTrue("un deaths in" in self.page.getDescription('whatever'))
 
   def testMercatorBorder(self):
     self.page.showAsCartogram(False)
     self.assertTrue(self.page.borderTileForTypeExists('state'))
-    self.assertTrue("State borders" in self.page.getBorderDescription())
+    self.assertTrue("State borders" in self.page.getDescription('arbitrary'))
 
   def testCityLabelExists(self):
     self.assertTrue(self.page.doesLabelExistForCityNamed('Indianapolis'))

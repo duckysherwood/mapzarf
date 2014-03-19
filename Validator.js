@@ -3,7 +3,7 @@
  *  @classdesc This class is used to check (at a relatively simple level)
  *    the correctness of the MAI file.  It will not catch a few truly evil
  *    things, but as this comes from the server and executes on the client,
- *    it shouldn't really be vulnerable to exploits.  I mean, really, if 
+ *    it shouldn't really be vulnerable to exploits.  I mean, really, if
  *    you want to screw someone, you can just put something nasty on the
  *    server, no need to get clever and put it here.
  *  @public
@@ -18,12 +18,12 @@ function Validator() {
  *  @public
  */
 Validator.isLegalWord = function(candidate) {
-  if(typeof candidate != 'string') {
+  if (typeof candidate != 'string') {
     return false;
   }
 
   var regexp = /[^\w\-\_\.]/;
-  return !candidate.match(regexp); 
+  return !candidate.match(regexp);
 
 };
 
@@ -33,7 +33,7 @@ Validator.isLegalWord = function(candidate) {
  *  @public
  */
 Validator.isLegalInt = function(candidate) {
-  if(typeof candidate != 'number') {
+  if (typeof candidate != 'number') {
     return false;
   }
 
@@ -66,7 +66,7 @@ Validator.isLegalBoolean = function(candidate) {
  *  @public
  */
 Validator.isLegalColor = function(candidate) {
-  if(typeof candidate != 'string') {
+  if (typeof candidate != 'string') {
     return false;
   }
 
@@ -82,7 +82,7 @@ Validator.isLegalColor = function(candidate) {
  *  @public
  */
 Validator.isLegalText = function(candidate) {
-  if(typeof candidate != 'string') {
+  if (typeof candidate != 'string') {
     return false;
   }
   return !candidate.match(/[\"\!<>]/);
@@ -150,30 +150,30 @@ Validator.isLegalText = function(candidate) {
 // _^(?:(?:https?|ftp)://)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)(?:\.(?:[a-z\x{00a1}-\x{ffff}0-9]+-?)*[a-z\x{00a1}-\x{ffff}0-9]+)*(?:\.(?:[a-z\x{00a1}-\x{ffff}]{2,})))(?::\d{2,5})?(?:/[^\s]*)?$_iuS
 //
 var re_weburl = new RegExp(
-  "^" +
+  '^' +
     // protocol identifier
     // "(?:(?:https?|ftp)://)" +  // @@@ kds added file
-    "(?:(?:https?|ftp|file)://)" +  
+    '(?:(?:https?|ftp|file)://)' +
     // user:pass authentication
-    "(?:\\w+(?::\\S*)?@)?" +
+    '(?:\\w+(?::\\S*)?@)?' +
     // "(?:\\S+(?::\\S*)?@)?" +
-    "(?:" +
+    '(?:' +
       // IP address exclusion
       // private & local networks
-      "(?!(?:10|127)(?:\\.\\d{1,3}){3})" +
-      "(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})" +
-      "(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})" +
+      '(?!(?:10|127)(?:\\.\\d{1,3}){3})' +
+      '(?!(?:169\\.254|192\\.168)(?:\\.\\d{1,3}){2})' +
+      '(?!172\\.(?:1[6-9]|2\\d|3[0-1])(?:\\.\\d{1,3}){2})' +
       // IP address dotted notation octets
       // excludes loopback network 0.0.0.0
       // excludes reserved space >= 224.0.0.0
       // excludes network & broacast addresses
       // (first & last IP address of each class)
-      "(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])" +
-      "(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}" +
-      "(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))" +
-    "|" +
+      '(?:[1-9]\\d?|1\\d\\d|2[01]\\d|22[0-3])' +
+      '(?:\\.(?:1?\\d{1,2}|2[0-4]\\d|25[0-5])){2}' +
+      '(?:\\.(?:[1-9]\\d?|1\\d\\d|2[0-4]\\d|25[0-4]))' +
+    '|' +
       // kds I want to be able to use local URLs
-      "([\\w\\-\\.]{2,})*" + 
+      '([\\w\\-\\.]{2,})*' +
       // kds // host name
       // kds "(?:(?:[a-z\\u00a1-\\uffff0-9]+-?)*[a-z\\u00a1-\\uffff0-9]+)" +
       // kds // domain name
@@ -181,38 +181,38 @@ var re_weburl = new RegExp(
       // kds // TLD identifier
       // kds "(\\.(?:[a-zA-Z]{2,}))" +
       // kds // "(?:\\.(?:[a-z\\u00a1-\\uffff]{2,}))" + // kds changed
-    ")" +
+    ')' +
     // port number
-    "(?::\\d{2,5})?" +
-    // resource path   
-    "(/[%#=\\w\/\\+\\-\\?\\&\\.]*)?" +
-    // "(?:/[^\\s]*)?" +   // kds modified -- not strict enough 
-  "$", "i"
+    '(?::\\d{2,5})?' +
+    // resource path
+    '(/[%#=\\w\/\\+\\-\\?\\&\\.]*)?' +
+    // "(?:/[^\\s]*)?" +   // kds modified -- not strict enough
+  '$', 'i'
 );
 
 
-/** Checks a value to see if is a legal URL.  
+/** Checks a value to see if is a legal URL.
  *  @param candidate {string} a Url to be checked
  *  @return {boolean} Whether the value is legal.
  *  @public
  */
 Validator.isLegalUrl = function(candidate) {
-  if(typeof candidate != 'string') {
+  if (typeof candidate != 'string') {
     return false;
   }
 
-  var relativePathPattern = "^((\\.{1,2}/)*([%#=\\w\/\\+\\-\\?\\&\\.]+))+$"; 
+  var relativePathPattern = '^((\\.{1,2}/)*([%#=\\w\/\\+\\-\\?\\&\\.]+))+$';
 
    // The "!!" is to turn it from a char into a boolean
    // return !!(candidate.match(re_weburl))
    return !!(candidate.match(re_weburl) || (candidate.match(relativePathPattern)));
 };
 
-Validator.isLegalArray = function (candidate) {
+Validator.isLegalArray = function(candidate) {
   return $.isArray(candidate);
-}
+};
 
-/** Checks a value to see if is a legal URL.  
+/** Checks a value to see if is a legal URL.
  *  @param fieldType {string} The type which candidate is supposed to be
  *  @param candidate A value to be checked
  *  @return {boolean} Whether the candidate's value is legal.
@@ -260,7 +260,7 @@ Validator.isLegal = function(fieldType, candidate) {
 };
 
 Validator.isLegalLat = function(candidate) {
-  if(!this.isLegalFloat(candidate)) {
+  if (!this.isLegalFloat(candidate)) {
     return false;
   }
 
@@ -269,7 +269,7 @@ Validator.isLegalLat = function(candidate) {
 };
 
 Validator.isLegalLng = function(candidate) {
-  if(!this.isLegalFloat(candidate)) {
+  if (!this.isLegalFloat(candidate)) {
     return false;
   }
 
@@ -282,25 +282,67 @@ Validator.isLegalLng = function(candidate) {
  *  @return {boolean} Whether the mai is legal
  *  @public
  */
-Validator.validateMai = function(mai) {
-  var requiredFields = { "pageTitle" : "text",
-                         "pageDescription" : "text"
+Validator.validateOrderedMai = function(omai) {
+  var requiredFields = { 'pageTitle' : 'text',
+                         'pageDescription' : 'text',
+                         'layersets' : 'array'
                        };
-  var optionalFields = { "pointInfoUrl" : "url", 
-                         "startingMarkerLat" : "lat",
-                         "startingMarkerLng" : "lng",
-                         "startingCenterLat" : "lat",
-                         "startingCenterLng" : "lng",
-                         "startingCenterZoom" : "int",
-                         "hasCartogram" : "bool",
-                         "citiesUrl" : "url",
-                         "cityIconUrl" : "url",
-                         "slippyMapFramework" : "word",
-                         "slippyMapVersion" : "float",
-                         "attribution" : "text" };
+  var optionalFields = { 'pointInfoUrl' : 'url',
+                         'startingMarkerLat' : 'lat',
+                         'startingMarkerLng' : 'lng',
+                         'startingCenterLat' : 'lat',
+                         'startingCenterLng' : 'lng',
+                         'startingCenterZoom' : 'int',
+                         'hasCartogram' : 'bool',
+                         'citiesUrl' : 'url',
+                         'cityIconUrl' : 'url',
+                         'slippyMapFramework' : 'word',
+                         'slippyMapVersion' : 'float',
+                         'attribution' : 'text' };
 
-  return this.validateFields(mai, requiredFields, optionalFields);
-  
+  if (!this.validateFields(omai, requiredFields, optionalFields)) {
+    alert('The map application info file is invalid, alas.');
+    return false;
+  }
+
+  var success = true;
+  $.each(omai.layersets, function(index, layerset) {
+     if (!Validator.validateLayerset(layerset)) {
+       success = false;
+       return false;
+     }
+  });
+
+  return success;
+
+};
+
+Validator.validateLayerSpec = function(layerSpec) {
+  if (!layerSpec.tileEngine) {
+    alert('Missing tile engine for layer Spec ' + layerSpec.name);
+  }
+  return Validator.classForTileType(layerSpec.tileEngine).validate(layerSpec);
+};
+
+Validator.validateLayerset = function(layerset) {
+  var requiredFields = { 'shortName' : 'word',
+                         'layers' : 'array'};
+  var optionalFields = { 'displayName' : 'text'};
+  if (!Validator.validateFields(layerset, requiredFields, optionalFields)) {
+    alert('The layerset ' + layerset.shortName + ' is invalid');
+    return false;
+  }
+
+  var success = true;
+  $.each(layerset.layers, function(index, layerSpec) {
+    if (!Validator.validateLayerSpec(layerSpec)) {
+      success = false;
+      return false;
+    }
+  });
+
+  return success;
+
 };
 
 /** Checks a bunch of fields in a candidate object to see if they
@@ -308,9 +350,9 @@ Validator.validateMai = function(mai) {
  *  Candidate is usually a MapApplicationInfo object or a piece
  *  of it.
  *  @param candidate {object} Object to be examined
- *  @param requiredFields {object} Table with keys of the fieldName and 
+ *  @param requiredFields {object} Table with keys of the fieldName and
  *         values of a string saying what type of field it is
- *  @param optionalFields {object} Table with keys of the fieldName and 
+ *  @param optionalFields {object} Table with keys of the fieldName and
  *         values of a string saying what type of field it is
  *  @return {boolean} Whether the candidate is legal
  *  @public
@@ -320,22 +362,22 @@ Validator.validateFields = function(candidate,
 
   var success = true;
   $.each(requiredFieldsTable, function(fieldName, fieldType) {
-    if(!candidate.hasOwnProperty(fieldName)) {
-      console.log("Object is missing field " + fieldName);
+    if (!candidate.hasOwnProperty(fieldName)) {
+      console.log('Object is missing field ' + fieldName);
       success = false;
       return false;
     }
-    if(!Validator.isLegal(fieldType, candidate[fieldName])) {
-      console.log(fieldName + " of " + candidate[fieldName] + " is invalid");
+    if (!Validator.isLegal(fieldType, candidate[fieldName])) {
+      console.log(fieldName + ' of ' + candidate[fieldName] + ' is invalid');
       success = false;
       return false;
     }
   });
 
   $.each(optionalFieldsTable, function(fieldName, fieldType) {
-    if(candidate[fieldName]) {   // field does not need to exist
-      if(!Validator.isLegal(fieldType, candidate[fieldName])) {
-        console.log(fieldName + " of " + candidate[fieldName] + " is invalid");
+    if (candidate[fieldName]) {   // field does not need to exist
+      if (!Validator.isLegal(fieldType, candidate[fieldName])) {
+        console.log(fieldName + ' of ' + candidate[fieldName] + ' is invalid');
         success = false;
         return false;
       }
@@ -343,10 +385,10 @@ Validator.validateFields = function(candidate,
   });
 
   return success;
-    
+
 };
 
-Validator.classForTileType = function (tileType) {
+Validator.classForTileType = function(tileType) {
   var myClassTable = {
     'mapeteriaChoropleth' : MapeteriaChoroplethLayerSpecFormatSupport,
     'mapeteriaBorder' : MapeteriaBorderLayerSpecFormatSupport,
@@ -355,4 +397,4 @@ Validator.classForTileType = function (tileType) {
     };
 
   return myClassTable[tileType];
-}
+};

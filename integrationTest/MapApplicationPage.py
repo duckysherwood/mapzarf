@@ -77,12 +77,12 @@ class MapApplicationPage:
     return self.doesMarkerExistForUrlFragment(urlFragment)
 
   # To look for particular layer types, look for 
-  def tileLayerOfTypeAndAttributeExists(self, layerspecName, attributeName):
-    translation = { 'choroplethLayers' : 'choropleth.phpx',
-                    'dotLayers' : 'dots.php',
-                    'borderLayers' : 'choropleth.phpx' }
+  def tileLayerOfTypeAndAttributeExists(self, tileType, attributeName):
+    translation = { 'choropleth' : 'choropleth.phpx',
+                    'dot' : 'dots.php',
+                    'border' : 'choropleth.phpx' }
     tileClassName = 'leaflet-tile'
-    executableName = translation[layerspecName]
+    executableName = translation[tileType]
 
     # Let the tiles load
     try:
@@ -101,25 +101,25 @@ class MapApplicationPage:
 
   def choroplethTileAtCoordinatesExists(self, x, y, z):
     coordinateString = "x=" + str(x) + "&y=" + str(y) + "zoom=" + str(z)
-    return self.tileLayerOfTypeAndAttributeExists('choroplethLayers', 
+    return self.tileLayerOfTypeAndAttributeExists('choropleth', 
                                                   coordinateString)
 
   def choroplethTileForAttributeExists(self, attributeName): 
     urlFragment = 'field=' + attributeName + "&"
-    return self.tileLayerOfTypeAndAttributeExists('choroplethLayers', 
+    return self.tileLayerOfTypeAndAttributeExists('choropleth', 
                                                   urlFragment)
  
   def borderTileForTypeExists(self, borderLayerType): 
     urlFragment = 'polyType=' + borderLayerType + "&"
-    hasBorderType = self.tileLayerOfTypeAndAttributeExists('choroplethLayers', 
+    hasBorderType = self.tileLayerOfTypeAndAttributeExists('choropleth', 
                                                   urlFragment)
-    isBorder = self.tileLayerOfTypeAndAttributeExists('borderLayers', 
+    isBorder = self.tileLayerOfTypeAndAttributeExists('border', 
                                                   'border=solid')
     return isBorder & hasBorderType
    
   def dotTileForAttributeExists(self, dotAttributeName):
     urlFragment = 'name=' + dotAttributeName + "&"
-    return self.tileLayerOfTypeAndAttributeExists('dotLayers', urlFragment)
+    return self.tileLayerOfTypeAndAttributeExists('dot', urlFragment)
  
  
   def getTitle(self):
@@ -133,14 +133,18 @@ class MapApplicationPage:
   def showAsCartogram(self, value):
     self.setCheckbox('isCartogramCheckbox', value)
 
-  def showDots(self, value):
-    self.setCheckbox('dotLayersCheckbox', value)
+  def showLayerset(self, layersetName, value):
+    self.setCheckbox(layersetName + 'Checkbox', value)
 
-  def showChoropleths(self, value):
-    self.setCheckbox('choroplethLayersCheckbox', value)
 
-  def showBorders(self, value):
-    self.setCheckbox('borderLayersCheckbox', value)
+#  def showDots(self, value):
+#    self.setCheckbox('dotLayersCheckbox', value)
+#
+#  def showChoropleths(self, value):
+#    self.setCheckbox('choroplethLayersCheckbox', value)
+#
+#  def showBorders(self, value):
+#    self.setCheckbox('borderLayersCheckbox', value)
 
   def areCitiesVisible(self):
     try:
@@ -163,14 +167,17 @@ class MapApplicationPage:
     element = self.browser.find_element_by_id(elementName)
     return element.text
 
-  def getChoroplethDescription(self):
-    return self.browser.find_element_by_id("choroplethLayers").text
+  def getDescription(self, layersetName):
+    return self.browser.find_element_by_id(layersetName + 'Description').text
 
-  def getDotDescription(self):
-    return self.browser.find_element_by_id("dotLayers").text
-
-  def getBorderDescription(self):
-    return self.browser.find_element_by_id("borderLayers").text
+#  def getChoroplethDescription(self):
+#    return self.browser.find_element_by_id("choroplethLayersDescription").text
+#
+#  def getDotDescription(self):
+#    return self.browser.find_element_by_id("dotLayersDescription").text
+#
+#  def getBorderDescription(self):
+#    return self.browser.find_element_by_id("borderLayersDescription").text
 
   def getSharingUrl(self):
     return self.browser.find_element_by_id('sharingUrl').get_attribute('href')
@@ -183,28 +190,22 @@ class MapApplicationPage:
     selector = self.browser.find_element_by_id(layersetName + "LayersSelector")
     selector.select_by_visible_text(nameFragment)
 
-  def changeDotLayerToIndex(self, index):
-    self.changeLayerToIndex('dotLayers', index)
-
-  def changeChoroplethLayerToIndex(self, index):
-    self.changeLayerToIndex('choroplethLayers', index)
-
-  def changeBorderLayerToIndex(self, index):
-    self.changeLayerToIndex('borderLayers', index)
+#  def changeDotLayerToIndex(self, index):
+#    self.changeLayerToIndex('dotLayers', index)
+#
+#  def changeChoroplethLayerToIndex(self, index):
+#    self.changeLayerToIndex('choroplethLayers', index)
+#
+#  def changeBorderLayerToIndex(self, index):
+#    self.changeLayerToIndex('borderLayers', index)
 
   # I could do this en masse, but I want to find out which
   # checkbox had problems.
   def setAllCheckboxesTo(self, aBoolean):
-    saveFuncName = ""
-    functions = [self.showAsCartogram,
-                 self.showDots,
-                 self.showChoropleths,
-                 self.showBorders,
-                 self.showCities]
-
-    for func in functions:
-      saveFuncName = func.func_name
-      self.doAndWait(func, aBoolean)
+    checkboxes = self.browser.find_elements_by_tag_name("input")
+    for checkbox in checkboxes:
+      if(checkbox.get_attribute('checked') != aBoolean):
+        checkbox.click()
 
   def checkAllCheckboxes(self):
     self.setAllCheckboxesTo(True)

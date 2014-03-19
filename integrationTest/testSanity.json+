@@ -10,16 +10,15 @@
    "hasCartogram":true,
    "slippyMapFramework":"leaflet",
    "slippyMapFrameworkVersion":1.6,
-   "pointInfoUrl":"./testSanityMarkerInfo.html?",
+   "pointInfoUrlPrefix":"./testSanityMarkerInfo.html?",
    "citiesUrl":"/cgi-bin/getCities.py?",
    "cityIconUrl":"/maps/mapeteria2/makeCityLabel.php?",
    "layersets":[
       {
-         "shortName" : "noImporta",
-         "displayName" : "Choropleth",
+         "name":"choroplethLayers",
          "layers":[
             {
-               "shortName":"taxRoiNormalized",
+               "name":"taxRoiNormalized",
                "tileEngine":"mapeteriaChoropleth",
                "tileEngineVersion":2,
                "table":"provinceAttributes",
@@ -43,7 +42,7 @@
                "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
             },
             {
-               "shortName":"populationPovertyPct",
+               "name":"populationPovertyPct",
                "tileEngine":"mapeteriaChoropleth",
                "tileEngineVersion":2,
                "table":"countryLowerChamberAttributes",
@@ -68,11 +67,10 @@
          ]
       },
       {
-         "shortName":"arbitrary",
-         "displayName":"Border",
+         "name":"borderLayers",
          "layers":[
             {
-               "shortName":"state",
+               "name":"state",
                "tileEngine":"mapeteriaBorder",
                "tileEngineVersion":2,
                "table":"provinceAttributes",
@@ -91,8 +89,7 @@
                "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
             },
             {
-               "shortName":"county",
-               "displayName":"County",
+               "name":"county",
                "tileEngine":"mapeteriaBorder",
                "tileEngineVersion":2,
                "table":"countyAttributes",
@@ -114,11 +111,10 @@
          ]
       },
       {
-         "shortName":"whatever",
-         "displayName":"dot",
+         "name":"dotLayers",
          "layers":[
             {
-               "shortName":"gunDeaths",
+               "name":"gunDeaths",
                "tileEngine":"mapeteriaDot",
                "tileEngineVersion":2,
                "mercatorTable":"dotAttributes",
@@ -134,7 +130,7 @@
                "provider":"Huffington Post; some geocoding provided by GeoCoder.ca"
             },
             {
-               "shortName":"shutdownSigners",
+               "name":"shutdownSigners",
                "tileEngine":"mapeteriaDot",
                "tileEngineVersion":2,
                "mercatorTable":"dotAttributes",

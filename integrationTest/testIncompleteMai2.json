@@ -1,5 +1,8 @@
 {
-  "pageTitle" : "TestSanity pageTitle",
-  "pageDescription" : "TestSanity pageDescription",
-  "attribution" : "Kaitlin Duck Sherwood"
+   "pageTitle":"TestSanity pageTitle",
+   "pageDescription":"TestSanity pageDescription",
+   "attribution":"Kaitlin Duck Sherwood",
+   "layersets":[
+
+   ]
 }

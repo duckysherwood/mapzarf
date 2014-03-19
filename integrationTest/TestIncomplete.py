@@ -1,5 +1,5 @@
 # This test is designed to test a MAI which is totally messed up: valid
-# JSON but not at all the correct thing.  It should fail completely in
+# JSON but not at all correct semantically.  It should fail completely in
 # expected ways.
 
 # TODO check for no controls, no cartogram checkbox, no description
@@ -21,6 +21,7 @@ GOOD_JSON = 'http://localhost/mapzarf/integrationTest/testSanity.html'
 EMPTY_JSON = 'http://localhost/mapzarf/integrationTest/testIncompleteMai1.html'
 MINIMAL_JSON = 'http://localhost/mapzarf/integrationTest/testIncompleteMai2.html'
 ONE_LAYER_JSON = 'http://localhost/mapzarf/integrationTest/testIncompleteMai3.html'
+# one layer apiece, with only required fields
 MINIMAL_LAYERSET = 'http://localhost/mapzarf/integrationTest/testIncompleteMai4.html'
 
 class TestIncomplete(unittest.TestCase):
@@ -118,20 +119,20 @@ class TestIncomplete(unittest.TestCase):
     success = True
     urlStrings = [MINIMAL_JSON, ONE_LAYER_JSON, MINIMAL_LAYERSET]
     for urlString in urlStrings:
-      s = self.doesMarkerExist(urlString)
-      success &= not s
+      s = not self.doesMarkerExist(urlString)
+      success &= s
 
-    self.assertTrue(success)
+    self.assertTrue(success, "testForNoMarker")
 
   def testForNoChoroplethControl(self):
     urlStrings = [MINIMAL_JSON]
-    layerspecNames = ["choroplethLayers"]
-    success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, False)
+    layerspecNames = ["noImporta"]
+    success = self.checkLayerForMultipleUrls(urlStrings,layerspecNames, False)
     self.assertTrue(success)
 
   def testForChoroplethControl(self):
     urlStrings = [GOOD_JSON, ONE_LAYER_JSON]
-    layerspecNames = ["choroplethLayers"]
+    layerspecNames = ["noImporta"]
     success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, True)
     self.assertTrue(success)
 
@@ -139,7 +140,7 @@ class TestIncomplete(unittest.TestCase):
   def testForDotAndBorderExistence(self):
     urlStrings = [GOOD_JSON, MINIMAL_LAYERSET]
     success = True
-    layerspecNames = ['dotLayers', 'borderLayers']
+    layerspecNames = ['whatever', 'arbitrary']
     success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, True)
     self.assertTrue(success)
 
@@ -147,8 +148,8 @@ class TestIncomplete(unittest.TestCase):
   def testForNoDotAndBorderExistence(self):
     urlStrings = [MINIMAL_JSON, ONE_LAYER_JSON]
     success = True
-    layerspecNames = ['dotLayers', 'borderLayers']
-    success = self.checkLayerForMultipleUrls(urlStrings, layerspecNames, False)
+    layerspecNames = ['whatever', 'arbitrary']
+    success = self.checkLayerForMultipleUrls(urlStrings,layerspecNames, False)
     self.assertTrue(success)
    
 

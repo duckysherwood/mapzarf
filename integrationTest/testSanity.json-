@@ -1,7 +1,7 @@
 {
    "pageTitle":"TestSanity pageTitle",
    "pageDescription":"TestSanity pageDescription",
-   "attribution":"Kaitlin Duck Sherwood",
+   "pointInfoUrlPrefix":"./testSanityMarkerInfo.html",
    "startingMarkerLat":40,
    "startingMarkerLng":-100,
    "startingCenterLat":38,
@@ -10,16 +10,13 @@
    "hasCartogram":true,
    "slippyMapFramework":"leaflet",
    "slippyMapFrameworkVersion":1.6,
-   "pointInfoUrl":"./testSanityMarkerInfo.html?",
+   "attribution":"Kaitlin Duck Sherwood",
    "citiesUrl":"/cgi-bin/getCities.py?",
    "cityIconUrl":"/maps/mapeteria2/makeCityLabel.php?",
    "layersets":[
       {
-         "shortName" : "noImporta",
-         "displayName" : "Choropleth",
-         "layers":[
-            {
-               "shortName":"taxRoiNormalized",
+         "choroplethLayers":[
+            {"name" : "taxRoiNormalized"{
                "tileEngine":"mapeteriaChoropleth",
                "tileEngineVersion":2,
                "table":"provinceAttributes",
@@ -42,8 +39,7 @@
                "providerUrl":"http://taxfoundation.org",
                "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
             },
-            {
-               "shortName":"populationPovertyPct",
+            {"populationPovertyPct":{
                "tileEngine":"mapeteriaChoropleth",
                "tileEngineVersion":2,
                "table":"countryLowerChamberAttributes",
@@ -65,14 +61,11 @@
                "providerUrl":"http://www.census.gov",
                "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
             }
-         ]
+         }]
       },
       {
-         "shortName":"arbitrary",
-         "displayName":"Border",
-         "layers":[
-            {
-               "shortName":"state",
+         "borderLayers":{
+            "state":{
                "tileEngine":"mapeteriaBorder",
                "tileEngineVersion":2,
                "table":"provinceAttributes",
@@ -90,9 +83,7 @@
                "provider":"US Census Bureau",
                "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
             },
-            {
-               "shortName":"county",
-               "displayName":"County",
+            "county":{
                "tileEngine":"mapeteriaBorder",
                "tileEngineVersion":2,
                "table":"countyAttributes",
@@ -111,14 +102,11 @@
                "provider":"US Census Bureau",
                "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
             }
-         ]
+         }
       },
       {
-         "shortName":"whatever",
-         "displayName":"dot",
-         "layers":[
-            {
-               "shortName":"gunDeaths",
+         "dotLayers":[
+            {"gunDeaths":{
                "tileEngine":"mapeteriaDot",
                "tileEngineVersion":2,
                "mercatorTable":"dotAttributes",
@@ -133,8 +121,7 @@
                "sourceUrl":"http://data.huffingtonpost.com/2013/03/gun-deaths",
                "provider":"Huffington Post; some geocoding provided by GeoCoder.ca"
             },
-            {
-               "shortName":"shutdownSigners",
+            "shutdownSigners":{
                "tileEngine":"mapeteriaDot",
                "tileEngineVersion":2,
                "mercatorTable":"dotAttributes",
@@ -149,7 +136,7 @@
                "sourceUrl":"http://www.freedomworks.org/content/have-your-members-congress-signed-defund-obamacare-letter-find-out-here",
                "provider":"Freedom Works"
             }
-         ]
+         }
       }
    ]
 }
