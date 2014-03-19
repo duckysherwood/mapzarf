@@ -1,3 +1,13 @@
+/** @author Kaitlin Duck Sherwood
+ *  @class Validator
+ *  @classdesc This class is used to check (at a relatively simple level)
+ *    the correctness of the MAI file.  It will not catch a few truly evil
+ *    things, but as this comes from the server and executes on the client,
+ *    it shouldn't really be vulnerable to exploits.  I mean, really, if 
+ *    you want to screw someone, you can just put something nasty on the
+ *    server, no need to get clever and put it here.
+ *  @public
+ */
 function Validator() {
 }
 
@@ -198,6 +208,10 @@ Validator.isLegalUrl = function(candidate) {
    return !!(candidate.match(re_weburl) || (candidate.match(relativePathPattern)));
 };
 
+Validator.isLegalArray = function (candidate) {
+  return $.isArray(candidate);
+}
+
 /** Checks a value to see if is a legal URL.  
  *  @param fieldType {string} The type which candidate is supposed to be
  *  @param candidate A value to be checked
@@ -236,6 +250,9 @@ Validator.isLegal = function(fieldType, candidate) {
     case 'lng':
       return this.isLegalLng(candidate);
 
+    case 'array':
+      return this.isLegalArray(candidate);
+
     default:
       return false;
   }
@@ -267,7 +284,8 @@ Validator.isLegalLng = function(candidate) {
  */
 Validator.validateMai = function(mai) {
   var requiredFields = { "pageTitle" : "text",
-                         "pageDescription" : "text" };
+                         "pageDescription" : "text"
+                       };
   var optionalFields = { "pointInfoUrlPrefix" : "url", 
                          "startingMarkerLat" : "lat",
                          "startingMarkerLng" : "lng",
