@@ -20,10 +20,9 @@ html, body, table {
 }
 #legend {
    position: absolute;
-   left: 55%;
+   right: 20px;
    top: 2%;
-   width: 5%;
-   margin: 0;
+   margin: 3px;
 }
 #errorMessage {
    position: absolute;
