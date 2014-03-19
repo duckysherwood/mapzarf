@@ -1,7 +1,7 @@
 {
   "pageTitle" : "Test Wrong8",
   "pageDescription" : "Test Wrong8",
-  "pointInfoUrlPrefix" : "/testSanityMarkerInfo.html",
+  "pointInfoUrl" : "/testSanityMarkerInfo.html?",
   "startingMarkerLat" : 40,
   "startingMarkerLng" : -100,
   "startingCenterLat" : 38,

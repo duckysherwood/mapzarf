@@ -1,7 +1,7 @@
 {
   "pageTitle" : 32,
   "pageDescription" : -46,
-  "pointInfoUrlPrefix" : 255,
+  "pointInfoUrl" : 255,
   "startingMarkerLat" : "a",
   "startingMarkerLng" : "b",
   "startingCenterLat" : "c",

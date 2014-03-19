@@ -55,7 +55,7 @@ ListenerInitializer.prototype.updateSharingUrl = function() {
 
 /** Enables clicking on the marker to get info about the dot
  *  or jurisdiction at that point.  (It gets the information from
- *  mapApplicationInfo.pointInfoUrlPrefix.)
+ *  mapApplicationInfo.pointInfoUrl.)
  *  No arguments, no return.   Calls the {marker} callback.
  *  SIDE EFFECTS: changes the DOM.
  *  @private
@@ -175,7 +175,7 @@ ListenerInitializer.prototype.setPopupInfoCallback = function (responseText) {
 /** Event handler for clicking on the map or marker.  Kicks off a request
  *  to the server for content to fill the infowindow with.  Note that
  *  the URL for the call to the server is constructed with
- *  pointInfoUrlPrefix as specified in the JSON mapApplicationInfo file.
+ *  pointInfoUrl as specified in the JSON mapApplicationInfo file.
  *  The server gets information about where the user clicked, but after
  *  that, it's all the server's job to figure out what to populate the
  *  infowindow with.
@@ -200,7 +200,7 @@ ListenerInitializer.prototype.requestPopupInformation = function (e) {
   year = layersetName ? this.mai.dotLayers[layersetName].year : null;
 
 
-  var url = this.map.pointInfoUrlPrefix + "?" +
+  var url = this.map.pointInfoUrl + 
      "lat=" + lat + "&lng=" + lng +
      "&zoom=" + this.map.getZoom() +
      "&fieldName=" + fieldName  +

@@ -39,7 +39,7 @@ Runner.prototype.start = function (data, textStatus, jqXhr) {
                                     pageInitValues.markerLng])
                            .bindPopup("Fetching data, please wait...")
                            .addTo(myMap);
-    myMap.pointInfoUrlPrefix = this.mai.pointInfoUrlPrefix;
+    myMap.pointInfoUrl = this.mai.pointInfoUrl;
   }
 
   var domAppender = new DomElementAppender(myMap, this.mai, pageInitValues);

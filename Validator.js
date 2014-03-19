@@ -286,7 +286,7 @@ Validator.validateMai = function(mai) {
   var requiredFields = { "pageTitle" : "text",
                          "pageDescription" : "text"
                        };
-  var optionalFields = { "pointInfoUrlPrefix" : "url", 
+  var optionalFields = { "pointInfoUrl" : "url", 
                          "startingMarkerLat" : "lat",
                          "startingMarkerLng" : "lng",
                          "startingCenterLat" : "lat",

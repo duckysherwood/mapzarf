@@ -45,7 +45,7 @@ by the HTML and CSS.  You can put the various pieces of the page anywhere
 you want by changing the HTML and CSS.
 3. The JSON file doesn't control contents of the marker's infowindow 
 (aka "balloon") per se.  The JSON file does specify an executable
-   mapApplicationInfo.pointInfoUrlPrefix ;
+   mapApplicationInfo.pointInfoUrl
 the executable prefix plus the DOM state get combined in
   ListenerInitialization.requestPopupInformation()
 

@@ -1,7 +1,7 @@
 {
   "pageTitle" : "TestBare pageTitle",
   "pageDescription" : "TestBare pageDescription",
-  "pointInfoUrlPrefix" : "./testSanityMarkerInfo.html",
+  "pointInfoUrl" : "./testSanityMarkerInfo.html?",
   "startingMarkerLat" : 40,
   "startingMarkerLng" : -100,
   "startingCenterLat" : 38,
