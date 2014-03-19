@@ -70,9 +70,14 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
              }
            });
 
-    this.dotLayer = this.getDotLayer();
-    this.borderLayer = this.getBorderLayer();
-    this.choroplethLayer = this.getChoroplethLayer();
+    var dotLayerSpec = this.getLayerSpec('dotLayers');
+    var borderLayerSpec = this.getLayerSpec('borderLayers');
+    var choroplethLayerSpec = this.getLayerSpec('choroplethLayers');
+
+    this.dotLayer = dotLayerSpec ? this.getLayer(dotLayerSpec) : null;
+    this.borderLayer = borderLayerSpec ? this.getLayer(borderLayerSpec) : null;
+    this.choroplethLayer = choroplethLayerSpec ? 
+                                this.getLayer(choroplethLayerSpec) : null;
 
     $.each([this.choroplethLayer, this.borderLayer, this.dotLayer],
            function (index, layer) {
@@ -95,40 +100,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     }
   };
 
-  /** Creates a choropleth layer for the map to use
-   *  @returns {Object} Layer object describing a choropleth layer
-   *  @private
-   */
-  this.map.getChoroplethLayer = function () {
-    var layersetName = 'choroplethLayers';
-    var layerSpec = this.getLayerSpec(layersetName); // validation happens there
-
-    if(!layerSpec) {
-      return null;
-    }
-
-
-    $( '#legendImage' )[0].update(layerSpec);
-
-    return this.getPolygonLayer(layerSpec);
-  };
-
-  /** Creates a border layer for the map to use
-   * @returns {Object} Layer object describing a border layer
-   * @private
-   */
-  this.map.getBorderLayer = function () {
-    var layersetName = 'borderLayers';
-    var layerSpec = this.getLayerSpec(layersetName); // and validates
-
-    if(!layerSpec) { 
-      return null;
-    }
-
-    var fakeSpec = MapeteriaBorderLayerSpecFormatSupport
-                                    .asChoroplethLayerSpec(layerSpec);
-    return this.getPolygonLayer(fakeSpec);
-  };
 
   /** Gets the layerSpec for the currently-selected layer of the 
    *  given layerset.
@@ -169,22 +140,15 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     return this.mai[layersetName][key] ;
   }
 
-  /** Creates a polygon layer -- either choropleth or border --
-   *  for the map to use.
-   *  @param {string} layersetName A string describing what type of
-   *    layerset it is (valid strings: 'borderLayers' or 'choroplethLayers')
-   *  @param {string} showBorder Flag which tells if there should be a border on
-   *    the polygons or not.  This is needed because what the user sees as
-   *    a border might be implemented either as a separate layer or as
-   *    a choropleth layer which happens to have a border.  
-   *  TODO implement borders as choropleth borders
-   *  @returns {Object} Layer object describing a border or choropleth layer.
+
+  /** Figures out what the projection type is.
+   *  @param {object} Layerspec used to generate the layer on the map
+   *  @returns {object} Leaflet layer for use on map
    *  @private
    */
-  this.map.getPolygonLayer = function (layerSpec) {
+  this.map.getLayer = function(layerSpec) {
 
-
-   var supportClass;
+    var supportClass;
     if(layerSpec.tileEngine) {
       supportClass = Validator.classForTileType(layerSpec.tileEngine);
     } else {
@@ -193,39 +157,17 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
 
     url = supportClass.getLayerUrl(layerSpec, this.projectionType())
 
-       
-    return L.tileLayer(url, {
-      maxZoom: 18,
-      attribution: layerSpec.source
-    });
-
-  };
-
-
-  /** Creates a dots layer for the map to use.
-   *  @returns {Object} Layer object describing a dots layer.
-   *  @private
-   */
-  // TODO change this to a use a DotLayerFactory, and choose
-  // which LayerFactory type to use based on layersetType in the 
-  // layerspec.
-  this.map.getDotLayer = function () {
-    var layersetName = 'dotLayers';
-
-    if(!$( '#dotLayersCheckbox').is(':checked')) {
-      return null;
+    if(layerSpec.legendUrl) {
+      $( '#legendImage' )[0].update(layerSpec);
     }
 
-    var layerSpec = this.getLayerSpec(layersetName);
-
-    projection = this.projectionType();
-    var url = MapeteriaDotLayerSpecFormatSupport.getLayerUrl(layerSpec, projection);
-  
     return L.tileLayer(url, {
       maxZoom: 18,
       attribution: layerSpec.source
     });
+
   };
+
 
   /** Utility to see if the mapApplicationInfo file specifies any layer
    *  of =layersetName= type.
@@ -259,24 +201,23 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *   in question, e.g. 'dotLayers', 'choroplethLayers', or "borderLayers'
    *  @returns {string} The key (name) of the layer, e.g. 
    *   'unemployment' or 'povertyChildren' or 'gunDeaths' or 'stateBorder'
+   *   NOTE: returns value even if checkbox is unchecked.
    *  @private
    */
   this.map.findSelectedKeyForLayerType  = function (layersetName) {
     var checkboxId = '#' + layersetName + 'Checkbox';
     if(!$( checkboxId )) {
-      return false;
+      return null;
     }
 
-    if($( checkboxId ).is(':checked')) {
-      var key = $( checkboxId ).val();
-  
-      if(key == SENTINEL_MULTIPLE) {
-        // multiple options, select the one which is checked
-        var layerSelectorId = '#' + layersetName + 'Selector';
-        key = $( layerSelectorId ).find(':selected').val();
-      } 
-      return key;
-    }
+    var key = $( checkboxId ).val();
+
+    if(key == SENTINEL_MULTIPLE) {
+      // multiple options, select the one which is checked
+      var layerSelectorId = '#' + layersetName + 'Selector';
+      key = $( layerSelectorId ).find(':selected').val();
+    } 
+    return key;
   };
 
   /** Initializes the map.
