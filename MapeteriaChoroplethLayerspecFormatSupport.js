@@ -100,11 +100,15 @@ MapeteriaChoroplethLayerSpecFormatSupport.validate = function(layerSpec) {
                              'isPercentage' : 'bool',
                              'shortDescription' : 'text',
                              'description' : 'text',
+                             'sourceUrl' : 'url'
                              'mapping' : 'text',
                              'showBorder' : 'bool',
                              'legendUrl' : 'url',
-                             'sourceUrl' : 'url',
-                             'source' : 'text'};
+                             'providerUrl' : 'url',
+                             'provider' : 'text',
+                             'licenseUrl' : 'url',
+                             'license' : 'text'
+                            };
 
   if(!layerSpec.tileEngine) {
     console.log('Tile type not specified for choropleth layer');

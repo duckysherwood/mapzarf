@@ -106,6 +106,7 @@ class TestSanity(unittest.TestCase):
 
   def testChangeBorder(self):
     self.page.changeBorderLayerToIndex(1)
+    time.sleep(1)
     self.assertTrue(self.page.borderTileForTypeExists(
                               'countyPopulationCartogram'))
     self.assertTrue("County borders" in self.page.getBorderDescription())

@@ -26,7 +26,8 @@
           "legendUrl" : "taxRoiLegend.png",
           "shortDescription" : "Tax ROI",
           "description":"Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes",
-          "source":"Tax Foundation",
+          "provider":"Tax Foundation",
+          "providerUrl":"http://taxfoundation.org",
           "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
        }
     }

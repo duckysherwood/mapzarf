@@ -27,8 +27,32 @@ Utilities.descriptionHtml = function(layerSpec) {
     source = "Unknown source";
   }
 
+  var provider = layerSpec.provider;
+  if(provider && layerSpec.providerUrl) {
+    provider = '<a href="' + layerSpec.providerUrl + '">' + provider + '</a>';
+  }
 
-  return descriptor + ' (' + layerSpec.year + ', ' + source + ')';
+  if(!provider) {
+    provider = "Unknown source";
+  }
+
+  var year = layerSpec.year ? layerSpec.year + ", " : "";
+  
+
+  descriptor = descriptor + ' (' + year + provider + ')';
+
+
+  var license = layerSpec.license;
+  if(license && layerSpec.licenseUrl) {
+    license = 'License: <a href="' + layerSpec.licenseUrl + '">' + license + '</a>';
+  }
+
+  if(license) {
+    descriptor = descriptor + ' ' + license;
+  }
+  
+  return descriptor;
+
 };
 
 /** Convenience method to make an HTTP request with the callback

@@ -46,7 +46,10 @@ BareLayerSpecFormatSupport.validate = function(layerSpec) {
   var optionalFieldsTable = {'shortDescription' : 'text',
                              'description' : 'text',
                              'sourceUrl' : 'url',
-                             'source' : 'text',
+                             'providerUrl' : 'url',
+                             'provider' : 'text',
+                             'licenseUrl' : 'url',
+                             'license' : 'text',
                              'year' : 'int'
                             };
 

@@ -50,9 +50,12 @@ MapeteriaDotLayerSpecFormatSupport.validate = function(layerSpec) {
                              'cartogramPoints' : 'word',
                              'shortDescription' : 'text',
                              'description' : 'text',
+                             'sourceUrl' : 'url'
                              'legendUrl' : 'url',
-                             'sourceUrl' : 'url',
-                             'source' : 'text'
+                             'providerUrl' : 'url',
+                             'provider' : 'text',
+                             'licenseUrl' : 'url',
+                             'license' : 'text',
                             };
 
   if(!layerSpec.tileEngine) {

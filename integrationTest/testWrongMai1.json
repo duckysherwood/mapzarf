@@ -33,7 +33,7 @@
           "legendUrl" : 2345,
           "shortDescription" : 72626,
           "description" : 83,
-          "source" : 34663,
+          "provider" : 34663,
           "sourceUrl" : 47676
        },
        "populationPovertyPct": {
@@ -53,7 +53,7 @@
           "mapping" : 231,
           "shortDescription" : 3636,
           "description" : 3535,
-          "source" : 4452,
+          "provider" : 4452,
           "sourceUrl" : 4646
        }
     },
@@ -74,7 +74,7 @@
           "borderWidth" : true,
           "shortDescription" : 34636,
           "description" : 34636,
-          "source" : -46456,
+          "provider" : -46456,
           "sourceUrl" : true
        }
     },
@@ -91,7 +91,7 @@
           "shortDescription" : 47357,
           "description" : 4346,
           "sourceUrl" : 4743.4,
-          "source" : 4734.868
+          "provider" : 4734.868
        }
     }
 }

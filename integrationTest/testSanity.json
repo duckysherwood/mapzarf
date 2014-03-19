@@ -34,7 +34,8 @@
           "legendUrl" : "./taxRoiLegend.png",
           "shortDescription" : "Tax ROI",
           "description":"Excess/Loss Federal Spending in Each State Per Dollar of Federal Taxes",
-          "source":"Tax Foundation",
+          "provider":"Tax Foundation",
+          "providerUrl":"http://taxfoundation.org",
           "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
        },
        "populationPovertyPct": {
@@ -54,8 +55,9 @@
           "mapping" : "linear",
           "legendUrl" : "./poverty.png",
           "shortDescription" : "Poverty Level",
-          "description":"Population earning less than the poverty line",
-          "source":"US Census Bureau",
+          "description" : "Population earning less than the poverty line",
+          "provider" : "US Census Bureau",
+          "providerUrl" : "http://www.census.gov",
           "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
        }
     },
@@ -76,7 +78,7 @@
           "borderWidth" : "2",
           "shortDescription" : "State",
           "description" : "State borders",
-          "source":"US Census Bureau",
+          "provider":"US Census Bureau",
           "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
        },
        "county": {
@@ -95,7 +97,7 @@
           "mapping" : "none",
           "shortDescription" : "County",
           "description" : "County borders",
-          "source":"US Census Bureau",
+          "provider":"US Census Bureau",
           "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
        }
     },
@@ -114,7 +116,7 @@
           "shortDescription" : "gun deaths",
           "description": "gun deaths in the 100 days after Sandy Hook",
           "sourceUrl" : "http://data.huffingtonpost.com/2013/03/gun-deaths",
-          "source" : "Huffington Post; some geocoding provided by GeoCoder.ca"
+          "provider" : "Huffington Post; some geocoding provided by GeoCoder.ca"
        },
        "shutdownSigners": {
           "tileEngine" : "mapeteriaDot",
@@ -129,7 +131,7 @@
           "shortDescription" : "Shutdown signers",
           "description": "Republican Congressional Representatives who signed a letter supporting shutting down the US Federal government in an attempt to defund Obamacare.",
           "sourceUrl" : "http://www.freedomworks.org/content/have-your-members-congress-signed-defund-obamacare-letter-find-out-here",
-          "source" : "Freedom Works"
+          "provider" : "Freedom Works"
        }
     }
 }

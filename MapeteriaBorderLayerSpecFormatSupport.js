@@ -26,10 +26,12 @@ MapeteriaBorderLayerSpecFormatSupport.asChoroplethLayerSpec =
     return null;
   }
 
-  var fieldsToCopy = ['tileEngineVersion', 'table', 'year', 'borderColor', 
+  var fieldsToCopy = ['tileEngineVersion', 
+                      'table', 'year', 'borderColor', 
                       'borderWidth', 'borderColor',
-                      'shortDescription', 'description', 
-                      'source', 'sourceUrl', 
+                      'shortDescription', 'description', 'sourceUrl', 
+                      'providerUrl', 'provider',  
+                      'licenseUrl', 'license', 
                       'mercatorShapeType', 'mercatorPolyYear',
                       'cartogramShapeType', 'cartogramPolyYear']
 
