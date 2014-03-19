@@ -8,4 +8,5 @@ do
   python $t
 done
 
+tput bel
 
