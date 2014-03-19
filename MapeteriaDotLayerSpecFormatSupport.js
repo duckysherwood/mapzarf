@@ -50,7 +50,7 @@ MapeteriaDotLayerSpecFormatSupport.validate = function(layerSpec) {
                              'cartogramPoints' : 'word',
                              'shortDescription' : 'text',
                              'description' : 'text',
-                             'sourceUrl' : 'url'
+                             'sourceUrl' : 'url',
                              'legendUrl' : 'url',
                              'providerUrl' : 'url',
                              'provider' : 'text',
