@@ -58,11 +58,7 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
     // them "layers" instead of "layerSpecs", but User doesn't care
     // about the distinction.  :-(
     var layerSpecsArray = layerset.layers;
-    var $layerDiv = $('layerControls');
-    if (!$layerDiv) {
-      console.log('Warning: Missing layers div');
-      return null;
-    }
+    DomFacade.doesLayerDivExist();
 
     if (layerSpecsArray) {
       var layerSelectionControl;
@@ -152,25 +148,22 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
   // indirection, but that would make it even more of a chore to
   // get at/address/find the elements I want.
   this.adjustLayerControl = function(layersetName) {
-    var checkboxName = '#' + layersetName + 'Checkbox';
-    var $checkbox = $(checkboxName);
 
-    if ($checkbox) {
+    if (DomFacade.doesLayersetCheckboxExist(layersetName)) {
       var qstringShowFieldName = 'show' +
                     Utilities.capitalizeFirstLetter(layersetName);
       var checkedBool = closurePageInitValues[qstringShowFieldName];
-      $checkbox.prop('checked', checkedBool);
+      DomFacade.setCheckboxForLayerset(layersetName, checkedBool);
 
       var indexName = layersetName + 'Index';
       if (closurePageInitValues[indexName]) {
-        var $selector = $('#' + layersetName + 'Selector');
-        // values checked for legality earlier
-        $selector.prop('selectedIndex', closurePageInitValues[indexName]);
-        var layerSpecName = $selector[0].value;
+        DomFacade.setLayerIndexForLayersetName(layersetName, 
+                                       closurePageInitValues[indexName]);
+        var layerSpecName = DomFacade.getSelectedLayerNameForLayerset(
+                                       layersetName);
         var layerSpec = this.getLayerSpec(layersetName, layerSpecName);
         var layerSpecDescription = Utilities.descriptionHtml(layerSpec);
-        var $descriptor = $('#' + layersetName + 'Description');
-        $descriptor[0].innerHTML = layerSpecDescription;
+        DomFacade.setLayerSpecDescription(layersetName, layerSpecDescription);
       }
     }
   };
@@ -210,7 +203,7 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
 
     document.title = this.omai.pageTitle;
 
-    $('#explanation').html('<b>' + this.omai.pageTitle + '</b><p>' +
+    DomFacade.setPageExplanation('<b>' + this.omai.pageTitle + '</b><p>' +
                              this.omai.pageDescription + '<p>');
 
     var layersets = this.omai.layersets;
@@ -219,7 +212,7 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
     $.each(layersets, function(index, layerset) {
       var selector = scope.createLayerSelectorControl(layerset);
       if (selector) {
-        $('#layerControls').append(selector);
+        DomFacade.appendToLayerControls(selector);
       }
 
       scope.adjustLayerControl(layerset.shortName);
@@ -231,15 +224,16 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
     }
 
 
-    $('#sharingUrl')[0].href = '#';
+    DomFacade.setSharingUrl('#');
 
     // Allow switching between cartogram and not
+    // TODO generalize checkbox creation
     var checkedString = closurePageInitValues.cartogram ? 'checked' : '';
     if (this.omai.hasCartogram) {
-      var cartogramCheckboxString =
-        '<input type="checkbox" id="isCartogramCheckbox" ' + checkedString +'>';
-      var cartogramText = 'Show as cartogram<p />';
-      $('#cartogramSelector').append(cartogramCheckboxString + cartogramText);
+      this.addCheckboxControl('isCartogram', 
+                                   closurePageInitValues.cartogram,
+                                  'Show as cartogram', 
+                                   DomFacade.appendToCartogramControls);
     }
 
     // Set up the map
@@ -248,46 +242,47 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
 
 
     if (this.omai.citiesUrl && this.omai.cityIconUrl) {
-      var showCitiesCheckbox = document.createElement('input');
-      showCitiesCheckbox.id = 'showCitiesCheckbox';
-      showCitiesCheckbox.type = 'checkbox';
-      showCitiesCheckbox.checked = closurePageInitValues.showCities;
-
-      var showCitiesLabel = document.createElement('label');
-      showCitiesLabel.htmlFor = 'showCitiesCheckbox';
-      showCitiesLabel.innerHTML = 'Show city names ';
-      showCitiesLabel.id = 'showCitiesLabel';
-      showCitiesLabel.className = 'indented';
-
-      $('#showCities')[0].appendChild(showCitiesCheckbox);
-      $('#showCities')[0].appendChild(showCitiesLabel);
+      this.addCheckboxControl('showCities', 
+                                   closurePageInitValues.showCities,
+                                  'Show city names ', 
+                                   DomFacade.appendToCityControls);
     }
 
 
     // Put in the attribution for the page/app (as opposed to the data)
-    if (this.omai.attribution) {
-      $('#attribution').append(', page customized by ' + this.omai.attribution);
-    } else {
-      $('#attribution').append('.');
-    }
+    DomFacade.appendAttribution(this.omai.attribution);
 
     return true;
   };
 
-  /** Updates the legend.
-   *
-   *  @param layerSpec {object} A piece of the MAI describing the current layer
-   *  @param urlFragment {object} The base of a URL which describes the legend
-   *  @public
-   */
-  $('#legendImage')[0].update = function(layerSpec) {
-    if (layerSpec.legendUrl) {
-      this.src = layerSpec.legendUrl;
-    } else {
-      this.src = 'http://maps.webfoot.com/mapeteria2/tiles/clearTile.png';
-    }
 
+  /** Adds a checkbox element and label element to a parent element
+   *
+   *  @param basename {string} The base name of the elements (e.g. 'showCities')
+   *  @param isChecked {boolean} Initial checked state
+   *  @param isChecked {object} The base of a URL which describes the legend
+   *  @param labelText {string} Description printed next to checkbox
+   *  @param appendFunction  {object} Function for attaching the checkbox
+   *    and label to the parent object
+   *  @private
+   */
+  this.addCheckboxControl = function(baseName, isChecked, 
+                                     labelText, appendFunction) {
+      var checkbox = document.createElement('input');
+      checkbox.id = baseName + 'Checkbox';
+      checkbox.type = 'checkbox';
+      checkbox.checked = isChecked;
+  
+      var label = document.createElement('label');
+      label.htmlFor = baseName + 'Checkbox';
+      label.innerHTML = labelText;
+      label.id = baseName + 'Label';
+      label.className = 'indented';
+  
+      appendFunction(checkbox);
+      appendFunction(label);
   };
 
+} 
 
-}
+

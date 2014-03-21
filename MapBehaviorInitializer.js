@@ -37,7 +37,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     if (closureCityLabeller) {
       closureCityLabeller.refreshCityLabels(closureCityLabeller);
     }
-    $('#sharingUrl')[0].href = closureMap.getSharingUrl();
+    DomFacade.setSharingUrl(closureMap.getSharingUrl());
   });
 
   // Refreshes the city labels and sharing URL when the user moves the map.
@@ -45,7 +45,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     if (closureCityLabeller) {
       closureCityLabeller.refreshCityLabels(closureCityLabeller);
     }
-    $('#sharingUrl')[0].href = closureMap.getSharingUrl();
+    DomFacade.setSharingUrl(closureMap.getSharingUrl());
   });
 
   /** Changes which layers are displayed on the map.
@@ -83,7 +83,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *  @private
    */
   this.map.projectionType = function() {
-    if ($('#isCartogramCheckbox').is(':checked')) {
+    if (DomFacade.isCartogramCheckboxChecked()) {
       return 'cartogram';
     } else {
       return 'mercator';
@@ -103,7 +103,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
       return null;
     }
 
-    if (!$('#' + layersetName + 'Checkbox').is(':checked')) {
+    if (DomFacade.isCartogramCheckboxChecked()) {
       return null;
     }
 
@@ -136,7 +136,7 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
     url = supportClass.getLayerUrl(layerSpec, this.projectionType());
 
     if (layerSpec.legendUrl) {
-      $('#legendImage')[0].update(layerSpec);
+      DomFacade.updateLegend(layerSpec.legendUrl);
     }
 
     return L.tileLayer(url, {
@@ -183,17 +183,16 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
    *  @private
    */
   this.map.findSelectedKeyForLayerType = function(layersetName) {
-    var checkboxId = '#' + layersetName + 'Checkbox';
-    if (!$(checkboxId)) {
+    var checkbox = DomFacade.getCheckboxForLayerset(layersetName);
+    if (!checkbox) {
       return null;
     }
 
-    var key = $(checkboxId).val();
+    var key = checkbox.val();
 
     if (key == SENTINEL_MULTIPLE) {
       // multiple options, select the one which is checked
-      var layerSelectorId = '#' + layersetName + 'Selector';
-      key = $(layerSelectorId).find(':selected').val();
+      key = DomFacade.getSelectedLayerNameForLayerset(layersetName).val();
     }
     return key;
   };
@@ -220,11 +219,9 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      url += '&lng=' + latlng.lng;
      url += '&zoom=' + closureMap.getZoom();
 
-     url += '&cartogram=' + closureMap.
-                              getFlagForCheckbox('#isCartogramCheckbox');
+     url += '&cartogram=' + DomFacade.getFlagForCartogramCheckbox();
 
-     url += '&showCities=' + 
-            closureMap.getFlagForCheckbox('#showCitiesCheckbox');
+     url += '&showCities=' + DomFacade.getFlagForCitiesCheckbox();
 
      if (closureJurisdictionMarker) {
        url += '&markerLat=' + closureJurisdictionMarker.getLatLng().lat;
@@ -234,17 +231,15 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      var layersetNames = DomFacade.getLayersetNames();
      $.each(layersetNames, function(index, layersetName) {
       
-       var checkboxId = '#' + layersetName + 'Checkbox';
-       var checkbox = $(checkboxId).first()[0];
+       var checkbox = DomFacade.getCheckboxForLayerset(layersetName);
        if (checkbox) {
          var fieldName = 'show' +
                 Utilities.capitalizeFirstLetter(layersetName);
          url += '&' + fieldName + '=' +
-                closureMap.getFlagForCheckbox(checkboxId);
+                DomFacade.getFlagForLayersetCheckbox(layersetName);
        }
 
-       var selectorId = '#' + layersetName + 'Selector';
-       var selector = $(selectorId).first()[0];
+       var selector = DomFacade.getSelectorForLayersetName(layersetName);
        if (selector) {
          url += '&' + layersetName + 'Index=' +
                 (parseInt(selector.selectedIndex));
@@ -263,21 +258,6 @@ function MapBehaviorInitializer(aMap, aMapApplicationInfo,
      */
 
      return url;
-  };
-
-  /** Figures out if the map should be in cartogram projection or not.
-   *  @return {string} Returns a single character 't' or 'f' to
-   *    represent whether the map should show the cartogram projection or not.
-   *    It is a string and not a boolean because it will be used in
-   *    a URL query string.
-   *  @private
-   */
-  this.map.getFlagForCheckbox = function(checkboxElementName) {
-     var element = $(checkboxElementName);
-     if (!element) {
-       return 'f';
-     }
-     return $(checkboxElementName).is(':checked') ? 't' : 'f';
   };
 
 

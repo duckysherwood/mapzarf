@@ -28,7 +28,6 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(1)
-    # pdb.set_trace()
     self.assertTrue("less than the poverty" in page.getDescription('noImporta'))
 
     page.tearDown()
@@ -39,7 +38,6 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(1)
-    # pdb.set_trace()
     self.assertTrue("less than the poverty" in page.getDescription('noImporta'))
 
     page.tearDown()
@@ -50,7 +48,6 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(1)
-    # pdb.set_trace()
     self.assertTrue("Congressional Representatives" in page.getDescription('whatever'))
 
     page.tearDown()
@@ -61,7 +58,6 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(1)
-    # pdb.set_trace()
     self.assertTrue("Congressional Representatives" in page.getDescription('whatever'))
 
     page.tearDown()
@@ -82,7 +78,6 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(2)
-    # pdb.set_trace()
     self.assertTrue("County borders" in page.getDescription('arbitrary'))
 
     page.tearDown()
@@ -97,7 +92,6 @@ class TestQueryString(unittest.TestCase):
     time.sleep(1)
     
     # None of the possible choropleth layers should be showing
-    # pdb.set_trace()
     self.assertFalse(page.choroplethTileForAttributeExists(
                                'taxRoiNormalized'))
     self.assertFalse(page.choroplethTileForAttributeExists(
@@ -115,7 +109,6 @@ class TestQueryString(unittest.TestCase):
     self.assertFalse(page.borderTileForTypeExists('state'))
     self.assertFalse(page.borderTileForTypeExists(
                               'countyPopulationCartogram'))
-    # pdb.set_trace()
     self.assertFalse(page.borderTileForTypeExists('county'))
 
     # The descriptions, however, should show that the non-default has
@@ -191,6 +184,7 @@ class TestQueryString(unittest.TestCase):
  
     # Now switch to cartogram, cartogram polytype should be found
     page.showAsCartogram(True)
+    time.sleep(1)
     self.assertTrue(page.tileLayerOfTypeAndAttributeExists(
                          "choropleth", "polyType=statePopCartogram&"))
 
@@ -230,6 +224,7 @@ class TestQueryString(unittest.TestCase):
     self.assertTrue(qs['zoom'][0] == '4')
 
     page.showAsCartogram(False)
+    time.sleep(1)
     self.queryStringCreationHelper(page, 'cartogram', 'f')
 
     page.showLayerset('noImporta', False)
@@ -242,7 +237,7 @@ class TestQueryString(unittest.TestCase):
     self.assertTrue(qs['showWhatever'][0] == 'f')
 
     page.showCities(False)
-    # pdb.set_trace()
+    time.sleep(1)
     self.queryStringCreationHelper(page, 'showCities', 'f')
 
     page.changeLayerToIndex('whatever', 1)

@@ -42,34 +42,6 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
   };
 
 
-  /** Removes all the city labels from the map.
-   *  @private
-   *  SIDE EFFECT: removes all the city labels from the map
-   */
-  this.removeCityLabels = function() {
-    var mapDiv = $('#map')[0];
-    var kids = mapDiv.childNodes;
-    var klen = kids.length;
-
-    // need to remove labels starting at the back of the list so that
-    // the array doesn't get messed up
-    // Alternate ways to do this:  make a list
-    // of children to delete, mark ones to delete, then delete only those
-    if (klen > 2) {
-      for (var k = klen - 1; k > 1; k--) {
-        try {
-        } catch (TypeError) {
-          console.log('Type error: ' + kids);
-          console.log(kids[k]);
-        }
-
-        if (kids[k].nodeName == 'P') {
-          this.mapDiv.removeChild(kids[k]);
-        }
-      }
-    }
-  };
-
   /** Fetches the largest cities in a bounding box, with their name and lat/lng.
    *  @param responseText {object} A JSON string with information about
    *    the visible cities
@@ -86,7 +58,7 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
 
     // add all the markers
     // TODO move dependence on global variable L to a MapFacade class
-    var shouldShowCities = $('#showCitiesCheckbox')[0].checked;
+    var shouldShowCities = DomFacade.isCityCheckboxChecked();
     if (shouldShowCities) {
       var lat, lng, latlng, cityName, cityNameIconUrl, cityNameIcon, marker;
       var scope = this;
@@ -121,13 +93,13 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
     var left = bounds.getSouthWest().lng;
     var right = bounds.getNorthEast().lng;
 
-    var isCartogram = $('#isCartogramCheckbox').is(':checked');
+    var isCartogram = DomFacade.isCartogramCheckboxChecked();
 
     // NOTE!  cgi-bin/getCities uses popCartDotAttributes, which only has data
     // from 2010.  The city labels are approximate enough that that's probably
     // good enough for all years, but at some point I should add data for other
     // years and add a =polyYear= parameter.
-    scope.removeCityLabels();
+    MapFacade.removeCityLabels();
     scope.requestCityInfo(upper, lower, left, right, isCartogram);
   };
 

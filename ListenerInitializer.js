@@ -13,8 +13,6 @@
  *    on startup
  *  @param jurisdictionMarker {object} A Leaflet marker
  */
-// TODO instead of adding all these listeners directly to the map, make a
-// TODO Facade element instead
 // TODO someday add links to social media sites like FB, Twitter, etc
 function ListenerInitializer(map, mapApplicationInfo,
                               labeller, jurisdictionMarker) {
@@ -50,7 +48,7 @@ ListenerInitializer.prototype.initialize = function() {
  *  @private
  */
 ListenerInitializer.prototype.updateSharingUrl = function() {
-  $('#sharingUrl')[0].href = this.map.getSharingUrl();
+  DomFacade.setSharingUrl(this.map.getSharingUrl());
 };
 
 /** Enables clicking on the marker to get info about the dot
@@ -77,22 +75,17 @@ ListenerInitializer.prototype.addMarkerClickListener = function() {
 ListenerInitializer.prototype.addLayerControlSelectListener =
   function(layersetName) {
 
-  var selectElement = $('#' + layersetName + 'Selector')[0];
+  var selectElement = DomFacade.getSelectorForLayersetName(layersetName);
   if (!selectElement) {
     return null;
   }
 
-  // make available to the closure
-  var closureLayersetName = layersetName;
   var scope = this;
-
-  /** @private */
   selectElement.onchange = function() {
-    var layer = $('option.' + closureLayersetName + 'Option:selected').val();
-    var elementName = '#' + closureLayersetName + 'Description';
+    var layerName = DomFacade.getSelectedLayerNameForLayerset(layersetName);
     var description =
-        Utilities.descriptionHtml(scope.mai[closureLayersetName][layer]);
-    $(elementName).html(description);
+        Utilities.descriptionHtml(scope.mai[layersetName][layerName]);
+    DomFacade.setLayerSpecDescription(layersetName, description);
     scope.map.updateLayers();
     scope.updateSharingUrl();
   };
@@ -106,15 +99,10 @@ ListenerInitializer.prototype.addLayerControlSelectListener =
 ListenerInitializer.prototype.addLayerControlCheckboxListener =
   function(layersetName) {
 
-  /** @private */
-  var checkboxElement = $('#' + layersetName + 'Checkbox')[0];
-  if (!checkboxElement) {
-    return null;
-  }
+  var checkbox = DomFacade.getCheckboxForLayerset(layersetName);
 
   var scope = this;
-  /** @private */
-  checkboxElement.onchange = function() {
+  checkbox.onchange = function() {
     scope.map.updateLayers();
     scope.updateSharingUrl();
   };
@@ -128,7 +116,7 @@ ListenerInitializer.prototype.addCitiesCheckboxListener =
   function() {
   var scope = this;
   if (this.cityLabeller) {
-    $('#showCitiesCheckbox')[0].onchange = function() {
+    DomFacade.getCityCheckbox().onchange = function() {
       scope.cityLabeller.refreshCityLabels(scope.cityLabeller);
       scope.updateSharingUrl();
     };
@@ -141,8 +129,8 @@ ListenerInitializer.prototype.addCitiesCheckboxListener =
  */
 ListenerInitializer.prototype.addIsCartogramCheckboxListener =
   function() {
-  var cartogramCheckboxElement = $('#isCartogramCheckbox')[0];
-  if (!cartogramCheckboxElement) {
+  var cartogramCheckboxElement = DomFacade.getCartogramCheckbox();
+  if(!cartogramCheckboxElement) {
     return null;
   }
 
