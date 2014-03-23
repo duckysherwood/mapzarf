@@ -27,17 +27,15 @@
 /**
  *  @constructor
  *  @this {DomElementAppender}
- *  @param map {object} Leaflet map object, e.g. L.map
  *  @param mapApplicationInfo {object} JSON describing the application,
  *    especially the layers to go on the map
  *  @param pageInitValues {object} Information on how to set the UI controls
  *    on startup
  */
-function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
+function DomElementAppender(mapApplicationInfo, pageInitValues ) {
   // omai is "ordered MAI"
   /** @private */ this.omai = mapApplicationInfo; // shortened for typing
   /** @private */ var closurePageInitValues = pageInitValues;
-  /** @private */ var closureMap = map;
 
   // @@@ Would it make more sense to create elements, then just hide
   // @@@ them if they are not used / there is not data for them?
@@ -161,14 +159,14 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
                                        closurePageInitValues[indexName]);
         var layerSpecName = DomFacade.getSelectedLayerNameForLayerset(
                                        layersetName);
-        var layerSpec = this.getLayerSpec(layersetName, layerSpecName);
+        var layerSpec = this.getLayerSpecObject(layersetName, layerSpecName);
         var layerSpecDescription = Utilities.descriptionHtml(layerSpec);
         DomFacade.setLayerSpecDescription(layersetName, layerSpecDescription);
       }
     }
   };
 
-  /** Gets a layerSpec given the names of the layerset and layerSpec.
+  /** Gets a layerSpec object given the names of the layerset and layerSpec.
    *  Done via brute-force by matching strings, ugh.
    *
    *  @param {string} layersetName the name of the layerset which
@@ -177,7 +175,7 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
    *  @return {object} A layerSpec
    *  @public
    */
-  this.getLayerSpec = function(layersetName, layerSpecName) {
+  this.getLayerSpecObject = function(layersetName, layerSpecName) {
     var layersets = this.omai.layersets;
     var layerSpec = null;
     $.each(layersets, function(index, layerset) {
@@ -235,10 +233,6 @@ function DomElementAppender(map, mapApplicationInfo, pageInitValues ) {
                                   'Show as cartogram', 
                                    DomFacade.appendToCartogramControls);
     }
-
-    // Set up the map
-    closureMap.setView([closurePageInitValues.lat, closurePageInitValues.lng],
-                 closurePageInitValues.zoom);
 
 
     if (this.omai.citiesUrl && this.omai.cityIconUrl) {

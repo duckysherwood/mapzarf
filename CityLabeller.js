@@ -9,12 +9,10 @@
  *
  *  @constructor
  *  @this {CityLabeller}
- *  @param aMap {object} A Leaflet map object.
- *  @param aJurisdictionMarker {object} A Leaflet marker
+ *  @param {object} mapFacade A map facade
  */
-function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
-  this.mapObject = aMap;
-  this.cityMarkers = [];
+function CityLabeller(mapFacade, aCitiesUrl, aCityIconUrl) {
+  this.mapFacade = mapFacade;
   this.citiesUrl = aCitiesUrl;
   this.cityIconUrl = aCityIconUrl;
 
@@ -35,7 +33,7 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
     var url = this.citiesUrl;  // purely to shorten the line lengths
     url += 'upper='+ anUpper + '&lower='+ aLower + 
            '&left='+ aLeft + '&right='+ aRight;
-    url += '&zoom='+ this.mapObject.getZoom() + '&cartogram='+ isCartogram;
+    url += '&zoom='+ this.mapFacade.getZoom() + '&cartogram='+ isCartogram;
 
     // request is a verb here
     Utilities.requestUrlWithScope(url, this.showCityLabels, this);
@@ -49,15 +47,10 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
    * SIDE EFFECT: shows cities' names on the map
    */
   this.showCityLabels = function(responseText) {
-    // http://stackoverflow.com/questions/9912145/leaflet-how-to-find-existing-markers-and-delete-markers
     var cities = JSON.parse(responseText);
-    // delete all the markers which are there
-    for (var i = 0; i < this.cityMarkers.length; i++) {
-        this.mapObject.removeLayer(this.cityMarkers[i]);
-    }
+    this.mapFacade.removeAllCityLabels();
 
     // add all the markers
-    // TODO move dependence on global variable L to a MapFacade class
     var shouldShowCities = DomFacade.isCityCheckboxChecked();
     if (shouldShowCities) {
       var lat, lng, latlng, cityName, cityNameIconUrl, cityNameIcon, marker;
@@ -65,16 +58,9 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
       $.each(cities, function(index, city) {
         lat = city.lat;
         lng = city.lng;
-        latlng = new L.LatLng(lat, lng);
         cityName = city.description;
-
         cityNameIconUrl = scope.cityIconUrl + 'cityName=' + cityName;
-        cityNameIcon = L.icon({iconUrl: cityNameIconUrl, iconAnchor: [2, 10]});
-
-        marker = L.marker(latlng, {icon: cityNameIcon, 
-                                   clickable: false, draggable: false});
-        scope.cityMarkers.push(marker);
-        scope.mapObject.addLayer(marker);
+        scope.mapFacade.addCityLabel(lat, lng, cityName, cityNameIconUrl);
       });
     }
   };
@@ -86,21 +72,21 @@ function CityLabeller(aMap, aCitiesUrl, aCityIconUrl) {
    * SIDE EFFECT: shows cities' names on the map
    */
   this.refreshCityLabels = function(scope) {
-
-    var bounds = this.mapObject.getBounds();
-    var upper = bounds.getNorthEast().lat;
-    var lower = bounds.getSouthWest().lat;
-    var left = bounds.getSouthWest().lng;
-    var right = bounds.getNorthEast().lng;
-
-    var isCartogram = DomFacade.isCartogramCheckboxChecked();
-
-    // NOTE!  cgi-bin/getCities uses popCartDotAttributes, which only has data
-    // from 2010.  The city labels are approximate enough that that's probably
-    // good enough for all years, but at some point I should add data for other
-    // years and add a =polyYear= parameter.
-    MapFacade.removeCityLabels();
-    scope.requestCityInfo(upper, lower, left, right, isCartogram);
+    if(DomFacade.isCityCheckboxChecked()) {
+      var isCartogram = DomFacade.isCartogramCheckboxChecked();
+      var north = scope.mapFacade.getNorthBound();
+      var south = scope.mapFacade.getSouthBound();
+      var east = scope.mapFacade.getEastBound();
+      var west = scope.mapFacade.getWestBound();
+  
+      // NOTE!  cgi-bin/getCities uses popCartDotAttributes, which only has data
+      // from 2010.  The city labels are approximate enough that that's probably
+      // good enough for all years, but at some point I should add data for other
+      // years and add a =polyYear= parameter.
+      scope.requestCityInfo(north, south, west, east, isCartogram);
+    } else {
+      scope.mapFacade.removeAllCityLabels();
+    }
   };
 
 }

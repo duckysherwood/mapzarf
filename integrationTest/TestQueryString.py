@@ -28,7 +28,7 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(1)
-    self.assertTrue("less than the poverty" in page.getDescription('noImporta'))
+    self.assertTrue("less than the poverty" in page.getDescription('noImporta'), 'less than the poverty not in noImporta description')
 
     page.tearDown()
 
@@ -38,7 +38,7 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(1)
-    self.assertTrue("less than the poverty" in page.getDescription('noImporta'))
+    self.assertTrue("less than the poverty" in page.getDescription('noImporta'), 'less than the poverty not in noImporta description')
 
     page.tearDown()
 
@@ -48,7 +48,9 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(1)
-    self.assertTrue("Congressional Representatives" in page.getDescription('whatever'))
+    self.assertTrue("Congressional Representatives" in 
+      page.getDescription('whatever'), 
+        "'Congressional Representatives' not in whatver layer")
 
     page.tearDown()
 
@@ -58,7 +60,9 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(1)
-    self.assertTrue("Congressional Representatives" in page.getDescription('whatever'))
+    self.assertTrue("Congressional Representatives" in 
+       page.getDescription('whatever'), 
+         "'Congressional Representatives' not in whatver layer")
 
     page.tearDown()
 
@@ -68,7 +72,8 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(2)
-    self.assertTrue("County borders" in page.getDescription('arbitrary'))
+    self.assertTrue("County borders" in page.getDescription('arbitrary'), 
+      "'County borders' not in arbitrary layer")
 
     page.tearDown()
 
@@ -78,7 +83,8 @@ class TestQueryString(unittest.TestCase):
     page = MapApplicationPage(self.browser, url)
     page.checkTitle(PAGE_TITLE)
     time.sleep(2)
-    self.assertTrue("County borders" in page.getDescription('arbitrary'))
+    self.assertTrue("County borders" in page.getDescription('arbitrary'), 
+      "'County borders' not in arbitrary layer")
 
     page.tearDown()
 
@@ -190,10 +196,6 @@ class TestQueryString(unittest.TestCase):
 
     page.tearDown()
 
-  # Note: this is not highly portable.  Some fields won't be 
-  # given in some cases.  For example, if the MAI doesn't specify
-  # any choropleth layers, there won't be a choropleth checkbox,
-  # so there won't be any 'showChoropleths' field.
   def queryStringCreationHelper(self, page, field, expectedValue):
     sharingUrl = page.getSharingUrl()
     qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
@@ -217,24 +219,24 @@ class TestQueryString(unittest.TestCase):
       if field in qs:
         self.assertTrue(qs[field][0] == '0')
 
-    self.assertTrue(qs['markerLng'][0] == '-100')
-    self.assertTrue(qs['markerLat'][0] == '40')
-    self.assertTrue(qs['lat'][0] == '38')
-    self.assertTrue(qs['lng'][0] == '-95')
-    self.assertTrue(qs['zoom'][0] == '4')
+    self.assertTrue(qs['markerLng'][0] == '-100', 'has marker lng')
+    self.assertTrue(qs['markerLat'][0] == '40', 'has marker lat')
+    self.assertTrue(qs['lat'][0] == '38', 'has lat')
+    self.assertTrue(qs['lng'][0] == '-95', 'has lng')
+    self.assertTrue(qs['zoom'][0] == '4', 'has zoom')
 
     page.showAsCartogram(False)
     time.sleep(1)
     self.queryStringCreationHelper(page, 'cartogram', 'f')
 
     page.showLayerset('noImporta', False)
-    self.queryStringCreationHelper(page, 'showNoImporta', 'f')
+    self.queryStringCreationHelper(page, 'showNoImporta', 'f');
 
 
     page.showLayerset('whatever', False) 
     sharingUrl = page.getSharingUrl()
     qs = urlparse.parse_qs(urllib.splitquery(sharingUrl)[1])
-    self.assertTrue(qs['showWhatever'][0] == 'f')
+    self.assertTrue(qs['showWhatever'][0] == 'f', 'showWhatever=f not shown')
 
     page.showCities(False)
     time.sleep(1)

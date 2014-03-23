@@ -31,42 +31,35 @@ Runner.prototype.start = function(data, textStatus, jqXhr) {
 
   var pageInitValues = mapDisplayParameters.getPageValueParameters();
 
-
-  // L (from Leaflet) is global scope, but we need =map= in this scope
-  // so we can pass it to behaviour
-  var myMap = L.map('map', {minZoom: 0, maxZoom: 14});
-
-  // jurisdictionMarker needs to be in this scope
-  var jurisdictionMarker = null;
-  if (mai.startingMarkerLat && mai.startingMarkerLng &&
-                 pageInitValues.markerLat && pageInitValues.markerLng) {
-    jurisdictionMarker = L.marker([pageInitValues.markerLat,
-                                    pageInitValues.markerLng])
-                           .bindPopup('Fetching data, please wait...')
-                           .addTo(myMap);
-    myMap.pointInfoUrl = mai.pointInfoUrl;
-  }
-
-  var domAppender = new DomElementAppender(myMap, orderedMai, pageInitValues);
+  var domAppender = new DomElementAppender(orderedMai, pageInitValues);
   if (domAppender.createAndPopulateElements()) {
+
+    var mapFacade = MapFacade.makeMapFacade(mai, cityLabeller);
+    var minZoom = 0;
+    var maxZoom = 14;
+
+    Utilities.assertTrue(pageInitValues.lat && 
+                         pageInitValues.lng && 
+                         pageInitValues.zoom);
+    mapFacade.initializeMap(pageInitValues.lat, pageInitValues.lng, 
+                            pageInitValues.zoom, minZoom, maxZoom);
+
+    if (mai.startingMarkerLat && mai.startingMarkerLng) {
+      mapFacade.initializeMarker(pageInitValues.markerLat, 
+                                 pageInitValues.markerLng);
+    }
 
     var cityLabeller;
     if (mai.citiesUrl && mai.cityIconUrl) {
-      cityLabeller = new CityLabeller(myMap,
-                     mai.citiesUrl, mai.cityIconUrl);
-    }
-
-    var mbc = new MapBehaviorInitializer(myMap, mai, cityLabeller,
-                                         jurisdictionMarker);
-    mbc.initialize();
-
-    var listenerInitializer =
-      new ListenerInitializer(myMap, mai, cityLabeller, jurisdictionMarker);
-    listenerInitializer.initialize();
-
-    if (cityLabeller) {
+      cityLabeller = new CityLabeller(mapFacade, 
+                                      mai.citiesUrl, mai.cityIconUrl);
       cityLabeller.refreshCityLabels(cityLabeller);
     }
+
+    var listenerInitializer =
+      new ListenerInitializer(mapFacade, mai, cityLabeller);
+    listenerInitializer.initialize();
+
 
   }
 };

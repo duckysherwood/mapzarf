@@ -1,7 +1,7 @@
 /** @author Kaitlin Duck Sherwood
  *  @class ListenerInitializer
  *  @classdesc This class sets up the listeners for everything BUT the
- *  map -- everything in the DOM.  After some internal debate, I put
+ *  mapFacade -- everything in the DOM.  After some internal debate, I put
  *  the listeners for the marker in here instead of in MapBehavior.
  *
  *  @constructor
@@ -11,18 +11,19 @@
  *    especially the layers to go on the map
  *  @param pageInitValues {object} Information on how to set the UI controls
  *    on startup
- *  @param jurisdictionMarker {object} A Leaflet marker
  */
 // TODO someday add links to social media sites like FB, Twitter, etc
-function ListenerInitializer(map, mapApplicationInfo,
-                              labeller, jurisdictionMarker) {
-  /* @private */ this.map = map;
+function ListenerInitializer(mapFacade, mapApplicationInfo, labeller) {
+  /* @private */ this.mapFacade = mapFacade;
   /* @private */ this.mai = mapApplicationInfo;
   /* @private */ this.cityLabeller = labeller;
-  /* @private */ this.jurisdictionMarker = jurisdictionMarker;
 
 }
 
+/** Adds all of the listeners to the page.
+ *  SIDE EFFECT: adds listeners
+ *  @public
+ */
 ListenerInitializer.prototype.initialize = function() {
   var scope = this;
   var layersetNames = DomFacade.getLayersetNames();
@@ -33,6 +34,7 @@ ListenerInitializer.prototype.initialize = function() {
 
   this.addCitiesCheckboxListener();
   this.addIsCartogramCheckboxListener();
+  this.addMapMovementListeners();
   this.addMapClickListener();
   this.addMarkerClickListener();
 
@@ -48,9 +50,11 @@ ListenerInitializer.prototype.initialize = function() {
  *  @private
  */
 ListenerInitializer.prototype.updateSharingUrl = function() {
-  DomFacade.setSharingUrl(this.map.getSharingUrl());
+  var url = DomUtils.getSharingUrl(this.mapFacade)
+  DomFacade.setSharingUrl(url);
 };
 
+// TODO move to MapFacade
 /** Enables clicking on the marker to get info about the dot
  *  or jurisdiction at that point.  (It gets the information from
  *  mapApplicationInfo.pointInfoUrl.)
@@ -60,11 +64,11 @@ ListenerInitializer.prototype.updateSharingUrl = function() {
  */
 ListenerInitializer.prototype.addMarkerClickListener = function() {
   var scope = this;
-  if (this.jurisdictionMarker) {
-    this.jurisdictionMarker.on('click', function(e) {
-      scope.requestPopupInformation(e);
-    });
-  }
+  callback = function(e) {
+    scope.requestPopupInformation(e);
+  };
+
+  this.mapFacade.addMarkerClickListener(callback);
 };
 
 /** Enables changing a combo box (aka select elements) to select
@@ -86,7 +90,7 @@ ListenerInitializer.prototype.addLayerControlSelectListener =
     var description =
         Utilities.descriptionHtml(scope.mai[layersetName][layerName]);
     DomFacade.setLayerSpecDescription(layersetName, description);
-    scope.map.updateLayers();
+    scope.mapFacade.updateLayers();
     scope.updateSharingUrl();
   };
 
@@ -103,7 +107,7 @@ ListenerInitializer.prototype.addLayerControlCheckboxListener =
 
   var scope = this;
   checkbox.onchange = function() {
-    scope.map.updateLayers();
+    scope.mapFacade.updateLayers();
     scope.updateSharingUrl();
   };
 };
@@ -116,11 +120,14 @@ ListenerInitializer.prototype.addCitiesCheckboxListener =
   function() {
   var scope = this;
   if (this.cityLabeller) {
-    DomFacade.getCityCheckbox().onchange = function() {
-      scope.cityLabeller.refreshCityLabels(scope.cityLabeller);
+    var closureCityLabeller = this.cityLabeller;
+    DomFacade.getCityCheckbox().onchange = function () {
+      console.log("City checkbox clicked!");
+      closureCityLabeller.refreshCityLabels(closureCityLabeller);
       scope.updateSharingUrl();
     };
   }
+
 };
 
 /** Enables changing whether the map shows a mercator projection or
@@ -135,14 +142,12 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener =
   }
 
   var scope = this;
-  /** @private */
-  cartogramCheckboxElement.onchange = function() {
-    scope.map.updateLayers();
-    if (scope.cityLabeller) {
-      scope.cityLabeller.refreshCityLabels(scope.cityLabeller);
-    }
+  var closureCityLabeller = this.cityLabeller;
+  DomFacade.getCartogramCheckbox().onchange = function () {
+    scope.mapFacade.updateLayers();
+    closureCityLabeller.refreshCityLabels(closureCityLabeller);
     scope.updateSharingUrl();
-  };
+  }
 };
 
 /** Helper for responding to a click on the map or marker.  Sets the
@@ -156,7 +161,7 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener =
  *  SIDE EFFECTS: changes the DOM's sharing URL and the map's infowindow
  */
 ListenerInitializer.prototype.setPopupInfoCallback = function(responseText) {
-  this.jurisdictionMarker.setPopupContent(responseText);
+  this.mapFacade.setPopupContent(responseText);
   this.updateSharingUrl();
 };
 
@@ -177,63 +182,81 @@ ListenerInitializer.prototype.requestPopupInformation = function(e) {
   var lat = latlng.lat;
   var lng = latlng.lng;
 
-  var cartogramFlag = this.map.getFlagForCheckbox('#isCartogramCheckbox');
+  var cartogramFlag = DomFacade.getFlagForCheckbox('#isCartogramCheckbox');
 
-  var layersetName = this.map.findSelectedKeyForLayerType('dotLayers');
+  var topLayersetName = DomFacade.getTopVisibleLayersetName();
+  var layerSpecName = DomUtils.findSelectedKeyForLayerType(topLayersetName);
   var fieldName, year;
   var projectionSelector = cartogramFlag == 't' ?
     'cartogramFieldName' : 'mercatorFieldName';
-  fieldName = layersetName ?
-    this.mai.dotLayers[layersetName][projectionSelector] : null;
-  year = layersetName ? this.mai.dotLayers[layersetName].year : null;
+  if (topLayersetName && layerSpecName) {
+    fieldName = this.mai[topLayersetName][layerSpecName][projectionSelector];
+    year = this.mai[topLayersetName][layerSpecName].year;
+  }
 
 
-  var url = this.map.pointInfoUrl +
+  var url = this.mai.pointInfoUrl +  
      'lat=' + lat + '&lng=' + lng +
-     '&zoom=' + this.map.getZoom() +
+     '&zoom=' + this.mapFacade.getZoom() +
      '&fieldName=' + fieldName +
      '&polyYear=2011&year=2011&cartogram=' + cartogramFlag;
 
   // console.log(url);
 
-  this.jurisdictionMarker.
+  this.mapFacade.
     setPopupContent('Looking up jurisdiction information, please wait...');
 
   // request is a verb here
   Utilities.requestUrlWithScope(url, this.setPopupInfoCallback, this);
 };
 
-/**
- * Calles the {marker} callback
- * SIDE EFFECTS: directly and indirectly changes the infowindow, indirectly
- * changes the sharing URL
- * @private
+/** Event handler for clicking on the map.  The action mostly happens
+ *  in this.requestPopupInformation.
+ *  @param myException {event} The event triggering the request (named something
+      besides 'e' to make debugging a little easier)
+ *  SIDE EFFECT: adds listener
+ *  @private
  */
 ListenerInitializer.prototype.addMapClickListener = function() {
-
   var scope = this;
-  this.map.on('click', function(e) {
-
-    var latlng = e.latlng;
+  this.mapFacade.addMapClickListener( function(myException) {
+    var latlng = myException.latlng;
     var lat = latlng.lat;
     var lng = latlng.lng;
 
-    if (scope.jurisdictionMarker) {
-      scope.jurisdictionMarker.setLatLng([lat, lng]);
-      // @@@ TODO set flag in mapApplicationInfo.js to say whether
-      // popup should open always
-      scope.jurisdictionMarker.openPopup();
-      scope.requestPopupInformation(e);
-    }
+    scope.mapFacade.setJurisdictionMarkerLatLng(lat, lng);
+    scope.mapFacade.openPopup();
+    scope.requestPopupInformation(myException);
   });
-
 };
 
 
+/** Event handler for refreshing the city labels and sharing URL when
+ *  the user moves the map.
+ *  SIDE EFFECT: adds listeners
+ *  @private
+ */
+ListenerInitializer.prototype.addMapMovementListeners = function() {
+  // Refreshes the city labels and sharing URL when the user moves the map.
+  var scope = this.mapFacade;
+  var closureCityLabeller = this.cityLabeller;
+  this.mapFacade.addMapZoomEndListener(function() {
+    if (closureCityLabeller) {
+      scope.removeAllCityLabels();
+      closureCityLabeller.refreshCityLabels(closureCityLabeller);
+    }
+    var url = DomUtils.getSharingUrl(scope)
+    DomFacade.setSharingUrl(url);
+  });
 
-
-
-
-
-
+  // Refreshes the city labels and sharing URL when the user moves the map.
+  this.mapFacade.addMapDragEndListener(function(myException) {
+    if (closureCityLabeller) {
+      scope.removeAllCityLabels();
+      closureCityLabeller.refreshCityLabels(closureCityLabeller);
+    }
+    var url = DomUtils.getSharingUrl(scope)
+    DomFacade.setSharingUrl(url);
+  });
+};
 

@@ -24,6 +24,37 @@ DomFacade.getLayersetNames = function() {
 
 };
 
+
+/** Gets the names of the visible layersets (the one which clicks interact
+ *  with.)
+ *  @return {object} Array with the names of the visible layersets
+ *  @public
+ */
+DomFacade.getVisibleLayersetNames = function() {
+  var layersetName = null;
+  var layersetNames = [];
+
+  var layersetCheckboxes = $('.layersetCheckbox');
+  $.each(layersetCheckboxes, function(index, layersetCheckbox) {
+    if(layersetCheckbox.checked) {
+      layersetName = layersetCheckbox.id.replace('Checkbox', '');
+      layersetNames.push(layersetName);
+    }
+  });
+
+  return layersetNames;
+}
+
+/** Gets the names of the "top" layer (the one which clicks interact
+ *  with.)
+ *  @return {object} Array with the names of the top layerset
+ *  @public
+ */
+DomFacade.getTopVisibleLayersetName = function() {
+  var layersets = DomFacade.getVisibleLayersetNames();
+  return layersets[layersets.length - 1];
+}
+
 /** Gets the selector element for a given layerset name.
  *  @param {string] layersetName A layerset name
  *  @return {object} <Select> DOM element for the given layerset name
@@ -34,6 +65,18 @@ DomFacade.getSelectorForLayersetName = function(layersetName) {
   Utilities.assertTrue($selector.length <= 1, 
        "There are more than one selectors for " + layersetName);
   return $selector[0];
+};
+
+/** Gets the name of the currently-select layer for the given 
+ *  layerset.  NOTE: this is used only for chosing one layer from
+ *  multiples; it is not used if the layerset only has one layer
+ *  (when it would need to ask a checkbox).
+ *  @return {object} <input> DOM element for the checkbox to show a
+ *    given layerset's layer.
+ *  @public
+ */
+DomFacade.getSelectedLayerNameForLayerset = function(layersetName) {
+  return $('option.' + layersetName + 'Option:selected').val();
 };
 
 /** Gets the checkbox element for the "show cities" checkbox
@@ -58,17 +101,8 @@ DomFacade.getCartogramCheckbox = function() {
   return $checkbox[0];
 };
 
-/** Gets the name of the currently-select layer for the given 
- *  layerset.  NOTE: this is used only for chosing one layer from
- *  multiples; it is not used if the layerset only has one layer
- *  (when it would need to ask a checkbox).
- *  @return {object} <input> DOM element for the checkbox to show a
- *    given layerset's layer.
- *  @public
- */
-DomFacade.getSelectedLayerNameForLayerset = function(layersetName) {
-  return $('option.' + layersetName + 'Option:selected').val();
-};
+
+
 
 /** Sets the description <span> of a layerset to the given text.
  *  @param {string} layersetName The name of a layerset
@@ -95,16 +129,13 @@ DomFacade.setCheckboxForIdTo = function(elementName, newBool) {
   $(elementName).prop('checked', newBool);
 };
 
-/** Gets the state of checkbox associated with the given layerset.
- *  @param {string} layersetName The name of the layerset
- *  @returns {boolean} The checked-state of the checkbox 
+/** Sets the state of the show-cities checkbox
+ *  @param {string} newBool The checked-state which the checkbox will
+ *     get set to.
  *  @public
  */
-DomFacade.getCheckboxForLayerset = function(layersetName) {
-  $checkbox = $('#' + layersetName + 'Checkbox');
-  Utilities.assertTrue($checkbox.length == 1, 
-             'The ' + layersetName + 'Checkbox element is not in the DOM!');
-  return $checkbox[0];
+DomFacade.setCityCheckbox = function(newBool) {
+  DomFacade.setCheckboxForIdTo('#showCitiesCheckbox', newBool);
 }
 
 /** Sets the state of the show-checkbox associated with a layerset.
@@ -116,6 +147,21 @@ DomFacade.getCheckboxForLayerset = function(layersetName) {
 DomFacade.setCheckboxForLayerset = function(layersetName, newBool) {
   DomFacade.setCheckboxForIdTo('#' + layersetName + 'Checkbox', newBool);
 };
+
+
+/** Gets the state of checkbox associated with the given layerset.
+ *  @param {string} layersetName The name of the layerset
+ *  @returns {boolean} The checked-state of the checkbox 
+ *  @public
+ */
+DomFacade.getCheckboxForLayerset = function(layersetName) {
+  $checkbox = $('#' + layersetName + 'Checkbox');
+  var errorMessage = 'The ' + layersetName + 'Checkbox element is not in the DOM!';
+  var success = ($checkbox.length == 1);
+  Utilities.assertTrue(success, errorMessage);
+  return $checkbox[0];
+}
+
 
 /** Returns the state of the checkbox associated with the given id.
  *  @param {string} checkboxId The id of the checkbox
@@ -134,15 +180,6 @@ DomFacade.isCityCheckboxChecked = function() {
   return DomFacade.isCheckboxChecked('#showCitiesCheckbox');
 };
 
-/** Sets the state of the show-cities checkbox
- *  @param {string} newBool The checked-state which the checkbox will
- *     get set to.
- *  @public
- */
-DomFacade.setCityCheckbox = function(newBool) {
-  DomFacade.setCheckboxForIdTo('#showCitiesCheckbox', newBool);
-}
-
 /** Returns the state of the show-as-cartogram checkbox.
  *  @returns {boolean} The checked-state of the checkbox 
  *  @public
@@ -150,6 +187,13 @@ DomFacade.setCityCheckbox = function(newBool) {
 DomFacade.isCartogramCheckboxChecked = function() {
   return DomFacade.isCheckboxChecked('#isCartogramCheckbox');
 };
+
+// TODO document this
+DomFacade.isCheckboxForLayersetChecked = function(layersetName) {
+  return DomFacade.isCheckboxChecked('#' + layersetName + 'Checkbox');
+}
+
+
 
 
 /** Tells if the given element exists AND prints helpful logging to
@@ -273,8 +317,8 @@ DomFacade.getSharingUrlElement = function() {
  *  @public
  */
 DomFacade.setSharingUrl = function(url) {
-  var sharingUrl = DomFacade.getSharingUrlElement();
-  sharingUrl.href = url;
+  var sharingUrlElement = DomFacade.getSharingUrlElement();
+  sharingUrlElement.href = url;
 };
 
 /** Adds an element to the layer controls area 
@@ -353,7 +397,7 @@ DomFacade.getFlagForCitiesCheckbox = function() {
    *    represent true or false
    *  @public
    */
-DomFacade.getFlagForLayersetCheckbox = function(layersetCheckbox) {
+DomFacade.getFlagForLayersetCheckbox = function(layersetName) {
   return DomFacade.getFlagForCheckbox('#' + layersetName + 'Checkbox');
 }
 
