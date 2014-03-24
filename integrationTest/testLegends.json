@@ -1,6 +1,6 @@
 {
-   "pageTitle":"TestSanity pageTitle",
-   "pageDescription":"TestSanity pageDescription",
+   "pageTitle":"Test multiple legends",
+   "pageDescription":"This is to test what happens if there are multiple legends",
    "attribution":"Kaitlin Duck Sherwood",
    "startingMarkerLat":40,
    "startingMarkerLng":-100,
@@ -8,14 +8,14 @@
    "startingCenterLng":-95,
    "startingCenterZoom":4,
    "hasCartogram":true,
-   "slippyMapFramework": {"name":"leaflet", "version":1.6},
+   "slippyMapFramework": { "name" : "leaflet", "version":1.6 },
    "pointInfoUrl":"./testSanityMarkerInfo.html?",
    "citiesUrl":"/cgi-bin/getCities.py?",
    "cityIconUrl":"/maps/mapeteria2/makeCityLabel.php?",
    "layersets":[
       {
-         "shortName" : "noImporta",
-         "displayName" : "Choropleth",
+         "shortName" : "choropleth1",
+         "displayName" : "choro1",
          "layers":[
             {
                "shortName":"taxRoiNormalized",
@@ -40,7 +40,13 @@
                "provider":"Tax Foundation",
                "providerUrl":"http://taxfoundation.org",
                "sourceUrl":"http://taxfoundation.org/article/federal-spending-received-dollar-taxes-paid-state-2005"
-            },
+            }
+         ]
+      },
+      {
+         "shortName":"choro2",
+         "displayName":"Choro2",
+         "layers":[
             {
                "shortName":"populationPovertyPct",
                "tileEngine":"mapeteriaChoropleth",
@@ -67,53 +73,7 @@
          ]
       },
       {
-         "shortName":"arbitrary",
-         "displayName":"Border",
-         "layers":[
-            {
-               "shortName":"state",
-               "tileEngine":"mapeteriaBorder",
-               "tileEngineVersion":2,
-               "table":"provinceAttributes",
-               "mercatorShapeType":"state",
-               "mercatorPolyYear":2006,
-               "cartogramShapeType":"statePopCartogram",
-               "cartogramPolyYear":2011,
-               "fieldName":"jurisdictionId",
-               "year":2000,
-               "mapping":"none",
-               "borderColor":"000000",
-               "borderWidth":"2",
-               "shortDescription":"State",
-               "description":"State borders",
-               "provider":"US Census Bureau",
-               "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-            },
-            {
-               "shortName":"county",
-               "displayName":"County",
-               "tileEngine":"mapeteriaBorder",
-               "tileEngineVersion":2,
-               "table":"countyAttributes",
-               "mercatorShapeType":"county",
-               "mercatorPolyYear":2008,
-               "cartogramShapeType":"countyPopulationCartogram",
-               "cartogramPolyYear":2011,
-               "fieldName":"jurisdictionId",
-               "year":2009,
-               "mapping":"none",
-               "borderColor":"000000",
-               "borderWidth":"1",
-               "mapping":"none",
-               "shortDescription":"County",
-               "description":"County borders",
-               "provider":"US Census Bureau",
-               "sourceUrl":"http://www2.census.gov/acs2011_1yr/CD113/EasyStats_113_Congressional_DP.xlsx"
-            }
-         ]
-      },
-      {
-         "shortName":"whatever",
+         "shortName":"whatever1",
          "displayName":"dot",
          "layers":[
             {
@@ -131,7 +91,13 @@
                "description":"gun deaths in the 100 days after Sandy Hook",
                "sourceUrl":"http://data.huffingtonpost.com/2013/03/gun-deaths",
                "provider":"Huffington Post; some geocoding provided by GeoCoder.ca"
-            },
+            }
+         ]
+      },
+      {
+         "shortName":"suicide",
+         "displayName":"suicides",
+         "layers":[
             {
                "shortName":"shutdownSigners",
                "tileEngine":"mapeteriaDot",

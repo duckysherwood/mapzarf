@@ -7,8 +7,6 @@
    "startingCenterLat" : 38,
    "startingCenterLng" : -95,
    "startingCenterZoom" : 4,
-   "slippyMapFramework" : "leaflet",
-   "slippyMapFrameworkVersion" : 1.6,
    "attribution" : "Kaitlin Duck Sherwood",
    "citiesUrl" : "/cgi-bin/getCities.py?",
    "cityIconUrl" : "/maps/mapeteria2/makeCityLabel.php?",

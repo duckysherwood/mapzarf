@@ -13,7 +13,7 @@ function LeafletMapFacade(aMapApplicationInfo) {
 
 LeafletMapFacade.prototype = new MapFacade();
 
-LeafletMapFacade.isValidLeafletInfo = function(leafletInfo) {
+LeafletMapFacade.isValidFrameworkInfo = function(leafletInfo) {
   // Yes, this is the same as in Validator, just to show how it's done.
   // Other concrete mapFacades will have more extensive validators.
   return (leafletInfo.name && Validator.isLegalWord(leafletInfo.name));

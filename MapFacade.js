@@ -33,13 +33,12 @@ function MapFacade(aMapApplicationInfo) {
  */
 MapFacade.makeMapFacade = function(mai) {
   if(!mai.slippyMapFramework || !mai.slippyMapFramework.name) {
-    console.log("Defaulting to use Leaflet.");
-    mai.slippyMapFramework = "leaflet";
+    mai.slippyMapFramework = { "name": "leaflet", "version" : 1.6};
   }
   
   switch (mai.slippyMapFramework.name) {
     case 'leaflet':
-      if (LeafletMapFacade.isValidLeafletInfo(mai.slippyMapFramework)) {
+      if (LeafletMapFacade.isValidFrameworkInfo(mai.slippyMapFramework)) {
         return new LeafletMapFacade(mai);
       } else {
         alert('The leaflet slippy map framework described is invalid.');
