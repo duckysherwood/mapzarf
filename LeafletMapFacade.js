@@ -13,6 +13,12 @@ function LeafletMapFacade(aMapApplicationInfo) {
 
 LeafletMapFacade.prototype = new MapFacade();
 
+LeafletMapFacade.isValidLeafletInfo = function(leafletInfo) {
+  // Yes, this is the same as in Validator, just to show how it's done.
+  // Other concrete mapFacades will have more extensive validators.
+  return (leafletInfo.name && Validator.isLegalWord(leafletInfo.name));
+}
+
 /** Initializes the map, e.g. setting it to the starting location.
  *  SIDE EFFECT: initializes the map
  *  @param {float} centerLat The map's starting center latitude

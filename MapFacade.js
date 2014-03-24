@@ -32,14 +32,18 @@ function MapFacade(aMapApplicationInfo) {
  *  @public
  */
 MapFacade.makeMapFacade = function(mai) {
-  if(!mai.slippyMapFramework) {
+  if(!mai.slippyMapFramework || !mai.slippyMapFramework.name) {
     console.log("Defaulting to use Leaflet.");
     mai.slippyMapFramework = "leaflet";
   }
   
-  switch (mai.slippyMapFramework) {
+  switch (mai.slippyMapFramework.name) {
     case 'leaflet':
-      return new LeafletMapFacade(mai);
+      if (LeafletMapFacade.isValidLeafletInfo(mai.slippyMapFramework)) {
+        return new LeafletMapFacade(mai);
+      } else {
+        alert('The leaflet slippy map framework described is invalid.');
+      }
       break;
     default:
       alert('Sorry, we have not implemented code for ' + 

@@ -253,6 +253,10 @@ Validator.isLegal = function(fieldType, candidate) {
     case 'array':
       return this.isLegalArray(candidate);
 
+    case 'frameworkInfo':
+      // The concrete instance of MapFacade also needs to validate
+      return (candidate.name && this.isLegalWord(candidate.name));
+
     default:
       return false;
   }
@@ -296,8 +300,7 @@ Validator.validateOrderedMai = function(omai) {
                          'hasCartogram' : 'bool',
                          'citiesUrl' : 'url',
                          'cityIconUrl' : 'url',
-                         'slippyMapFramework' : 'word',
-                         'slippyMapVersion' : 'float',
+                         'slippyMapFramework' : 'frameworkInfo',
                          'attribution' : 'text' };
 
   if (!this.validateFields(omai, requiredFields, optionalFields)) {
