@@ -29,7 +29,7 @@ MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl = function(layerSpec, proj
     return null;
   }
 
-  var url = BINDIR + '/choropleth.phpx?x={x}&y={y}&zoom={z}&';
+  var url = 'http://maps.webfoot.com/mapeteria2/choropleth.phpx?x={x}&y={y}&zoom={z}&';
 
   url += 'polyType=' + layerSpec[projection + 'ShapeType'];
   url += '&polyYear=' + layerSpec[projection + 'PolyYear'];

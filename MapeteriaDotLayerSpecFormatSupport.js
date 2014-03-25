@@ -20,7 +20,7 @@ function MapeteriaDotLayerSpecFormatSupport() {
  *  (Used by MapBehaviorInitializer)
  */
 MapeteriaDotLayerSpecFormatSupport.getLayerUrl = function(layerSpec, projection) {
-    var url = BINDIR + '/dots.php?x={x}&y={y}&zoom={z}&';
+    var url = 'http://maps.webfoot.com/mapeteria2/dots.php?x={x}&y={y}&zoom={z}&';
     url += 'points=' + layerSpec[projection + 'Table'];
     url += '&name=' + layerSpec[projection + 'FieldName'];
     url += '&year=' + layerSpec.year;

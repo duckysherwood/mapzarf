@@ -5,10 +5,6 @@
 // so that BehaviourCreator can see it.
 /* @const */ SENTINEL_MULTIPLE = '';
 
-// This is only because Ducky Sherwood's directory structure is
-// different on test and production servers.  Annoying.
-/* @const */ BINDIR = '/maps/mapeteria2';
-
 /** @class DomElementAppender
  *  @classdesc This class sets up the DOM for the map application.
  *  The DomElementAppender depends, by convention, on a number of DOM
