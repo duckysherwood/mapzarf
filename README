@@ -8,6 +8,15 @@ a marker, change the starting display based on the query string, and so on.
 This framework lets me specify all those things (and a 
 few more) based on one JSON file.
 
+You can see examples at 
+http://maps.webfoot.com/demos/gunDeaths/mapzarf.html
+http://maps.webfoot.com/demos/taxRoi/mapzarf.html
+http://maps.webfoot.com/demos/congress2012/mapzarf.html
+
+Each of those has an associated file in the same directory called
+  mapApplicationInfo.json
+which drives the layout of the page and which layers are shown.
+
 ======= Terminology
 
 MAI: Short for MapApplicationInfo, the JSON file which describes how the
