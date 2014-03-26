@@ -2,9 +2,9 @@
 
 TESTS=`ls -1 Test*py`
 
-cd ..
+pushd /appdata/src/mapzarf
 make
-cd integrationTest
+popd
 
 for t in $TESTS
 do

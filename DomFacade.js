@@ -274,30 +274,32 @@ DomFacade.appendAttribution = function(attribution) {
     }
 };
 
-/** Gets the image which holds the legend.
- *  @returns {object} Returns <img> object which holds the legend
+/** Gets the image which holds a legend.
+ *  @returns {object} Returns <img> objects which holds legends
  *  @public
  */
-DomFacade.getLegendElement = function () {
+DomFacade.getLegendElements = function () {
   var $legends = $('#legendImage');
   Utilities.assertTrue($legends.length == 1, 
                        'The legendImage DOM element is missing!');
-  return $legends[0];
+  // convert from jQuery to DOM objects
+  var legends = []  
+  for(i=0; i<$legends.length; i++) {
+    legends.push($legends[i]); 
+  }
+  return legends;
 }
 
-// TODO This will have to be modified when more than one visible layer
-// has a legend.
-/** Makes the legend show a different URL's image.
- *  @param {object} url The url to the image which will show in the legend area.
- *  @public
- */
-DomFacade.updateLegend = function(url) {
-  var legend = DomFacade.getLegendElement();
-  if(url) {
-    legend.src = url;
-  } else {
-    legend.src = 'http://maps.webfoot.com/mapeteria2/tiles/clearTile.png';
-  }
+DomFacade.addLegend = function(url) {
+  var legend = document.createElement('img');
+  legend.className = 'legendImage'; 
+  legend.src = url;
+  var legendDiv = $('#legend')[0];
+  legendDiv.appendChild(legend);
+}
+
+DomFacade.removeAllLegends = function() {
+  $('#legend').empty();
 }
 
 /** Returns the <span> which holds the sharing URL.

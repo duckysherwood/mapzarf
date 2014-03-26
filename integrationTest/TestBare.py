@@ -29,7 +29,7 @@ class TestSanity(unittest.TestCase):
   # Tests ----------------
 
   def testLegendExistence(self):
-    legendUrl = self.page.getLegendUrl()
+    legendUrl = self.page.getLegendUrls()[0]
     pieces = legendUrl.split("/")
     self.assertTrue(pieces[-1] == "webfoot.gif")
 

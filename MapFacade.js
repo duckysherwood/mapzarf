@@ -68,6 +68,7 @@ MapFacade.prototype.updateLayers = function() {
              scope.removeLayer(layer);
            }
          });
+  DomFacade.removeAllLegends();
 
   var layersetNames = DomFacade.getLayersetNames();
   $.each(layersetNames, function(index, layersetName) {
@@ -77,6 +78,9 @@ MapFacade.prototype.updateLayers = function() {
       if (layer) {
         scope.addLayer(layer);
         scope.visibleLayers.push(layer);
+        if(layerSpec.legendUrl) {
+          DomFacade.addLegend(layerSpec.legendUrl);
+        }
       }
     }
   });
@@ -98,10 +102,6 @@ MapFacade.prototype.getLayer = function(layerSpec) {
   }
 
   url = supportClass.getLayerUrl(layerSpec, DomUtils.projectionType());
-
-  if (layerSpec.legendUrl) {
-    DomFacade.updateLegend(layerSpec.legendUrl);
-  }
 
   return L.tileLayer(url, {
     maxZoom: 18,

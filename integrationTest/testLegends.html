@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>TestSanity pageTitle</title>
+    <title>Test multiple legends</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- FIXME TODO NOTE Set this to the locations of your Leaflet
@@ -43,13 +43,31 @@
 
 <!--
     <script type="text/javascript" src="/mapzarf/mapzarfAllCompressed.js"></script>
--->
     <script type="text/javascript" src="/mapzarf/mapzarfAll.js"></script>
+-->
+    <script type="text/javascript" src="../MapFacade.js"></script>
+    <script type="text/javascript" src="../BareLayerSpecFormatSupport.js"></script>
+    <script type="text/javascript" src="../CityLabeller.js"></script>
+    <script type="text/javascript" src="../DomElementAppender.js"></script>
+    <script type="text/javascript" src="../DomFacade.js"></script>
+    <script type="text/javascript" src="../DomUtils.js"></script>
+    <script type="text/javascript" src="../LeafletMapFacade.js"></script>
+    <script type="text/javascript" src="../ListenerInitializer.js"></script>
+    <script type="text/javascript" src="../MapDisplayParameters.js"></script>
+    <script type="text/javascript" src="../MapeteriaBorderLayerSpecFormatSupport.js
+"></script>
+    <script type="text/javascript" src="../MapeteriaChoroplethLayerspecFormatSupport.js"></script>
+    <script type="text/javascript" src="../MapeteriaDotLayerSpecFormatSupport.js"></script>
+    <script type="text/javascript" src="../Runner.js"></script>
+    <script type="text/javascript" src="../Tester.js"></script>
+    <script type="text/javascript" src="../Utilities.js"></script>
+    <script type="text/javascript" src="../Validator.js"></script>
+
   
     <script type="text/javascript">
 
 
-      var maiFile = './testWrongMai5.json';
+      var maiFile = './testLegends.json';
 
       var runner = new Runner();
       $.get( maiFile, runner.start, 'json' ).error(runner.maiAlert);

@@ -296,9 +296,15 @@ class MapApplicationPage:
     return maxZoom
 
 
-  def getLegendUrl(self):
-    legend = self.browser.find_element_by_id('legendImage')
-    return legend.get_attribute('src')
+  def getLegendUrls(self):
+    WebDriverWait(self.browser, 4).until(
+      EC.presence_of_element_located((By.CLASS_NAME, 'legendImage')))
+    legends = self.browser.find_elements_by_class_name("legendImage")
+    urls = []
+    for legend in legends:
+      urls.append(legend.get_attribute('src'))
+
+    return urls
 
   def getPageUrl(self):
     WebDriverWait(self.browser, 2).until(

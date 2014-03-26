@@ -95,10 +95,16 @@ class TestSanity(unittest.TestCase):
 
   # check check the second layers
   def testChangeChoropleth(self):
+    legendUrl = self.page.getLegendUrls()[0]
+    pieces = legendUrl.split("/")
+    self.assertTrue(pieces[-1] == "taxRoiLegend.png")
     self.page.changeLayerToIndex('noImporta', 1)
     self.assertTrue(self.page.choroplethTileForAttributeExists(
                                                  'populationPovertyPct'))
     self.assertTrue("less than the poverty" in self.page.getDescription('noImporta'))
+    legendUrl = self.page.getLegendUrls()[0]
+    pieces = legendUrl.split("/")
+    self.assertTrue(pieces[-1] == "poverty.png")
 
   def testChangeDots(self):
     self.page.changeLayerToIndex('whatever', 1)
