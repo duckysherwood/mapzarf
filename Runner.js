@@ -35,8 +35,8 @@ Runner.prototype.start = function(data, textStatus, jqXhr) {
   if (domAppender.createAndPopulateElements()) {
 
     var mapFacade = MapFacade.makeMapFacade(mai, cityLabeller);
-    var minZoom = 0;
-    var maxZoom = 14;
+    var minZoom = mai.minZoom || 0;
+    var maxZoom = mai.maxZoom || 14;
 
     Utilities.assertTrue(pageInitValues.lat && 
                          pageInitValues.lng && 

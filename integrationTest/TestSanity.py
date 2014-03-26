@@ -132,6 +132,34 @@ class TestSanity(unittest.TestCase):
   def testCityLabelExists(self):
     self.assertTrue(self.page.doesLabelExistForCityNamed('Indianapolis'))
 
+  def testMinZoom(self):
+    zoom = self.page.getMinZoom() # start at 4
+    self.assertTrue(zoom==4, "4 zoom is " + str(zoom))
+    self.page.zoomOut()  # now zoom 3
+    time.sleep(3)
+    zoom = self.page.getMinZoom()
+    self.assertTrue(zoom==3, "3 zoom is " + str(zoom))
+    self.page.zoomOut()  # zoom 2 not allowed, still 3
+    time.sleep(3)
+    zoom = self.page.getMinZoom()
+    self.assertTrue(zoom==3, "3 zoom is " + str(zoom))
+
+  def testMaxZoom(self):
+    zoom = self.page.getMaxZoom() # start at 4
+    self.assertTrue(zoom==4, "4 zoom is " + str(zoom))
+    self.page.zoomIn()  # now zoom 5
+    time.sleep(3)
+    zoom = self.page.getMaxZoom()
+    self.assertTrue(zoom==5, "5 zoom is " + str(zoom))
+    self.page.zoomIn()  # now zoom 6
+    time.sleep(3)
+    zoom = self.page.getMaxZoom()
+    self.assertTrue(zoom==6, "6 zoom is " + str(zoom))
+    self.page.zoomIn()  # zoom 7 not allowed, still 6
+    time.sleep(3)
+    zoom = self.page.getMaxZoom()
+    self.assertTrue(zoom==6, "6 zoom is " + str(zoom))
+
   def testBogusCityLabel(self):
     self.assertFalse(self.page.doesLabelExistForCityNamed('lasjfasf'))
 

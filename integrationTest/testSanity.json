@@ -7,6 +7,8 @@
    "startingCenterLat":38,
    "startingCenterLng":-95,
    "startingCenterZoom":4,
+   "minZoom":3,
+   "maxZoom":6,
    "hasCartogram":true,
    "slippyMapFramework": {"name":"leaflet", "version":1.6},
    "pointInfoUrl":"./testSanityMarkerInfo.html?",

@@ -1,4 +1,5 @@
 import pdb
+import re
 import time
 import urllib
 from selenium import webdriver
@@ -244,6 +245,56 @@ class MapApplicationPage:
 
   def zoomOut(self):
     self.browser.find_element_by_class_name("leaflet-control-zoom-out").click()
+
+  # Note: after a zoom in/out, the previous tiles are still
+  # hanging around, so you have to look through ALL the tiles to 
+  # figure out what the min/max are
+  def getMinZoom(self):
+    try:
+      WebDriverWait(self.browser, 3).until(
+            EC.presence_of_element_located((
+                By.CLASS_NAME, 'leaflet-tile-loaded')))
+    except TimeoutException as e:
+      print "Uh-oh: page tiles never loaded!"
+      raise
+
+    tiles = self.browser.find_elements_by_class_name("leaflet-tile-loaded")
+    minZoom = 32   # excessively high
+    for tile in tiles:
+      try:
+        src = tile.get_attribute('src')
+        zoomRegexp = re.compile(r'zoom=\d+')
+        currentZoom = int(zoomRegexp.findall(src)[0].replace('zoom=', ''))
+        minZoom = min(currentZoom, minZoom)
+        continue
+      except StaleElementReferenceException:
+        continue
+
+    return minZoom
+
+  def getMaxZoom(self):
+    try:
+      WebDriverWait(self.browser, 3).until(
+            EC.presence_of_element_located((
+                By.CLASS_NAME, 'leaflet-tile-loaded')))
+    except TimeoutException as e:
+      print "Uh-oh: page tiles never loaded!"
+      raise
+
+    tiles = self.browser.find_elements_by_class_name("leaflet-tile-loaded")
+    maxZoom = -1   # excessively low
+    for tile in tiles:
+      try:
+        src = tile.get_attribute('src')
+        zoomRegexp = re.compile(r'zoom=\d+')
+        currentZoom = int(zoomRegexp.findall(src)[0].replace('zoom=', ''))
+        maxZoom = max(currentZoom, maxZoom)
+        continue
+      except StaleElementReferenceException:
+        continue
+
+    return maxZoom
+
 
   def getLegendUrl(self):
     legend = self.browser.find_element_by_id('legendImage')

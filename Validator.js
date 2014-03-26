@@ -235,6 +235,11 @@ Validator.isLegal = function(fieldType, candidate) {
     case 'text':
       return this.isLegalText(candidate);
 
+    case 'zoom':
+      return (this.isLegalInt(candidate) && 
+              candidate >= 0 && 
+              candidate <= 20);
+
     case 'url':
       return this.isLegalUrl(candidate);
 
@@ -296,7 +301,9 @@ Validator.validateOrderedMai = function(omai) {
                          'startingMarkerLng' : 'lng',
                          'startingCenterLat' : 'lat',
                          'startingCenterLng' : 'lng',
-                         'startingCenterZoom' : 'int',
+                         'startingCenterZoom' : 'zoom',
+                         'minZoom' : 'zoom',
+                         'maxZoom' : 'zoom',
                          'hasCartogram' : 'bool',
                          'citiesUrl' : 'url',
                          'cityIconUrl' : 'url',
