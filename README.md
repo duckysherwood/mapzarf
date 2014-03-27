@@ -65,17 +65,11 @@ I like to make choropleth cartograms.  :-)
 # What is NOT covered by the JSON file?
 
 Five things:
-1. Mapzarf doesn't make the tiles.  You need to find tiles yourself.  As is,
-you can specify three different layer types, two of which are my
-own custom types and one of which is very simple (low-featured) but which can 
-do basically any tile type.
-2. Mapzarf doesn't control layout and presentation of the page; that's covered 
-by the HTML and CSS.  You can put the various pieces of the page anywhere 
-you want by changing the HTML and CSS.
-3. Mapzarf does't fill in the marker's popups.  You need to specify a URL which will get give that text (but that URL will get lat/lng appended to it,
-so you can vary what text is in the popup based on the lat/lng).  (Set mapApplicationInfo.pointInfo).
+1. Mapzarf doesn't make the tiles.  You need to find tiles yourself.  As is, you can specify three different layer types, two of which are my own custom types and one of which is very simple (low-featured) but which can do basically any tile type.
+2. Mapzarf doesn't control layout and presentation of the page; that's covered by the HTML and CSS.  You can put the various pieces of the page anywhere you want by changing the HTML and CSS.
+3. Mapzarf does't fill in the marker's popups.  You need to specify a URL which will get give that text (but that URL will get lat/lng appended to it, so you can vary what text is in the popup based on the lat/lng).  (Set mapApplicationInfo.pointInfo).
 4. Mapzarf doesn't make the city icons or generate the list of cities.  (Set citiesUrl and cityIconUrl.)
-4. Mapzarf doesn't make the legends.  You need to give it the URL of an image for the layer.  (Set legendUrl.)
+5. Mapzarf doesn't make the legends.  You need to give it the URL of an image for the layer.  (Set legendUrl.)
 
 
 
