@@ -1,0 +1,105 @@
+<h1>Using Mapzarf</h1>
+<i>TBD: make this page prettier.</i>
+<p>
+
+Mapzarf builds a tile-based map application from a data file.  Here is a 
+screenshot of an example:<p>
+<a href="http://maps.webfoot.com/demos/congress2012/mapzarf.html?lat=40.865756786006806&lng=-74.42413330078125&zoom=8&cartogram=f&showCities=t&markerLat=40.17467622056341&markerLng=-76.0528564453125&showDotLayers=t&showChoroplethLayers=t&choroplethLayersIndex=2&showBorderLayers=t&borderLayersIndex=0">a pretty 
+full-fledged example</a><img src="./congr2012.png"></a><p>
+(Click on the image to go to the web page of the example.)
+
+In the image, you can see that there's a map, some city names, a marker
+with a popup, some text, some dropdowns, and some checkboxes.  Almost
+all of that is specified in the <i>Map Application Info</i> or <i>MAI</i> 
+file.  Mapzarf handles creating the page and putting it all together.
+
+(There are also examples in the 
+<a href="https://github.com/duckysherwood/mapzarf/tree/master/integrationTest">
+integration test directory on github</a>, but note that some of the tests 
+are <i>supposed</i> to be broken.  The testSanity test example 
+(<a href="https://github.com/duckysherwood/mapzarf/tree/master/integrationTest/testSanity.html">HTML</a>, <a href="https://github.com/duckysherwood/mapzarf/tree/master/integrationTest/testSanity.json">JSON</a>) is supposed to 
+work, though.)
+<p>
+
+
+<h2>Building up the map application</h2>
+Let's build up a map application in stages.
+<p>
+You need three things: a .html file, a .css file, and a .json file.
+
+<h3>HTML and CSS files</h3>
+You can find templates for the HTML file and the CSS file on github:
+<a href="https://raw.githubusercontent.com/duckysherwood/mapzarf/master/mapzarfDemo.html">HTML</a> and 
+<a href="https://raw.githubusercontent.com/duckysherwood/mapzarf/master/mapzarfDemo.css">CSS</a>.
+<p>
+The only thing you should need to change in the HTML and CSS file is 
+the location of the Leaflet .js file, and the location of the mapzarf
+code (e.g. mapzarfAll.js or mapzarfAllCompressed.js or the individual files).
+Change the HTML which looks like this:
+<pre>
+    <!-- FIXME TODO NOTE Set this to the locations of your Leaflet
+         and mapzarf CSS files!  NOTE TOTO FIXME -->
+    <link rel="stylesheet" href="/thirdparty/leaflet/Leaflet-0.6.4/leaflet.css">
+    <link rel="stylesheet" href="/mapzarf/mapzarfDemo.css">
+</pre>
+
+What you need to set those to depends upon where you have put those files on 
+your server.  You will have to figure that out; I can't help you there.
+The good news is that that shouldn't be that difficult.
+<p>
+More good news is that you can modify the CSS to your heart's content.
+Put the sidebar on the left.  Put the legend on the bottom.  Make the background
+green.  (Heck, make the title blink, I don't care.)  But that's also something
+you will have to figure out on your own.
+<p>
+You can also modify the HTML; you will probably want to remove the text
+about cartograms because almost nobody knows what a cartogram is, let alone
+cares about cartograms.<p>
+
+<h3>MAI file</h3>
+Now on to the file which is at the heart of mapzarf: the <b>Map Application
+Info</b> file, or <i>MAI</i> file.
+<p>
+The MAI file is JSON, and as such, it is really stupid-easy to make
+a mistake in the syntax.  I strongly suggest that you become good friends
+with a JSON validator; a JSON validator will make your life hugely better.
+<a href="http://jsonlint.com/">JSONLint</a> and 
+<a href="http://jsonformatter.curiousconcept.com/">JSON Formatter</a> are both
+great tools.
+<p>
+
+While most MAI files will have more fields, the smallest MAI file has four 
+fields:
+<ul>
+<li>pageTitle: The title of the page, a string which tells what should 
+appear in the title bar of the browser when you are on the application's 
+page.</li>
+<li>pageDescription: A little bit of text to explain to your users what the
+map shows, how to interpret it, and/or why they should care.</li>
+<li>attribution: YOUR NAME HERE!  This is where you get to say who you are,
+so that your users will know where to send their praise and reverence.</li>
+<li>layersets: This is a JSON array of layers, which we will discuss later.
+It can be empty (as we'll show in a moment), but it's a pretty dull app
+with no layers.</li>
+</ul>
+<p>
+Here is an example of a minimum MAI file.  (It also happens to be the
+MAI file used for the 
+<a href="https://github.com/duckysherwood/mapzarf/tree/master/integrationTest/testIncompleteMai2.html">test named testIncompleteMai2</a>.)
+<pre>
+{
+   "pageTitle":"TestIncompleteMai2 pageTitle",
+   "pageDescription":"IncompleteMai2 pageDescription",
+   "attribution":"Kaitlin Duck Sherwood",
+   "layersets":[
+
+   ]
+}
+</pre>
+
+It makes an application which looks like this:<p>
+<img src="./testIncompleteMai2.png"><p>
+The red text and arrows are not on the actual page, they annotations
+to explain where each piece comes from.
+
+
