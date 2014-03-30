@@ -249,3 +249,35 @@ appended.)</li>
 </ul>
 
 <img src="./twoLayersets.png"><p>
+
+<h2>Setting the start location</h2>
+You can customize the starting location of the map with several MAI
+fields (at the top level):
+<ul>
+<li>startingCenterLat: The latitude where the map's center should be at 
+first (a floating-point number, with Southern Hemisphere being negative).</li>
+<li>startingCenterLng: The longitude where the map's center should be at 
+first (a floating-point number, with longitudes west of Grenich being negative).
+</li>
+<li>startingCenterZoom: The zoom where the map should be at first (an integer).</li>
+</ul>
+
+For example, using the layersets from the above ("twoLayersets") example<p>
+
+<pre>
+{
+   "pageTitle":"Two layersets zoomed in",
+   "pageDescription":"Two layersets zoomed in",
+   "attribution":"Kaitlin Duck Sherwood",
+   "startingCenterLat" : 40.0,
+   "startingCenterLng" : -79.0,
+   "startingCenterZoom" : 7,
+   "layersets":[ &lt;as above&gt; ]
+}
+</pre>
+
+gives a page where a piece of the page looks like this:<p>
+<img src="zoomedIn.png"><p>
+
+
+
