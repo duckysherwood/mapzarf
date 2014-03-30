@@ -51,7 +51,8 @@ BareLayerSpecFormatSupport.validate = function(layerSpec) {
                              'provider' : 'text',
                              'licenseUrl' : 'url',
                              'license' : 'text',
-                             'year' : 'int'
+                             'year' : 'int',
+                             'legendUrl' : 'url'
                             };
 
   if (!layerSpec.tileEngine) {
