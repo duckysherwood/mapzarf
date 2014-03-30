@@ -126,12 +126,19 @@ it.</li>
 <li>url: This is the URL to the tile layer.  This particular URL points
 to Open Street Map map tiles.  Note that the URL should 
 include tile x, y, and zoom coordinates in the query string, which Leaflet 
-will fill in.  (Note that Leaflet needs curly braces around {x}, {y}, and {z},
-but that <i>here</i> the curly braces need to be URL-encoded.)
+will fill in.  (Note that 
+<a href="http://leafletjs.com/reference.html#tilelayer">Leaflet needs curly 
+braces around {x}, {y}, and {z}</a>,
+but that <i>here</i> the curly braces need to be URL-encoded: %7B for "{" and 
+%7D for "}".)
 </ul>
 <p>
 <h2>More description</h2>
-To be a good online citizen, you really should provide information 
+The information about the layer using the above MAI file isn't very interesting:
+<p>
+<img src="./oneLayerCloseup.png">
+<p>
+To be a good online citizen, you really should provide better information 
 about the map tiles which you use, especially if someone else provides
 the tiles.  Not only is it polite, but it will keep noobs from asking
 you questions that really should go to the tile provider.  In the layer
@@ -148,24 +155,97 @@ how the tile was made, e.g. what data was used to make the tile.</li>
 which provided the tile.</li>
 <li>license: A description of the license the tile is used under.</li>
 <li>lincenseUrl: A URL where the user can find out more about the license.</li>
-</ul>
-<p>
-
+<li>year: The year the data on the tile came from.</li>
 </ul>
 
+If, for example, you use this as the layer spec, you will get a much nicer
+description.
 <pre>
-            {
-               "shortName" : "mapnik",
-               "tileEngine" : "bare",
-               "tileEngineVersion" : 2,
-               "shortDescription" : "OSM Mapnik",
-               "description" : "Open Street Maps Mapnik layer",
-               "sourceUrl" : "http://wiki.openstreetmap.org/wiki/Tile_servers",
-               "url" : "http://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
-               "provider" : "Open Street Maps",
-               "providerUrl" : "http://openstreetmap.org",
-               "license" : "ODbL and CC BY-SA",
-               "licenseUrl" : "http://www.openstreetmap.org/copyright"
-            },
+       {
+          "shortName" : "mapnik",
+          "tileEngine" : "bare",
+          "tileEngineVersion" : 2,
+          "shortDescription" : "OSM Mapnik",
+          "description" : "Open Street Maps Mapnik layer",
+          "sourceUrl" : "http://wiki.openstreetmap.org/wiki/Tile_servers",
+          "url" : "http://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png",
+          "provider" : "Open Street Maps",
+          "providerUrl" : "http://openstreetmap.org",
+          "license" : "ODbL and CC BY-SA",
+          "licenseUrl" : "http://www.openstreetmap.org/copyright",
+          "year" : 2014
+       }
 </pre>
 
+Gives:<p>
+<img src="./oneLayerBetterDescription.png"><p>
+
+<h2>Multiple layers</h2>
+Suppose you want to let users choose between showing two different types
+of data.  For example, you want to let them see the locations of libraries
+in the US.  In that case, you put another layer object in the same layerset. 
+For example, add this (metadata information omitted for brevity):
+<pre>
+   {
+      "shortName" : "libraries",
+      "tileEngine" : "bare",
+      "tileEngineVersion" : 2,
+      "shortDescription" : "Libraries",
+      "url" : "http://localhost/maps/mapeteria2/dots.php?x=%7Bx%7D&amp;y=%7By%7D&amp;zoom=%7Bz%7D&amp;points=dotAttributes&amp;name=library&amp;year=2010&amp;colour=ff0000&amp;size=1&amp;jid=0"
+  }
+</pre>
+That will give you a page which has a drop-down menu letting you select
+which layer to look at; here the libraries layer is selected.<p>
+<img src="libraries.png">
+
+<h2>Multiple layersets</h2>
+
+Now, it probably would be nicer to see the library dots <i>on top of</i>
+the Open Street Map map.  To do that, put the library dots in a different
+<i>layerset</i> from the Open Street Map map.
+
+Each layerset can show one layer at a time.  So if you have two layersets,
+then you can see two layers at a time.  Each layerset can have multiple layers,
+selectable with a dropdown menu, but only one layer from each layerset will
+be visible at one time.  Here is an example (with most metadata removed for 
+brevity) of a snipped of a MAI with two layersets; the first layerset has
+two layers:
+
+<pre>
+   "layersets":[
+      {
+         "shortName":"maps",
+         "displayName":"street map",
+         "layers":[ {
+               "shortName":"mapnik",
+               "tileEngine":"bare",
+               "tileEngineVersion":1.0,
+               "url":"http://a.tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png"
+            }, {
+               "shortName" : "mapquest",
+               "tileEngine" : "bare",
+               "tileEngineVersion" : 2,
+               "url" : "http://otile1.mqcdn.com/tiles/1.0.0/osm/%7Bz%7D/%7Bx%7D/%7By%7D.png" 
+            } ] }, { 
+         "shortName":"dots",
+         "displayName":"street map",
+         "layers":[ {
+               "shortName":"libraries",
+               "tileEngine":"bare",
+               "tileEngineVersion":1.0,
+               "url":"http://localhost/maps/mapeteria2/dots.php?x=%7Bx%7D&amp;y=%7By%7D&amp;zoom=%7Bz%7D&amp;points=dotAttributes&amp;name=libraryt&amp;year=2010&amp;colour=ff0000&amp;size=1&amp;jid=0"
+            } ] } ] }
+</pre>
+
+Each layerset has three required fields (and no optional fields):
+<ul>
+<li>shortName: an arbitrary identifier (made up of letters and numbers), used
+internally.  (Pro tip: While it can be anything, if you get into debugging, 
+you will be happier if you make it a meaningful identifier.)</li>
+<li>displayName: the text which will describe the layerset to the user if there 
+is more than one layer.  ("Show" will be prepended and "layers" will be 
+appended.)</li>
+<li>layers: An array of layers, as before.</li>
+</ul>
+
+<img src="./twoLayersets.png"><p>
