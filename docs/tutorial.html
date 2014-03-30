@@ -58,16 +58,16 @@ great tools.
 While most MAI files will have more fields, the smallest MAI file has four 
 fields:
 <ul>
-<li>pageTitle: The title of the page, a string which tells what should 
+<li><b>pageTitle</b>: The title of the page, a string which tells what should 
 appear in the title bar of the browser when you are on the application's 
 page.</li>
-<li>pageDescription: A little bit of text to explain to your users what the
-map shows, how to interpret it, and/or why they should care.</li>
-<li>attribution: YOUR NAME HERE!  This is where you get to say who you are,
-so that your users will know where to send their praise and reverence.</li>
-<li>layersets: This is a JSON array of layers, which we will discuss later.
-It can be empty (as we'll show in a moment), but it's a pretty dull app
-with no layers.</li>
+<li><b>pageDescription</b>: A little bit of text to explain to your users what 
+the map shows, how to interpret it, and/or why they should care.</li>
+<li><b>attribution</b>: YOUR NAME HERE!  This is where you get to say who you 
+are, so that your users will know where to send their praise and reverence.</li>
+<li><b>layersets</b>: This is a JSON array of layers, which we will discuss 
+later.  It can be empty (as we'll show in a moment), but it's a pretty dull 
+app with no layersets.</li>
 </ul>
 <p>
 Here is an example of a minimum MAI file.  (It also happens to be the
@@ -114,16 +114,16 @@ There are several different types of layer which you can specify, but
 the "bare" one shown above is probably what you will be using most.
 It has four required fields: 
 <ul>
-<li>shortName: a name which the user might see on a dropdown (if there is 
+<li><b>shortName</b>: a name which the user might see on a dropdown (if there is 
 more than one layer) and which is used internally for an id.  Note: you can 
 only have letters and numbers -- no spaces or symbols -- in the shortName</li>
-<li>tileEngine: the name of the code which generates that type of tile layer.  
+<li><b>tileEngine</b>: the name of the code which generates that type of tile layer.  
 The other possibilities right now are for tiles which I (Ducky Sherwood)
 generate.  If you want to make a custom layer for whatever you
 are doing, great, go for it!  Send me a pull request and I will incorporate 
 it.</li>
-<li>tileEngineVersion: the version number of the tile engine.  </li>
-<li>url: This is the URL to the tile layer.  This particular URL points
+<li><b>tileEngineVersion</b>: the version number of the tile engine.  </li>
+<li><b>url</b>: This is the URL to the tile layer.  This particular URL points
 to Open Street Map map tiles.  Note that the URL should 
 include tile x, y, and zoom coordinates in the query string, which Leaflet 
 will fill in.  (Note that 
@@ -138,24 +138,28 @@ The information about the layer using the above MAI file isn't very interesting:
 <p>
 <img src="./oneLayerCloseup.png">
 <p>
+<i><b>NOTE:</b> From here on, I'm only going show <i>pieces</i> of screenshots. 
+The whole screenshot takes up a lot of room and most of it isn't very 
+interesting.</i>
+<p>
 To be a good online citizen, you really should provide better information 
 about the map tiles which you use, especially if someone else provides
 the tiles.  Not only is it polite, but it will keep noobs from asking
 you questions that really should go to the tile provider.  In the layer
 spec, there are lots of things you can describe:
 <ul>
-<li>shortDescription: The short description overrides shortName for 
+<li><b>shortDescription</b>: The short description overrides shortName for 
 showing on the drop-down menu (if it is there).</li>
-<li>description: A long, more detailed description of the layer, which
+<li><b>description</b>: A long, more detailed description of the layer, which
 will appear underneath the drop-down or checkbox.</li>
-<li>sourceUrl: The URL that someone can go to to find more information on
+<li><b>sourceUrl</b>: The URL that someone can go to to find more information on
 how the tile was made, e.g. what data was used to make the tile.</li>
-<li>provider: The name of the organization which provided the tile.</li>
-<li>providerUrl: A URL where the user can find out more about the organization
+<li><b>provider</b>: The name of the organization which provided the tile.</li>
+<li><b>providerUrl</b>: A URL where the user can find out more about the organization
 which provided the tile.</li>
-<li>license: A description of the license the tile is used under.</li>
-<li>lincenseUrl: A URL where the user can find out more about the license.</li>
-<li>year: The year the data on the tile came from.</li>
+<li><b>license</b>: A description of the license the tile is used under.</li>
+<li><b>lincenseUrl</b>: A URL where the user can find out more about the license.</li>
+<li><b>year</b>: The year the data on the tile came from.</li>
 </ul>
 
 If, for example, you use this as the layer spec, you will get a much nicer
@@ -250,16 +254,16 @@ appended.)</li>
 
 <img src="./twoLayersets.png"><p>
 
-<h2>Setting the start location</h2>
+<h2>Setting the starting location</h2>
 You can customize the starting location of the map with several MAI
 fields (at the top level):
 <ul>
-<li>startingCenterLat: The latitude where the map's center should be at 
+<li><b>startingCenterLat</b>: The latitude where the map's center should be at 
 first (a floating-point number, with Southern Hemisphere being negative).</li>
-<li>startingCenterLng: The longitude where the map's center should be at 
+<li><b>startingCenterLng</b>: The longitude where the map's center should be at 
 first (a floating-point number, with longitudes west of Grenich being negative).
 </li>
-<li>startingCenterZoom: The zoom where the map should be at first (an integer).</li>
+<li><b>startingCenterZoom</b>: The zoom where the map should be at first (an integer).</li>
 </ul>
 
 For example, using the layersets from the above ("twoLayersets") example<p>
@@ -278,6 +282,11 @@ For example, using the layersets from the above ("twoLayersets") example<p>
 
 gives a page where a piece of the page looks like this:<p>
 <img src="zoomedIn.png"><p>
+
+You can also set the <b>minZoom</b> and <b>maxZoom</b>, which prevent the user from
+zooming in/out past those limits.  However, that's hard to show with a
+still photo.
+
 
 
 
