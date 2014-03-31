@@ -288,5 +288,16 @@ zooming in/out past those limits.  However, that's hard to show with a
 still photo.
 
 
+<h2>Legends</h2>
+If you want to show a legend for a particular layer, in the layerSpec,
+give the URL to the legend in the <b>legendUrl</b> field.  This URL
+can be to any image.  For example, if I add 
+<pre>
+               "legendUrl" : "http://webfoot.com/pictures/webfoot.gif",
+</pre>
+to the "mapnik" layerSpec in the previous example, I get a screenshot which
+looks like this:<p>
+<img src="legend.png"><p>
 
-
+If you have multiple visible layers (because you have multiple layersets) 
+and more than one has a legend, the legends will "stack" from left to right.  
