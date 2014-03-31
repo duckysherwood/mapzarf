@@ -301,3 +301,95 @@ looks like this:<p>
 
 If you have multiple visible layers (because you have multiple layersets) 
 and more than one has a legend, the legends will "stack" from left to right.  
+Note that if you are going to have multiple legends, you probably want
+to have the name of the layer in the image, so people can tell which
+legend goes with which layer.
+
+<h2>Marker</h2>
+You might like to have a marker on the map which tells people about
+spots on the map.  These MAI fields (at the top level, i.e. not part of
+the layerset or layers) control where the marker is at first.
+<ul>
+<li><b>startingMarkerLat</b>: The latitude where the marker should start.</li>
+<li><b>startingMarkerLng</b>: The longitude where the marker should start.</li>
+</ul>
+
+If you look at the very first screenshot in the tutorial, you will see a
+marker with an open popup window (also called an "infowindow").  That got
+populated with the <b>pointInfoUrl</b>, specified in the layerSpec.  
+Note that the pointInfoUrl is just the prefix; the lat and long will get 
+appended to the pointInfoUrl, so the whole URL will be something like<p>
+<i>pointInfoUrl</i><code>lat=</code><i>lat=</i><code>&amp;lng=</code><i>lng</i>
+</p>
+
+For example, if <pre>
+pointInfoUrl = "http://foo.com?field=library&amp;"
+</pre> and the user clicks on longitude -105.3, latitude 37.5, then the
+URL which will get fetched is <pre>
+http://foo.com?field=library&amp;lat=-105.3&amp;lng=37.5
+</pre>
+<b>IMPORTANT! Your pointInfoUrl needs to end with a closing delimiter
+(?, &amp;, or /) so that the extra stuff can get appended cleanly.</b>
+<p>
+If there are multiple visible layerSpecs with <b>pointInfoUrls</b>, then 
+mapzarf will iterate through, from the top layer to the bottom layer,
+and use the first <b>pointInfoUrl</b> it finds.
+<p>
+The HTML which is in the response to the URL will get stuffed into the 
+infowindow.
+
+<h2>City labels</h2>
+In the previous example, you can see the roads and cities through the dot
+layer.  But if you have a solid layer, those won't show through.  How do
+you give your users some context about where they are?  With the cities
+fields:
+<ul>
+<li><b>citiesUrl</b>: This URL gives some number of possible cities to show 
+that are within the viewport.  More details below.</li>
+<li><b>cityIconUrl</b>: This URL gives the icon of the name of the city.</li>
+</ul>
+
+The <b>citiesUrl</b> that you specified gets the following appended to it 
+(sort of like in pointInfoUrl, above) in query string form before the 
+request goes out, so you can return only cities in
+the viewport:
+<ul>
+<li><b>upper</b>: the northern latitude of the viewport</li>
+<li><b>lower</b>: the southern latitude of the viewport</li>
+<li><b>left</b>: the western longitude of the viewport</li>
+<li><b>right</b>: the eastern longitude of the viewport</li>
+<li><b>zoom</b>: the current zoom level of the map</li>
+<li><b>cartogram</b>: highly unlikely that you will care about this</li>
+</ul>
+<b>IMPORTANT! Your pointInfoUrl needs to end with a closing delimiter
+(?, &, or /) so that the extra stuff can get appended cleanly.</b><p>
+
+They response to that URL needs to be some number of the most important cities
+in the viewport, be in JSON format as an ordered array of objects, 
+and each object must have properties of the name, the latitude, and the 
+longitude of that city.  When I do this, I return 25 cities, but here is
+a made-up response with only three cities (for brevity):
+<pre>
+[{ "description":"New York", "lat":41.352122,"lng":-70.664961 },
+{ "description":"Los Angeles", "lat":34.822085,"lng":-124.424735 },
+{ "description":"Chicago", "lat":46.360331,"lng":-95.01061 }]
+</pre>
+You can read more about
+<a href="http://blog.webfoot.com/2013/11/17/city-labels-on-maps/">the 
+algorithm for placing cities</a>.
+<p>
+The <b>cityIconUrl</b> needs to return an image with the name of the city.
+I <i>strongly</i> advise you to return an image with an outline in a 
+contrasting colour.  If you don't, I can pretty much guarantee you that
+it will be difficult to see the label over <i>some</i> layer.  Here's 
+an example (over a blue background) of the icons I make when I am making
+maps:<p>
+<img src="cityLabel.png" style="background-color:0000ff">
+<p>
+Here is an example of what the city labels look like over an opaque
+data layer:<p>
+<a href="http://localhost/maps/demos/taxRoi/mapzarf.html?lat=40.86783384138491&lng=-74.51751708984375&zoom=9&cartogram=f&showCities=t&showChoroplethLayers=t&choroplethLayersIndex=0&showBorderLayers=t&borderLayersIndex=0&showDotLayers=f"><img src="./cityLabels.png"></a><p>
+(Note the legend in the upper right hovering over the data layer.)
+
+
+
