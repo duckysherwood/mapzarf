@@ -17,12 +17,14 @@ html, body, table {
     width: 60%;
     height: 95%;
     margin: 0;
+    z-index: 1;
 }
 #legend {
    position: absolute;
    right: 20px;
    top: 2%;
    margin: 3px;
+   z-index: 1000;
 }
 #errorMessage {
    position: absolute;
