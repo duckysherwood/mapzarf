@@ -73,3 +73,9 @@ BareLayerSpecFormatSupport.validate = function(layerSpec) {
 
 
 
+// TODO JsDoc this
+BareLayerSpecFormatSupport.getPointInfoUrl = 
+  function(layerSpec) {
+  
+  return layerSpec.pointInfoUrl;
+}

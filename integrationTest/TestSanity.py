@@ -59,6 +59,18 @@ class TestSanity(unittest.TestCase):
     time.sleep(8)  # even at sleep(5), sometimes the tiles were still stale.
 
     self.page.clickOnDotTile(7, 11, 5)
+
+    try:
+      WebDriverWait(self.browser, 5).until(
+        EC.presence_of_element_located((By.ID, 'markerText')))
+    except TimeoutException as e:
+      print("Exception " + repr(e))
+      self.assertTrue(False, "The popup never appeared.")
+      return
+    except Exception as e:
+      print("Exception: " + repr(e))
+      raise e
+
     element = self.browser.find_element_by_id('markerText')
     self.assertTrue( MARKER_TEXT in element.text)
  

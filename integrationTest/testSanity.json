@@ -11,7 +11,6 @@
    "maxZoom":6,
    "hasCartogram":true,
    "slippyMapFramework": {"name":"leaflet", "version":1.6},
-   "pointInfoUrl":"./testSanityMarkerInfo.html?",
    "citiesUrl":"/cgi-bin/getCities.py?",
    "cityIconUrl":"/maps/mapeteria2/makeCityLabel.php?",
    "layersets":[
@@ -122,6 +121,7 @@
                "shortName":"gunDeaths",
                "tileEngine":"mapeteriaDot",
                "tileEngineVersion":2,
+               "pointInfoUrl":"./testSanityMarkerInfo.html?",
                "mercatorTable":"dotAttributes",
                "mercatorFieldName":"gunDeathCount",
                "cartogramTable":"popCartDotAttributes",
@@ -142,6 +142,7 @@
                "mercatorFieldName":"shutdownSigner",
                "cartogramTable":"congressionalDistrictPopCartDotAttributes",
                "cartogramFieldName":"shutdownSignerCart",
+               "pointInfoUrl":"./testSanityMarkerInfo.html?",
                "year":2013,
                "size":3,
                "color":"000005",

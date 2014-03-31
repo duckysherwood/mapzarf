@@ -182,32 +182,34 @@ ListenerInitializer.prototype.requestPopupInformation = function(e) {
   var lat = latlng.lat;
   var lng = latlng.lng;
 
-  var cartogramFlag = DomFacade.getFlagForCheckbox('#isCartogramCheckbox');
-
-  var topLayersetName = DomFacade.getTopVisibleLayersetName();
-  var layerSpecName = DomUtils.findSelectedKeyForLayerType(topLayersetName);
-  var fieldName, year;
-  var projectionSelector = cartogramFlag == 't' ?
-    'cartogramFieldName' : 'mercatorFieldName';
-  if (topLayersetName && layerSpecName) {
-    fieldName = this.mai[topLayersetName][layerSpecName][projectionSelector];
-    year = this.mai[topLayersetName][layerSpecName].year;
-  }
-
-
-  var url = this.mai.pointInfoUrl +  
-     'lat=' + lat + '&lng=' + lng +
-     '&zoom=' + this.mapFacade.getZoom() +
-     '&fieldName=' + fieldName +
-     '&polyYear=2011&year=2011&cartogram=' + cartogramFlag;
-
-  // console.log(url);
-
-  this.mapFacade.
-    setPopupContent('Looking up jurisdiction information, please wait...');
-
-  // request is a verb here
-  Utilities.requestUrlWithScope(url, this.setPopupInfoCallback, this);
+  var layersetNames = DomFacade.getVisibleLayersetNames().reverse();
+  var layerSpecName, layerSpec, tileEngineClass, url;
+  var scope = this;
+  $.each(layersetNames, function(index, layersetName) {
+    layerSpecName = DomUtils.findSelectedKeyForLayerType(layersetName);
+    if (layersetName && layerSpecName) {
+      layerSpec = scope.mai[layersetName][layerSpecName];
+      tileEngineClass = Validator.classForTileType(layerSpec.tileEngine);
+      if(!tileEngineClass) {
+        return true;  // go to next iteration of each
+      }
+      url = tileEngineClass.getPointInfoUrl(layerSpec);
+      if(url) {
+      
+        url += 'lat=' + lat + '&lng=' + lng +
+               '&zoom=' + scope.mapFacade.getZoom() ;
+        console.log(url);
+  
+        scope.mapFacade.
+          setPopupContent('Looking up jurisdiction information, please wait...');
+    
+        // request is a verb here
+        Utilities.requestUrlWithScope(url, scope.setPopupInfoCallback, scope);
+        return false;  // stop the each loop
+      }
+    }
+  });
+  
 };
 
 /** Event handler for clicking on the map.  The action mostly happens

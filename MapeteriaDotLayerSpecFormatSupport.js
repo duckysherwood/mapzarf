@@ -87,4 +87,30 @@ MapeteriaDotLayerSpecFormatSupport.validate = function(layerSpec) {
 };
 
 
+// TODO JsDoc
+MapeteriaDotLayerSpecFormatSupport.getPointInfoUrl = 
+  function(layerSpec) {
+  
+  if(!layerSpec.pointInfoUrl) {
+    return null;
+  }
 
+  var fieldName, tableName;
+  var year = layerSpec.year;
+  var cartogramFlag = DomFacade.getFlagForCartogramCheckbox();
+  if(DomFacade.isCartogramCheckboxChecked()) {
+    fieldName = layerSpec.cartogramFieldName;
+    tableName = layerSpec.cartogramTable;
+  } else {
+    fieldName = layerSpec.mercatorFieldName;
+    tableName = layerSpec.mercatorTable;
+  }
+
+  var url = layerSpec.pointInfoUrl +
+     '&fieldName=' + fieldName +
+     '&tableName=' + tableName + 
+     '&year=' + year + 
+     '&cartogram=' + cartogramFlag + '&';
+
+  return url;
+}

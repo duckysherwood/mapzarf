@@ -72,7 +72,6 @@ MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl = function(layerSpec, proj
 
 };
 
-
 /** Renders a verdict on whether or not the layerSpec is valid.  Attempts
  *  to do some semantic checking as well as syntactic checking.
  *  @public
@@ -137,3 +136,32 @@ MapeteriaChoroplethLayerSpecFormatSupport.validate = function(layerSpec) {
   return true;
 };
 
+// TODO JsDoc
+MapeteriaChoroplethLayerSpecFormatSupport.getPointInfoUrl = 
+  function(layerSpec) {
+  
+  if(!layerSpec.pointInfoUrl) {
+    return null;
+  }
+
+  var fieldName = layerSpec.fieldName;
+  var year = layerSpec.year;
+  var cartogramFlag = DomFacade.getFlagForCartogramCheckbox();
+  var polyYear, shapeType;
+  if(DomFacade.isCartogramCheckboxChecked()) {
+    polyYear = layerSpec.cartogramPolyYear;
+    shapeType = layerSpec.cartogramShapeType;
+  } else {
+    polyYear = layerSpec.mercatorPolyYear;
+    shapeType = layerSpec.mercatorhapeType;
+  }
+
+  var url = layerSpec.pointInfoUrl +
+     '&fieldName=' + fieldName +
+     '&shapeType=' + shapeType + 
+     '&polyYear=' + polyYear + 
+     '&year=' + year + 
+     '&cartogram=' + cartogramFlag + '&';
+
+  return url;
+}

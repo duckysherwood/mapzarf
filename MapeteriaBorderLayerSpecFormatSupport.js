@@ -138,3 +138,11 @@ MapeteriaBorderLayerSpecFormatSupport.validate = function(layerSpec) {
 };
 
 
+// I am not sure why you would ever want to get information about the
+// border layers, but it could happen.
+MapeteriaBorderLayerSpecFormatSupport.getPointInfoUrl = 
+  function(layerSpec) {
+  
+  return layerSpec.pointInfoUrl;
+}
+
