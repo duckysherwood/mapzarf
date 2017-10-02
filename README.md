@@ -22,9 +22,9 @@ Once you specify that, mapzarf will
 
 You can see examples of mapzarf in action at:
 
-* [http://maps.webfoot.com/demos/gunDeaths/mapzarf.html] (http://maps.webfoot.com/demos/gunDeaths/mapzarf.html)
-* [http://maps.webfoot.com/demos/taxRoi/mapzarf.html] (http://maps.webfoot.com/demos/taxRoi/mapzarf.html)
-* [http://maps.webfoot.com/demos/congress2012/mapzarf.html] (http://maps.webfoot.com/demos/congress2012/mapzarf.html)
+* http://maps.webfoot.com/demos/gunDeaths/mapzarf.html
+* http://maps.webfoot.com/demos/taxRoi/mapzarf.html
+* http://maps.webfoot.com/demos/congress2012/mapzarf.html
 
 Each of those has an associated file in the same directory called
   _mapApplicationInfo.json_
