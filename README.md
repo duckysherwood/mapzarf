@@ -1,7 +1,7 @@
 # What is mapzarf?
 
 Mapzarf is a framework for creating data-driven tile-based map applications.  
-IT has the Javascript (and a tiny bit of HTML) to create all the controls
+It has the Javascript (and a tiny bit of HTML) to create all the controls
 for a tile-based map.  Using the data file, you can specify 
 * what layers you want to show (and in which order),
 * what geographical area to show (center lat, center lng, and zoom), 
