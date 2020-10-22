@@ -107,6 +107,8 @@ MapeteriaBorderLayerSpecFormatSupport.validate = function(layerSpec) {
                              'minValue' : 'float',
                              'maxValue' : 'float',
                              'legendUrl' : 'url',
+                             'timeSeries' : 'text',
+                             'isDaily' : 'bool',
                              'sourceUrl' : 'url',
                              'source' : 'text'};
 
@@ -137,12 +139,54 @@ MapeteriaBorderLayerSpecFormatSupport.validate = function(layerSpec) {
 
 };
 
+/** This method returns a string with all the parameters
+ *  which are needed by the auxilliary URLs -- the
+ *  click handlers, for example.  This should be an exhaustive
+ *  list of parameters; any extra will just be ignored.
+ *  @param (object) layerSpec Information about the layer
+ *  @returns (string) key=value pairs separated by '&'
+ */
+function getClickHandlerQueryStringParameters(layerSpec) {
+  var year = layerSpec.year;
+  var cartogramFlag = DomFacade.getFlagForCartogramCheckbox();
+  var polyYear, shapeType, fieldName, tableName;
+  if(DomFacade.isCartogramCheckboxChecked()) {
+    polyYear = layerSpec.cartogramPolyYear;
+    fieldName = layerSpec.fieldName;
+    shapeType = layerSpec.cartogramShapeType;
+    tableName = layerSpec.cartogramTable;
+  } else {
+    polyYear = layerSpec.mercatorPolyYear;
+    fieldName = layerSpec.fieldName;
+    shapeType = layerSpec.mercatorShapeType;
+    tableName = layerSpec.mercatorTable;
+  }
+
+  // These always exist, so it should not be dangerous to use these.
+  var retval = "shapeType=" + shapeType +
+     "&polyYear=" + polyYear +
+     "&fieldName=" + fieldName +
+     "&year=" + year +
+     "&cartogram=" + cartogramFlag + "&";
+
+  if (layerSpec.tableName) {
+     retval += 'tableName=' + tableName +'&';
+  }
+  if (layerSpec.day) {
+     retval += 'day=' + layerSpec.day + '&';
+  }
+  return retval
+
+}
+
 
 // I am not sure why you would ever want to get information about the
 // border layers, but it could happen.
+// Ah.  Because sometimes the border layer is on top.
 MapeteriaBorderLayerSpecFormatSupport.getPointInfoUrl = 
   function(layerSpec) {
   
-  return layerSpec.pointInfoUrl;
+  return layerSpec.pointInfoUrl + getClickHandlerQueryStringParameters(layerSpec)
+
 }
 

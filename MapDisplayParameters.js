@@ -23,6 +23,15 @@ function MapDisplayParameters(omai) {
     return (aString == 't');
   };
 
+  this.toDate = function(aString) {
+    try {
+      return new Date(aString);
+    }
+    catch {
+      return null;
+    }
+  };
+
   // validation routine, default, min, max
   defaults.lat = [parseFloat, CENTER_LAT, -90, 90];
   defaults.lng = [parseFloat, CENTER_LNG, -180, 180];
@@ -31,6 +40,7 @@ function MapDisplayParameters(omai) {
   defaults.markerLng = [parseFloat, MARKER_LNG, -180, 180];
 
   defaults.showCities = [this.toBoolean, true, false, true];
+  defaults.day = [this.toDate, new Date(omai.endDay), new Date(omai.startDay), new Date(omai.endDay)];
 
   // isCartogram?
   defaults.cartogram = [this.toBoolean, true, false, true];

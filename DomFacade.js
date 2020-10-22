@@ -101,7 +101,36 @@ DomFacade.getCartogramCheckbox = function() {
   return $checkbox[0];
 };
 
+/** Gets the graph div.
+ *  @return {object} <div> DOM element for the graph div
+ *  @public
+ */
+DomFacade.getGraphDivElement = function() {
+  var $graphDiv = $('#graphDiv');
+  Utilities.assertTrue($graphDiv.length <= 1,
+                       "There is more than 1 graphDiv!");
+  return $graphDiv[0];
+};
 
+/** Gets the graph image.
+ *  @return {object} <img> DOM element for the graph image
+ *  @public
+ */
+DomFacade.getGraphImgElement = function() {
+  var $graph = $('#graph');
+  Utilities.assertTrue($graph.length <= 1,
+                       "There is more than 1 graph!");
+  return $graph[0];
+};
+
+/** Sets the graph Url
+ *  @return {text} <url> DOM element for the graph image
+ *  @public
+ */
+DomFacade.setGraphUrl = function(url) {
+  var img = DomFacade.getGraphImgElement()
+  img.src = url;
+};
 
 
 /** Sets the description <span> of a layerset to the given text.
@@ -111,7 +140,6 @@ DomFacade.getCartogramCheckbox = function() {
  */
 DomFacade.setLayerSpecDescription = function(layersetName, htmlDescription) {
   var id = '#' + layersetName + 'Description';
-  console.log("id " + id + ", desc " + htmlDescription);
   $descriptors = $(id);
   Utilities.assertTrue($descriptors.length == 1, 
                        'The DOM element '+ layersetName + 
@@ -279,7 +307,7 @@ DomFacade.appendAttribution = function(attribution) {
  *  @public
  */
 DomFacade.getLegendElements = function () {
-  var $legends = $('#legendImage');
+  var $legends = $('#legend');
   Utilities.assertTrue($legends.length == 1, 
                        'The legendImage DOM element is missing!');
   // convert from jQuery to DOM objects
@@ -323,6 +351,185 @@ DomFacade.setSharingUrl = function(url) {
   sharingUrlElement.href = url;
 };
 
+/** Gets the <span> which holds the string showing the date of
+ *  the currently visible map.
+ */
+DomFacade.getCurrentDayElement = function() {
+  var $timeElement = $('#currentDaySpan');
+  if ($timeElement) {
+    return $timeElement[0];
+  } else {
+    return null;
+  }
+}
+
+DomFacade.getPreviousDayButton = function() {
+  var $button = $('#previousDayButton');
+  if ($button) {
+    return $button[0];
+  } else {
+    return null;
+  }
+}
+DomFacade.getNextDayButton = function() {
+  var $button = $('#nextDayButton');
+  if ($button) {
+    return $button[0];
+  } else {
+    return null;
+  }
+}
+DomFacade.getPreviousWeekButton = function() {
+  var $button = $('#previousWeekButton');
+  if ($button) {
+    return $button[0];
+  } else {
+    return null;
+  }
+}
+DomFacade.getNextWeekButton = function() {
+  var $button = $('#nextWeekButton');
+  if ($button) {
+    return $button[0];
+  } else {
+    return null;
+  }
+}
+
+/** Gets the string representing the current day.
+ */
+DomFacade.getCurrentDayString = function() {
+  var element = DomFacade.getCurrentDayElement();
+  if (element) {
+    return element.innerHTML;
+  } else {
+    return null;
+  }
+}
+
+/** Gets the current day as a Date element
+ */
+DomFacade.getCurrentDay = function() {
+  var dayString = DomFacade.getCurrentDayString();
+  var epochMilliseconds = Date.parse(dayString);
+  return epochMilliseconds;
+}
+
+/** Sets the <span> which holds the string showing the date of
+ *  the currently visible map.
+ */
+DomFacade.setCurrentDayElement = function(aDayString) {
+   var currentDaySpan = DomFacade.getCurrentDayElement();
+   currentDaySpan.innerHTML = aDayString;
+}
+
+
+/** helper function to add a specified number of days to a day string.
+ * Retuns a day string, e.g. "2020-09-28"
+ */
+function addDaysToCurrentDayString(currentDayString, dayCount) {
+  var newDay = new Date(currentDayString);
+  newDay.setDate(newDay.getDate()+dayCount);
+  return newDay.toISOString().split('T')[0];
+}
+
+/** Gets a string representing one day earlier than
+ *  the day the map is currently showing.
+ *  Retuns a day string, e.g. "2020-09-28"
+ */
+function getPreviousDayString() {
+  // Have to add a timezone or else it will presume the TZ is UTC,
+  // and then when we create the string, it will be in local time.
+  var currentDayString = DomFacade.getCurrentDayString();
+  if (currentDayString) {
+    currentDayString = currentDayString.replace(/-/g, '\/');
+    return addDaysToCurrentDayString(currentDayString, -1);
+  } else {
+    return null;
+  }
+}
+
+/** Gets a string representing one week earlier than
+ *  the day the map is currently showing.
+ *  Retuns a day string, e.g. "2020-09-28"
+ */
+function getPreviousWeekString() {
+  // Have to add a timezone or else it will presume the TZ is UTC,
+  // and then when we create the string, it will be in local time.
+  var currentDayString = DomFacade.getCurrentDayString();
+  if (currentDayString) {
+    currentDayString = currentDayString.replace(/-/g, '\/');
+    return addDaysToCurrentDayString(currentDayString, -7);
+  } else {
+    return null;
+  }
+}
+
+/** Gets a string representing one day later than
+ *  the day the map is currently showing.
+ *  Retuns a day string, e.g. "2020-09-28"
+ */
+function getNextDayString() {
+  var currentDayString = DomFacade.getCurrentDayString();
+  if (currentDayString) {
+    currentDayString = currentDayString.replace(/-/g, '\/');
+    return addDaysToCurrentDayString(currentDayString, +1);
+  } else {
+    return null;
+  }
+}
+
+/** Gets a string representing one week later than
+ *  the day the map is currently showing.
+ *  Retuns a day string, e.g. "2020-09-28"
+ */
+function getNextWeekString() {
+  var currentDayString = DomFacade.getCurrentDayString();
+  if (currentDayString) {
+    currentDayString = currentDayString.replace(/-/g, '\/');
+    return addDaysToCurrentDayString(currentDayString, +7);
+  } else {
+    return null;
+  }
+}
+
+/** Updates the day-forward/day-backwads controls, enabling or
+ *  disabling based on whether or not the day within the range or not.
+ *  Returns null.
+ */
+function updateDayControls(currentDayString, startDay, endDay, mai) {
+  // No need to convert to dates, the string sorting works.
+  var prevDayButton = DomFacade.getPreviousDayButton();
+  var nextDayButton = DomFacade.getNextDayButton();
+  var prevWeekButton = DomFacade.getPreviousWeekButton();
+  var nextWeekButton = DomFacade.getNextWeekButton();
+  if (!(prevDayButton&& prevWeekButton && nextDayButton && nextWeekButton)) {
+    return null;
+  }
+  if (currentDayString <= startDay) {
+    prevDayButton.style.visibility = 'hidden';
+  } else {
+    prevDayButton.style.visibility = 'visible';
+  }
+  if (currentDayString >= endDay) {
+    nextDayButton.style.visibility = 'hidden';
+  } else {
+    nextDayButton.style.visibility = 'visible';
+  }
+  if (getPreviousWeekString() < startDay) {
+    prevWeekButton.style.visibility = 'hidden';
+  } else {
+    prevWeekButton.style.visibility = 'visible';
+  }
+  if (getNextWeekString() > endDay) {
+    nextWeekButton.style.visibility = 'hidden';
+  } else {
+    nextWeekButton.style.visibility = 'visible';
+  }
+
+  updateTimeBar(mai);  // returns if no time bar
+}
+
 /** Adds an element to the layer controls area 
  *  @param {object} element The element to add to the layer controls
  *     visible.
@@ -358,13 +565,33 @@ DomFacade.appendToCityControls = function(element) {
   $cityControls[0].appendChild(element);
 };
 
-  /** Gets the state of a checkbox, but as a one-char string instead
-   *  of as a boolean.  Used in creating the sharing URL mostly.
-   *  @param {object} checkboxElementName The name of the checkbox DOM element.
-   *  @return {string} Returns a single character 't' or 'f' to
-   *    represent true or false
-   *  @private
-   */
+/** Adds an element to the set-day controls area.  Should only be called
+ *  when mai.isDaily is set.
+ *  @param {object} element The element to add to the show-day controls.
+ *  @public
+ */
+DomFacade.appendToDayControls = function(element) {
+  $dayControls = $('#dayButtonsDiv');
+  $dayControls[0].appendChild(element);
+};
+
+/** Adds an element to the graph div controls area.  Should only be called
+ *  when mai.graphUrl is set.
+ *  @param {object} element The element to add to the show-day controls.
+ *  @public
+ */
+DomFacade.appendToGraphDiv = function(element) {
+  $graphDiv = DomFacade.getGraphDivElement();
+  $graphDiv.appendChild(element);
+};
+
+/** Gets the state of a checkbox, but as a one-char string instead
+ *  of as a boolean.  Used in creating the sharing URL mostly.
+ *  @param {object} checkboxElementName The name of the checkbox DOM element.
+ *  @return {string} Returns a single character 't' or 'f' to
+ *    represent true or false
+ *  @private
+ */
 DomFacade.getFlagForCheckbox = function(checkboxElementName) {
    var element = $(checkboxElementName);
    if (!element) {
@@ -383,23 +610,64 @@ DomFacade.getFlagForCartogramCheckbox = function() {
   return DomFacade.getFlagForCheckbox('#isCartogramCheckbox');
 }
 
-  /** Gets the state of the cartogram checkbox, but as a one-char string instead
-   *  of as a boolean.  Used in creating the sharing URL mostly.
-   *  @return {string} Returns a single character 't' or 'f' to
-   *    represent true or false
-   *  @public
-   */
+/** Gets the state of the cartogram checkbox, but as a one-char string instead
+ *  of as a boolean.  Used in creating the sharing URL mostly.
+ *  @return {string} Returns a single character 't' or 'f' to
+ *    represent true or false
+ *  @public
+ */
 DomFacade.getFlagForCitiesCheckbox = function() {
   return DomFacade.getFlagForCheckbox('#showCitiesCheckbox');
 }
 
-  /** Gets the state of the show-cities checkbox, but as a one-char string 
-   *  instead of as a boolean.  Used in creating the sharing URL mostly.
-   *  @return {string} Returns a single character 't' or 'f' to
-   *    represent true or false
-   *  @public
-   */
+/** Gets the state of the show-cities checkbox, but as a one-char string 
+ *  instead of as a boolean.  Used in creating the sharing URL mostly.
+ *  @return {string} Returns a single character 't' or 'f' to
+ *    represent true or false
+ *  @public
+ */
 DomFacade.getFlagForLayersetCheckbox = function(layersetName) {
   return DomFacade.getFlagForCheckbox('#' + layersetName + 'Checkbox');
 }
+
+// TODO JsDOC
+DomFacade.getTimeBarElement = function() {
+  var $timeBar = $('#timeBar');
+  return $timeBar[0];
+};
+
+// TODO JsDoc
+DomFacade.getNewGraphUrl =
+  function(mai, layerSpec) {
+
+  if(!mai.graphUrl) {
+    return null;
+  }
+  params = getClickHandlerQueryStringParameters(layerSpec);
+
+  return mai.graphUrl + params;
+}
+
+
+// TODO find a home in a class
+// TODO write JsDOC
+function updateTimeBar(mai) {
+  var timeBar = DomFacade.getTimeBarElement();
+  if (!timeBar) {
+    return;
+  }
+  var currentDayMilliseconds = DomFacade.getCurrentDay();
+
+  var timeBar = document.getElementById("timeBar");
+  var timeBarWidthOffset = timeBar.clientWidth / 2;
+
+  var newX = dateToPixel(currentDayMilliseconds, mai) - timeBarWidthOffset;
+
+  // move the bar's x 
+  var newLeft = newX.toString() + 'px';
+  timeBar.style.left = newLeft;
+  timeBar.style.visibility = "visible";
+
+}
+
 

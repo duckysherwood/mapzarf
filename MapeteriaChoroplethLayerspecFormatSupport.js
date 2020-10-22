@@ -29,7 +29,7 @@ MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl = function(layerSpec, proj
     return null;
   }
 
-  var url = 'http://maps.webfoot.com/mapeteria2/choropleth.phpx?x={x}&y={y}&zoom={z}&';
+  var url = 'http://maps.webfoot.com/mapeteria2/choropleth.php?x={x}&y={y}&zoom={z}&';
 
   url += 'polyType=' + layerSpec[projection + 'ShapeType'];
   url += '&polyYear=' + layerSpec[projection + 'PolyYear'];
@@ -68,6 +68,10 @@ MapeteriaChoroplethLayerSpecFormatSupport.getLayerUrl = function(layerSpec, proj
            '&border=solid&width='+ layerSpec.borderWidth;
   }
 
+  if (layerSpec.isDaily) {
+    url += '&day=' + DomFacade.getCurrentDayString();
+  }
+
   return url;
 
 };
@@ -104,6 +108,7 @@ MapeteriaChoroplethLayerSpecFormatSupport.validate = function(layerSpec) {
                              'mapping' : 'text',
                              'showBorder' : 'bool',
                              'legendUrl' : 'url',
+                             'timeSeries' : 'text',
                              'providerUrl' : 'url',
                              'provider' : 'text',
                              'licenseUrl' : 'url',
@@ -143,25 +148,8 @@ MapeteriaChoroplethLayerSpecFormatSupport.getPointInfoUrl =
   if(!layerSpec.pointInfoUrl) {
     return null;
   }
+  params = getClickHandlerQueryStringParameters(layerSpec);
 
-  var fieldName = layerSpec.fieldName;
-  var year = layerSpec.year;
-  var cartogramFlag = DomFacade.getFlagForCartogramCheckbox();
-  var polyYear, shapeType;
-  if(DomFacade.isCartogramCheckboxChecked()) {
-    polyYear = layerSpec.cartogramPolyYear;
-    shapeType = layerSpec.cartogramShapeType;
-  } else {
-    polyYear = layerSpec.mercatorPolyYear;
-    shapeType = layerSpec.mercatorhapeType;
-  }
+  return layerSpec.pointInfoUrl + params;
 
-  var url = layerSpec.pointInfoUrl +
-     '&fieldName=' + fieldName +
-     '&shapeType=' + shapeType + 
-     '&polyYear=' + polyYear + 
-     '&year=' + year + 
-     '&cartogram=' + cartogramFlag + '&';
-
-  return url;
 }

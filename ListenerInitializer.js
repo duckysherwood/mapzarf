@@ -37,7 +37,7 @@ ListenerInitializer.prototype.initialize = function() {
   this.addMapMovementListeners();
   this.addMapClickListener();
   this.addMarkerClickListener();
-
+  this.addGraphClickListener();
 
   // There isn't an obvious place to put this, alas.
   this.updateSharingUrl();
@@ -65,7 +65,7 @@ ListenerInitializer.prototype.updateSharingUrl = function() {
 ListenerInitializer.prototype.addMarkerClickListener = function() {
   var scope = this;
   callback = function(e) {
-    scope.requestPopupInformation(e);
+    scope.handleClick(e);
   };
 
   this.mapFacade.addMarkerClickListener(callback);
@@ -92,6 +92,49 @@ ListenerInitializer.prototype.addLayerControlSelectListener =
     DomFacade.setLayerSpecDescription(layersetName, description);
     scope.mapFacade.updateLayers();
     scope.updateSharingUrl();
+  };
+
+  var scopeUpdateLayers = function() {
+    scope.mapFacade.updateLayers();
+    scope.updateSharingUrl();
+  }
+  var changeDateHelper = function(currentDayString) {
+    // set the controls
+    DomFacade.setCurrentDayElement(currentDayString);
+    // make sure that we aren't past the limits
+    updateDayControls(currentDayString, scope.mai.startDay, scope.mai.endDay, scope.mai);
+    // refresh the map
+    scopeUpdateLayers();
+  }
+
+          // TODO check to see if the buttons are there
+  var prevDayButton = DomFacade.getPreviousDayButton();
+  var nextDayButton = DomFacade.getNextDayButton();
+  var prevWeekButton = DomFacade.getPreviousWeekButton();
+  var nextWeekButton = DomFacade.getNextWeekButton();
+  prevDayButton.onclick = function() {
+    var prevDayString = getPreviousDayString();
+    changeDateHelper(prevDayString);
+  }
+  nextDayButton.onclick = function() {
+    var nextDayString = getNextDayString();
+    changeDateHelper(nextDayString);
+  }
+  prevWeekButton.onclick = function() {
+    var prevWeekString = getPreviousWeekString();
+    changeDateHelper(prevWeekString);
+  }
+  nextWeekButton.onclick = function() {
+    var nextWeekString = getNextWeekString();
+    changeDateHelper(nextWeekString);
+  }
+
+  selectElement.onchange = function() {
+    var layerName = DomFacade.getSelectedLayerNameForLayerset(layersetName);
+    var description =
+        Utilities.descriptionHtml(scope.mai[layersetName][layerName]);
+    DomFacade.setLayerSpecDescription(layersetName, description);
+    scopeUpdateLayers();
   };
 
 };
@@ -122,7 +165,6 @@ ListenerInitializer.prototype.addCitiesCheckboxListener =
   if (this.cityLabeller) {
     var closureCityLabeller = this.cityLabeller;
     DomFacade.getCityCheckbox().onchange = function () {
-      console.log("City checkbox clicked!");
       closureCityLabeller.refreshCityLabels(closureCityLabeller);
       scope.updateSharingUrl();
     };
@@ -145,9 +187,52 @@ ListenerInitializer.prototype.addIsCartogramCheckboxListener =
   var closureCityLabeller = this.cityLabeller;
   DomFacade.getCartogramCheckbox().onchange = function () {
     scope.mapFacade.updateLayers();
+    // need to get the marker coordinates, 
+    var latlng = marker.getLatLng();
+    var markerLat = scope.mapFacade.getJurisdictionMarkerLat();
+    var markerLng = scope.mapFacade.getJurisdictionMarkerLng();
+    var isCartogram = DomFacade.isCartogramCheckboxChecked();
+    // pass them to switchCoordinatesUrl
+    var layerSpec = DomUtils.getSelectedLayerSpec(scope.mai, 'choroplethLayers');
+    var polyYear = (isCartogram ?  layerSpec.cartogramPolyYear : layerSpec.mercatorPolyYear);
+    url = scope.mai.switchCoordinatesUrl
+          + "lat=" + markerLat
+          + "&lng=" + markerLng
+          + "&year=" + polyYear
+          + "&toCartogram=" + (isCartogram ? 't' : 'f');
+    // request the new coordinates
+    Utilities.requestUrlWithScope(url, scope.switchCoordinatesCallback, scope);
+
     closureCityLabeller.refreshCityLabels(closureCityLabeller);
     scope.updateSharingUrl();
   }
+};
+
+/** Helper for changing coordinates from cartogram to mercator
+ *  and vice versa.  Does not update the sharing URL, that happens
+ *  in addIsCartogramCheckboxListener
+ *  @callback switchCoordinates
+ *  @param responseText
+ *  @private
+ *  SIDE EFFECTS: changes the DOM's sharing URL and the marker's location
+ */
+ListenerInitializer.prototype.switchCoordinatesCallback = function(jsonText) {
+  var latlng = JSON.parse(jsonText);
+  var lat = latlng[0];
+  var lng = latlng[1];
+  this.mapFacade.setJurisdictionMarkerLatLng(lat, lng);
+};
+
+/** Helper for responding to a click on graph.  Changes to map's date
+ *  and also updates the sharing URL.  
+ *  @callback setGraphUrlCallback
+ *  @param responseText
+ *  @private
+ *  SIDE EFFECTS: changes the DOM's sharing URL and the map's infowindow
+ */
+ListenerInitializer.prototype.setGraphUrlCallback = function(urlString) {
+  DomFacade.setGraphUrl(urlString);
+  this.updateSharingUrl();
 };
 
 /** Helper for responding to a click on the map or marker.  Sets the
@@ -177,7 +262,7 @@ ListenerInitializer.prototype.setPopupInfoCallback = function(responseText) {
  *  @private
  *  @callback marker
  */
-ListenerInitializer.prototype.requestPopupInformation = function(e) {
+ListenerInitializer.prototype.handleClick = function(e) {
   var latlng = e.latlng;
   var lat = latlng.lat;
   var lng = latlng.lng;
@@ -193,27 +278,42 @@ ListenerInitializer.prototype.requestPopupInformation = function(e) {
       if(!tileEngineClass) {
         return true;  // go to next iteration of each
       }
+
+      var mapParams = 'lat=' + lat + '&lng=' + lng +
+               '&zoom=' + scope.mapFacade.getZoom() ;
+      var keepGoing = true;
+
+      if (scope.mai.graphUrl){
+        url = DomFacade.getNewGraphUrl(scope.mai, layerSpec);
+        if (url) {
+          url += mapParams;
+          Utilities.requestUrlWithScope(url, scope.setGraphUrlCallback, scope);
+          shouldStop = true;
+        }
+      }
+
       url = tileEngineClass.getPointInfoUrl(layerSpec);
       if(url) {
       
-        url += 'lat=' + lat + '&lng=' + lng +
-               '&zoom=' + scope.mapFacade.getZoom() ;
-        console.log(url);
+        url += mapParams;
   
-        scope.mapFacade.
-          setPopupContent('Looking up jurisdiction information, please wait...');
+        // close the popup until there is something for it to display
+        scope.mapFacade.map.closePopup();
     
         // request is a verb here
         Utilities.requestUrlWithScope(url, scope.setPopupInfoCallback, scope);
-        return false;  // stop the each loop
+        shouldStop = true;
       }
+    }
+    if (shouldStop) {
+      return false;  // stop the =each= loop
     }
   });
   
 };
 
 /** Event handler for clicking on the map.  The action mostly happens
- *  in this.requestPopupInformation.
+ *  in this.handleClick.
  *  @param myException {event} The event triggering the request (named something
       besides 'e' to make debugging a little easier)
  *  SIDE EFFECT: adds listener
@@ -228,9 +328,85 @@ ListenerInitializer.prototype.addMapClickListener = function() {
 
     scope.mapFacade.setJurisdictionMarkerLatLng(lat, lng);
     scope.mapFacade.openPopup();
-    scope.requestPopupInformation(myException);
+    scope.handleClick(myException);
   });
 };
+
+// TODO JSDOC
+function millisecondsPerPixel(mai) {
+    var xMinDateMilliseconds = Date.parse(mai.xSpanMinDate);
+    var xMaxDateMilliseconds = Date.parse(mai.xSpanMaxDate);
+    var pixelSpan = mai.xSpanMaxPixel-mai.xSpanMinPixel;
+    var dateMillisecondsSpan = xMaxDateMilliseconds - xMinDateMilliseconds;
+    var millisecondsPerPixelX = dateMillisecondsSpan / pixelSpan;
+    return millisecondsPerPixelX;
+}
+
+/** Takes a span which gives date/pixel pairs for two points on
+ *  an axis and an x-coordinate, and returns the date for that coordinate.
+ *  @return int epoch time (in msec)
+ *  TODO finish the JSDoc
+ */
+function pixelToDate(targetPixel, mai) {
+    var xMinDateMilliseconds = Date.parse(mai.xSpanMinDate);
+
+    var newDayMilliseconds =  ((targetPixel-mai.xSpanMinPixel) * millisecondsPerPixel(mai)) + xMinDateMilliseconds;
+    var newDay = new Date(newDayMilliseconds);
+    return newDay;
+}
+
+function dateToPixel(currentDayMilliseconds, mai) {
+  var millisecondsSinceMinX = currentDayMilliseconds - Date.parse(mai.xSpanMinDate);
+        var m = millisecondsPerPixel(mai);
+        var xx = mai.xSpanMinPixel;
+  var pixelX = Math.round(mai.xSpanMinPixel + (millisecondsSinceMinX / millisecondsPerPixel(mai)));
+  return pixelX;
+}
+
+/** Event handler for clicking on the map.  The action mostly happens 
+ *  in this.handleClick. 
+ *  @param myException {event} The event triggering the request (named something 
+      besides 'e' to make debugging a little easier) 
+ *  SIDE EFFECT: adds listener 
+ *  @private 
+ */ 
+ListenerInitializer.prototype.addGraphClickListener = function() { 
+  var scope = this; 
+  var graphDiv = DomFacade.getGraphDivElement(); 
+ 
+  graphDiv.addEventListener('click', function(e) { 
+ 
+    // FF doesn't have offsetX/Y; Chrome doesn't have layerX/Y 
+    var x = e.hasOwnProperty('offsetX') ? e.offsetX : e.layerX; 
+    var y = e.hasOwnProperty('offsetY') ? e.offsetY : e.layerY; 
+   
+    // xSpan is a somewhat arbitrary horizontal span on the graph, 
+    // chosen purely to make it easy to measure the min/max 
+    // x-pixels and the min and max dates.  This is then used 
+    // to calculate how to convert from pixels to dates and back. 
+ 
+    var newDay = pixelToDate(x, scope.mai); 
+   
+    var topBounds = scope.mai.yMinPixel; 
+    var bottomBounds = scope.mai.yMaxPixel; 
+    var leftBounds = dateToPixel(Date.parse(scope.mai.xMinDateBound), scope.mai);  
+    var rightBounds = dateToPixel(Date.parse(scope.mai.xMaxDateBound), scope.mai); 
+   
+    // If the click is outside the active bounds, do nothing 
+    if(x < leftBounds || x > rightBounds || 
+       y < topBounds || y > bottomBounds) { 
+      return; 
+    } 
+ 
+    var currentDayString = newDay.yyyymmdd(); 
+ 
+    DomFacade.setCurrentDayElement(currentDayString); 
+    updateDayControls(currentDayString, scope.mai.startDay, scope.mai.endDay, scope.mai); 
+    scope.mapFacade.updateLayers() 
+    scope.updateSharingUrl() 
+  }); 
+ 
+}; 
 
 
 /** Event handler for refreshing the city labels and sharing URL when

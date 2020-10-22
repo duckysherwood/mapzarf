@@ -33,7 +33,9 @@ LeafletMapFacade.prototype.initializeMap = function(centerLat, centerLng,
                           startingZoom, minZoom, maxZoom) {
   // L (from Leaflet) is global scope, but we need =map= in this scope
   // so we can pass it to behaviour
-  this.map = L.map('map', {minZoom: minZoom, maxZoom: maxZoom});
+  this.map = L.map('map', {minZoom: minZoom, maxZoom: maxZoom, zoomControl:false});
+  new L.Control.Zoom({ position: 'bottomright' }).addTo(this.map);
+
   this.map.setView([centerLat, centerLng], startingZoom);
   this.updateLayers();
 };
@@ -62,7 +64,6 @@ LeafletMapFacade.prototype.removeAllCityLabels = function() {
  *  @public
  */
 LeafletMapFacade.prototype.addMapClickListener = function(callback) {
-  console.log("Adding map click listener");
   this.map.on('click', callback);
 };
 
@@ -72,7 +73,6 @@ LeafletMapFacade.prototype.addMapClickListener = function(callback) {
  *  @public
  */
 LeafletMapFacade.prototype.addMapDragEndListener = function(callback) {
-  console.log("Adding map drag end listener");
   this.map.on('dragend', callback);
 };
 
@@ -201,7 +201,9 @@ LeafletMapFacade.prototype.addMarkerClickListener = function(callback) {
  *  @public
  */
 LeafletMapFacade.prototype.setPopupContent = function(text) {
-  this.jurisdictionMarker.setPopupContent(text);
+  if (text != '') {
+    this.jurisdictionMarker.bindPopup(text).openPopup();
+  }
 };
 
 /** Initializes the jurisdiction marker: sets the initial content, lat, lng.

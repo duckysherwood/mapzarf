@@ -56,11 +56,12 @@ MapeteriaDotLayerSpecFormatSupport.validate = function(layerSpec) {
                              'providerUrl' : 'url',
                              'provider' : 'text',
                              'licenseUrl' : 'url',
+                             'timeSeries' : 'text',
+                             'isDaily' : 'bool',
                              'license' : 'text'
                             };
 
   if (!layerSpec.tileEngine) {
-    console.log(layerSpec);
     console.log('Tile type not specified for dot layer');
     return false;
   }
@@ -95,22 +96,6 @@ MapeteriaDotLayerSpecFormatSupport.getPointInfoUrl =
     return null;
   }
 
-  var fieldName, tableName;
-  var year = layerSpec.year;
-  var cartogramFlag = DomFacade.getFlagForCartogramCheckbox();
-  if(DomFacade.isCartogramCheckboxChecked()) {
-    fieldName = layerSpec.cartogramFieldName;
-    tableName = layerSpec.cartogramTable;
-  } else {
-    fieldName = layerSpec.mercatorFieldName;
-    tableName = layerSpec.mercatorTable;
-  }
-
-  var url = layerSpec.pointInfoUrl +
-     '&fieldName=' + fieldName +
-     '&tableName=' + tableName + 
-     '&year=' + year + 
-     '&cartogram=' + cartogramFlag + '&';
-
-  return url;
+  params = getClickHandlerQueryStringParameters(layerSpec);
+  return layerSpec.pointInfoUrl + params;
 }

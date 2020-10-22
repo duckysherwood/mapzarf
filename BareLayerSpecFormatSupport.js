@@ -24,7 +24,6 @@ BareLayerSpecFormatSupport.getLayerUrl = function(layerSpec, projection) {
     url = layerSpec.url;
     url = url.replace(/%7B/g, '{');
     url = url.replace(/%7D/g, '}');
-    console.log(url);
     return url;
 };
 

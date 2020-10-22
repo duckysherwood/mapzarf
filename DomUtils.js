@@ -44,6 +44,11 @@ DomUtils.getSharingUrl = function(mapFacade) {
      url += '&markerLng=' + mapFacade.getJurisdictionMarkerLng();
    }
 
+   var currentDayString = DomFacade.getCurrentDayString();
+   if (currentDayString) {
+     url += '&day=' + currentDayString;
+   }
+
    var layersetNames = DomFacade.getLayersetNames();
    $.each(layersetNames, function(index, layersetName) {
 
@@ -62,16 +67,6 @@ DomUtils.getSharingUrl = function(mapFacade) {
      }
   });
 
-   // TODO someday add capability to show time series
-   /*
-   // Year and month are not always set
-   if( typeof yearCombo != "undefined" ) {
-     url += "&year=" + yearCombo.value;
-   }
-   if( typeof monthCombo != "undefined" ) {
-     url += "&month=" + (parseInt(monthCombo.selectedIndex)+1);
-   }
-   */
 
    return url;
 };

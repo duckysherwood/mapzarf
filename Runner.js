@@ -32,7 +32,9 @@ Runner.prototype.start = function(data, textStatus, jqXhr) {
   var pageInitValues = mapDisplayParameters.getPageValueParameters();
 
   var domAppender = new DomElementAppender(orderedMai, pageInitValues);
-  if (domAppender.createAndPopulateElements()) {
+  // What day should the map start off showing?
+  var startingDay = pageInitValues.day;
+  if (domAppender.createAndPopulateElements(startingDay)) {
 
     var mapFacade = MapFacade.makeMapFacade(mai, cityLabeller);
     var minZoom = mai.minZoom || 0;

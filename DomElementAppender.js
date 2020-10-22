@@ -86,7 +86,7 @@ function DomElementAppender(mapApplicationInfo, pageInitValues ) {
         layerDescriptionLabel.innerHTML = 'Show ' +
            Utilities.descriptionHtml(layerSpecsArray[0]);
         layerDescriptionLabel.id = layersetName + 'Description';
-        layerDescriptionLabel.className = 'indented';
+        layerDescriptionLabel.className = 'doubleIndented';
 
         layerSelectionControl.appendChild(layerDescriptionLabel);
 
@@ -96,7 +96,7 @@ function DomElementAppender(mapApplicationInfo, pageInitValues ) {
         layerSelectionCheckbox.value = SENTINEL_MULTIPLE;
 
         layerDescriptionLabel.innerHTML = 'Show ' + layerset.displayName +
-                                          ' layers: <br />';
+                                          ' layers: ';
         layerSelectionControl.appendChild(layerDescriptionLabel);
         var selectElement = document.createElement('select');
         selectElement.className = 'indented';
@@ -186,14 +186,14 @@ function DomElementAppender(mapApplicationInfo, pageInitValues ) {
   };
 
   /** Creates and initializes all the DOM elements relating to the
-   *  map which depend upon the mapApplicationInfo.
+   *  map app which depend upon the mapApplicationInfo.
    *
    *  @return {boolean} whether there were errors during processing
    *  @public
    */
   // TODO this is honkin' long, maybe break it up into different
   // pieces?
-  this.createAndPopulateElements = function() {
+  this.createAndPopulateElements = function(startingDay) {
 
     document.title = this.omai.pageTitle;
 
@@ -226,7 +226,7 @@ function DomElementAppender(mapApplicationInfo, pageInitValues ) {
     if (this.omai.hasCartogram) {
       this.addCheckboxControl('isCartogram', 
                                    closurePageInitValues.cartogram,
-                                  'Show as cartogram', 
+                                  'Show as a population-based <a href="https://en.wikipedia.org/wiki/Cartogram">cartogram</a>',
                                    DomFacade.appendToCartogramControls);
     }
 
@@ -242,8 +242,143 @@ function DomElementAppender(mapApplicationInfo, pageInitValues ) {
     // Put in the attribution for the page/app (as opposed to the data)
     DomFacade.appendAttribution(this.omai.attribution);
 
+    var firstLayer = layersets[0].layers[0];
+    if (firstLayer.timeSeries && firstLayer.timeSeries == 'day') {
+      this.addButton('previousWeek', '<<', "mapButton", "Previous Week",
+                     DomFacade.appendToDayControls);
+      this.addButton('previousDay', '<', "mapButton", "Previous Day",
+                     DomFacade.appendToDayControls);
+      this.addSpan('currentDay', "(Today's Date)", "mapButton",
+	           DomFacade.appendToDayControls);
+      this.addButton('nextDay', '>', "mapButton", "Next Day",
+                     DomFacade.appendToDayControls);
+      this.addButton('nextWeek', '>>', "mapButton", "Next Week",
+                     DomFacade.appendToDayControls);
+
+      var startingDayString;
+      if (startingDay) {
+        // to make the input validation work, startingDay ends up as a Date object
+        // Need to convert back to a DateString (yyyy-mm-dd format).
+        startingDayString = startingDay.toISOString().split('T')[0];
+      } else {
+        startingDayString = this.omai.endDay;
+      }
+      DomFacade.setCurrentDayElement(startingDayString);
+      updateDayControls(startingDayString, this.omai.startDay, this.omai.endDay, this.omai);
+    } 
+
+    // add graph, timeBar, and tooltip text
+    if (this.omai.graphUrl) {
+      var tooltipText = "Click on the map to change the graph's jurisdiction; click on the graph to change the map's date.";
+      this.addTooltip("graph", tooltipText, DomFacade.appendToGraphDiv);
+
+      var altText = "Graph of data over time for selected jurisdiction";
+
+      // TODO put graph size, active area in MAI?
+      this.addImage("graph", "./images/defaultGraph.png", null, null, 0, 0, altText,
+                    DomFacade.appendToGraphDiv);
+
+      // make the first graph show the county where the marker is
+      var lat = this.omai.startingMarkerLat;
+      var lng = this.omai.startingMarkerLng;
+      var isCartogram = DomFacade.isCartogramCheckboxChecked();
+      var polyYear = (isCartogram ?  firstLayer.cartogramPolyYear : firstLayer.mercatorPolyYear);
+
+      var url = DomFacade.getNewGraphUrl(this.omai, firstLayer);
+      if (url) {
+        var mapParams = 'lat=' + lat + '&lng=' + lng +
+                 '&polyYear= ' + polyYear + '&isCartogram=' + isCartogram;
+        url += mapParams;
+        scope = this;
+        Utilities.requestUrlWithScope(url, DomFacade.setGraphUrl, this);
+      }
+
+      // What alt-text should I have for a time bar?
+      this.addImage("timeBar", "./images/timeBar.png", null, null, "376px", "36px", null,
+                    DomFacade.appendToGraphDiv);
+
+    }
+
+
     return true;
   };
+
+  /** Adds a span element to parent element
+   *
+   *  @param basename {string} The base name of the elements (e.g. 'currentDay')
+   *  @param labelText {string} Description printed in the span
+   *  @param appendFunction  {object} Function for attaching the checkbox
+   *    and label to the parent object
+   *  @private
+   */
+  this.addSpan = function(baseName, labelText, cssClassName,
+	                  appendFunction) {
+      var span = document.createElement('span');
+      span.id = baseName + 'Span';
+      span.className = cssClassName;
+      span.innerHTML = labelText;
+  
+      appendFunction(span);
+  };
+  /** Adds a tooltip to parent element
+   *
+   *  @param basename {string} The base name of the elements (e.g. 'currentDay')
+   *  @param tooltipText {string} text of the tooltip
+   *  @param appendFunction  {object} Function for attaching the checkbox
+   *    and label to the parent object
+   *  @private
+   */
+  this.addTooltip = function(baseName, tooltipText,
+	                  appendFunction) {
+      var span = document.createElement('span');
+      span.id = baseName + 'Tooltip';
+      span.className = "tooltiptext";
+      span.innerHTML = tooltipText;
+  
+      appendFunction(span);
+  };
+  /** Adds a button element to parent element
+   *
+   *  @param basename {string} The base name of the elements (e.g. 'showCities')
+   *  @param labelText {string} Description printed in the button
+   *  @param appendFunction  {object} Function for attaching the checkbox
+   *    and label to the parent object
+   *  @private
+   */
+  this.addButton = function(baseName, labelText, cssClassName, hoverText,
+	                    appendFunction) {
+      var button = document.createElement('button');
+      button.id = baseName + 'Button';
+      button.title = hoverText;
+      button.className = cssClassName;
+      button.innerHTML = labelText;
+  
+      appendFunction(button);
+  };
+
+  this.addImage = function(id, url, height, width, left, top, altText, appendFunction) {
+    var image = document.createElement('img');
+    image.setAttribute('src', url);
+    if(id) {
+      image.id = id;
+    }
+    if(height) {
+      image.setAttribute('height', height);
+    }
+    if(width) {
+      image.setAttribute('width', width);
+    }
+    if(top) {
+      image.style.position = "absolute";
+      image.style.top = top;
+    }
+    if(left) {
+      image.style.position = "absolute";
+      image.style.left = left;
+    }
+
+    appendFunction(image);
+  }
 
 
   /** Adds a checkbox element and label element to a parent element

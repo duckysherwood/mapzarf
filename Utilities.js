@@ -47,7 +47,7 @@ Utilities.descriptionHtml = function(layerSpec) {
 
   var provider = layerSpec.provider;
   if(provider && layerSpec.providerUrl) {
-    provider = '<a href="' + layerSpec.providerUrl + '">' + provider + '</a>';
+    provider = 'via <a href="' + layerSpec.providerUrl + '">' + provider + '</a>';
   }
 
   if(!provider) {
@@ -110,3 +110,35 @@ Utilities.requestUrlWithScope = function (url, callback, scope) {
 Utilities.capitalizeFirstLetter = function (aString) {
     return aString.charAt(0).toUpperCase() + aString.slice(1);
 };
+
+function updateTimeBar(mai) {
+  var timeBar = DomFacade.getTimeBarElement();
+  if (!timeBar) {
+    return;
+  }
+  var currentDayMilliseconds = DomFacade.getCurrentDay();
+
+  var timeBar = document.getElementById("timeBar");
+  var timeBarWidthOffset = timeBar.clientWidth / 2;
+
+  var newX = dateToPixel(currentDayMilliseconds, mai) - timeBarWidthOffset;
+
+  // move the bar's x 
+  var newLeft = newX.toString() + 'px';
+  timeBar.style.left = newLeft;
+  timeBar.style.visibility = "visible";
+
+}
+
+// adapted (added dashes) from  
+//   https://stackoverflow.com/questions/3066586/get-string-in-yyyymmdd-format-from-js-date-object
+Date.prototype.yyyymmdd = function() {
+  var mm = this.getMonth() + 1; // getMonth() is zero-based
+  var dd = this.getDate();
+
+  return [this.getFullYear(),
+          (mm>9 ? '' : '0') + mm,
+          (dd>9 ? '' : '0') + dd
+         ].join('-');
+};
+

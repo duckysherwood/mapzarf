@@ -49,6 +49,38 @@ Validator.isLegalFloat = function(candidate) {
   return typeof candidate == 'number';
 };
 
+/** Checks a string to see if it is a legal date string.
+ *  @param candidate {string} a value to be checked
+ *  @return {boolean} whether the candidate is a legal date string or not
+ *  @public
+ */
+Validator.isLegalDateString = function(candidate) {
+  if (typeof candidate != 'string') {
+    console.log(candidate + ' is not a date!');
+    return false;
+  }
+  if (candidate.length != 10) {
+    console.log(candidate + ' is not a date!');
+    return false;
+  }
+  var pieces = candidate.split('-');
+  if (pieces.length != 3) {
+    console.log(candidate + ' is not a date!');
+    return false;
+  }
+
+  try {
+  var date = new Date(candidate);
+  }
+  catch {
+    console.log(candidate + ' is not a date!');
+    return false;
+  }
+
+  return true;
+
+};
+
 /** Checks a value to see if it is a legal boolean.
  *  @param candidate A value to be checked
  *  @return {boolean} whether the candidate is a legal boolean or not
@@ -235,6 +267,9 @@ Validator.isLegal = function(fieldType, candidate) {
     case 'text':
       return this.isLegalText(candidate);
 
+    case 'date':
+      return this.isLegalDateString(candidate);
+
     case 'zoom':
       return (this.isLegalInt(candidate) && 
               candidate >= 0 && 
@@ -307,6 +342,17 @@ Validator.validateOrderedMai = function(omai) {
                          'hasCartogram' : 'bool',
                          'citiesUrl' : 'url',
                          'cityIconUrl' : 'url',
+                         'graphUrl' : 'url',
+                         "xSpanMinDate": 'date',
+                         "xSpanMaxDate": 'date',
+                         "xSpanMinPixel": 'int',
+                         "xSpanMaxPixel": 'int',
+                         "xMinDateBound": 'date',
+                         "xMaxDateBound": 'date',
+                         "yMinPixel": 'int',
+                         "yMaxPixel": 'int',
+                         "startDay": 'date',
+                         "endDay": 'date',
                          'slippyMapFramework' : 'frameworkInfo',
                          'attribution' : 'text' };
 

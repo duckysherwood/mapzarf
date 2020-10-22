@@ -22,6 +22,8 @@ function MapFacade(aMapApplicationInfo) {
   this.visibleLayers = [];
   /** @private */
   this.jurisdictionMarker = null;
+  /** @private */
+  this.day = null;
 
 }
 
