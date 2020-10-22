@@ -1,7 +1,7 @@
 # What is mapzarf?
 
 Mapzarf is a framework for creating data-driven tile-based map applications.  
-IT has the Javascript (and a tiny bit of HTML) to create all the controls
+It has the Javascript (and a tiny bit of HTML) to create all the controls
 for a tile-based map.  Using the data file, you can specify 
 * what layers you want to show (and in which order),
 * what geographical area to show (center lat, center lng, and zoom), 
@@ -22,9 +22,9 @@ Once you specify that, mapzarf will
 
 You can see examples of mapzarf in action at:
 
-* [http://maps.webfoot.com/demos/gunDeaths/mapzarf.html] (http://maps.webfoot.com/demos/gunDeaths/mapzarf.html)
-* [http://maps.webfoot.com/demos/taxRoi/mapzarf.html] (http://maps.webfoot.com/demos/taxRoi/mapzarf.html)
-* [http://maps.webfoot.com/demos/congress2012/mapzarf.html] (http://maps.webfoot.com/demos/congress2012/mapzarf.html)
+* http://maps.webfoot.com/demos/gunDeaths/mapzarf.html
+* http://maps.webfoot.com/demos/taxRoi/mapzarf.html
+* http://maps.webfoot.com/demos/congress2012/mapzarf.html
 
 Each of those has an associated file in the same directory called
   _mapApplicationInfo.json_
